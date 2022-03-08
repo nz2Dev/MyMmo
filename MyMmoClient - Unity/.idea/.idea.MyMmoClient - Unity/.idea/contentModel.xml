@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\Nazar\.Rider2019.1\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\Nazar\.Rider2019.1\system\resharper-host\local\Transient\ReSharperHost\v191\SolutionCaches\_MyMmoClient - Unity.1927175033.00" t="ExcludeRecursive" />
+    <e p="E:\dev\games\playground\MmoNetworking - Photon, Unity\MyMmoClient - Unity" t="IncludeRecursive">
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="MyMmo.Shared" t="Include">
+          <e p="Class1.cs" t="Include" />
+        </e>
+      </e>
+      <e p="MyMmoClient - Unity.sln" t="IncludeFlat" />
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="Packages" t="ExcludeRecursive" />
+      <e p="Temp\Bin" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>
