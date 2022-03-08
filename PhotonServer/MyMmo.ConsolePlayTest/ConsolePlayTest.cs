@@ -9,13 +9,14 @@ namespace MyMmo.ConsolePlayTest {
 
         private string nickname;
         private bool connected;
+        private const string WorldName = "UnityWorld";
 
         public void Initialize(Game gameInstance) {
             game = gameInstance;
         }
 
         public void Run() {
-            game.Connect();
+            game.ConnectDefault();
 
             var thread = new Thread(RunGameLoop);
             thread.IsBackground = true;
@@ -53,7 +54,7 @@ namespace MyMmo.ConsolePlayTest {
                 switch (inputArg[0]) {
                     case "-e": {
                         nickname = inputArg[1];
-                        game.CreateWorld(new CreateWorldParams {WorldName = "FirstWorld"});
+                        game.CreateWorld(new CreateWorldParams {WorldName = WorldName});
                         break;
                     }
 
@@ -86,7 +87,7 @@ namespace MyMmo.ConsolePlayTest {
 
         public void OnWorldCreated() {
             PrintLog("WorldCreated...");
-            game.EnterWorld(new EnterWorldParams {WorldName = "FirstWorld", UserName = nickname});
+            game.EnterWorld(new EnterWorldParams {WorldName = WorldName, UserName = nickname});
         }
 
         public void OnWorldEntered() {

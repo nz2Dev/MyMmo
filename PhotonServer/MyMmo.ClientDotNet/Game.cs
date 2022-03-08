@@ -28,9 +28,17 @@ namespace MyMmo.Client {
         public ICollection<Item> Items => itemCache.Values;
         public Item AvatarItem => string.IsNullOrEmpty(avatarId) ? null : itemCache[avatarId];
 
-        public void Connect() {
-            DebugReturn(DebugLevel.INFO, "Trying to connect to localhost:4530 - MyMmoServerApp");
-            peer.Connect("6.tcp.ngrok.io:16307", "MyMmoServerApp");
+        public void ConnectDefault() {
+            Connect("6.tcp.ngrok.io:17091");
+        }
+
+        public void ConnectLocal() {
+            Connect("localhost:4530");
+        }
+        
+        public void Connect(string serverAddress) {
+            DebugReturn(DebugLevel.INFO, $"Trying to connect to MyMmoServerApp at {serverAddress}");
+            peer.Connect(serverAddress, "MyMmoServerApp");
         }
 
         public void Update() {
