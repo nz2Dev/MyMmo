@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{4840EA77-EFD1-4FAB-859E-2DAED197A134}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MyMmo.Client</RootNamespace>
     <AssemblyName>MyMmo.Client</AssemblyName>
@@ -56,8 +56,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Console\ConsoleClient.cs" />
-    <Compile Include="Console\Launcher.cs" />
     <Compile Include="Events\ItemExitEvent.cs" />
     <Compile Include="Events\ItemEnterEvent.cs" />
     <Compile Include="Events\ItemLocationChangedEvent.cs" />

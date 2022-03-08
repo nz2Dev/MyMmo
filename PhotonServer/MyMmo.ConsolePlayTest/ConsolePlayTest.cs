@@ -1,8 +1,9 @@
 using System.Threading;
+using MyMmo.Client;
 using MyMmo.Client.Params;
 
-namespace MyMmo.Client.Console {
-    public class ConsoleClient : IGameListener {
+namespace MyMmo.ConsolePlayTest {
+    public class ConsolePlayTest : IGameListener {
 
         private Game game;
 
@@ -15,11 +16,11 @@ namespace MyMmo.Client.Console {
 
         public void Run() {
             game.Connect();
-            
+
             var thread = new Thread(RunGameLoop);
             thread.IsBackground = true;
             thread.Start();
-            
+
             RunUI();
         }
 
@@ -38,7 +39,7 @@ namespace MyMmo.Client.Console {
                 System.Console.ReadLine();
                 System.Console.Clear();
                 PrintUI();
-                
+
                 System.Console.WriteLine("-e [nickname] create default world and enter it with nickname specified");
                 System.Console.WriteLine("-m [locationId] move avatar to location specified");
                 System.Console.WriteLine("Enter command:");
@@ -58,7 +59,7 @@ namespace MyMmo.Client.Console {
 
                     case "-m": {
                         var locationId = int.Parse(inputArg[1]);
-                        game.ChangeLocation(game.AvatarItem.Id, locationId);       
+                        game.ChangeLocation(game.AvatarItem.Id, locationId);
                         break;
                     }
                 }
@@ -70,6 +71,7 @@ namespace MyMmo.Client.Console {
             foreach (var item in game.Items) {
                 System.Console.WriteLine($"+item id={item.Id} location={item.LocationId}");
             }
+
             System.Console.WriteLine("-----------");
         }
 

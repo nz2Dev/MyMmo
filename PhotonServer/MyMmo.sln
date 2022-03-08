@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyMmo.Shared", "..\MyMmoCli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMmo.Client", "MyMmo.Client\MyMmo.Client.csproj", "{4840EA77-EFD1-4FAB-859E-2DAED197A134}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMmo.ConsolePlayTest", "MyMmo.ConsolePlayTest\MyMmo.ConsolePlayTest.csproj", "{0A448975-766A-4609-9C63-F4888139FB29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{4840EA77-EFD1-4FAB-859E-2DAED197A134}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4840EA77-EFD1-4FAB-859E-2DAED197A134}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4840EA77-EFD1-4FAB-859E-2DAED197A134}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A448975-766A-4609-9C63-F4888139FB29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A448975-766A-4609-9C63-F4888139FB29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A448975-766A-4609-9C63-F4888139FB29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A448975-766A-4609-9C63-F4888139FB29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
