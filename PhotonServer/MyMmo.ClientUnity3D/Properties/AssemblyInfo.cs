@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MyMmo.Client")]
+[assembly: AssemblyTitle("MyMmo.ClientUnity3D")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MyMmo.Client")]
+[assembly: AssemblyProduct("MyMmo.ClientUnity3D")]
 [assembly: AssemblyCopyright("Copyright ©  2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("4840EA77-EFD1-4FAB-859E-2DAED197A134")]
+[assembly: Guid("4886792F-2A33-4293-8E7C-5CAEA5FD86BE")]
 
 // Version information for an assembly consists of the following four values:
 //

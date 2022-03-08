@@ -10,7 +10,7 @@ namespace MyMmo.Playground {
             foreach (var propertyInfo in type.GetProperties()) {
                 if (Attribute.GetCustomAttribute(propertyInfo, typeof(PropertyKeyAttribute)) is PropertyKeyAttribute attr) {
                     if (hashtable.TryGetValue(attr.Key, out var propertyValue)) {
-                        propertyInfo.SetValue(output, propertyValue);
+                        propertyInfo.SetValue(output, propertyValue, null);
                     } else if (!attr.IsOptional) {
                         throw new PropertyValueNotFound(attr.Key, propertyInfo.Name);
                     }
@@ -25,7 +25,7 @@ namespace MyMmo.Playground {
             var dictionaryOut = new Dictionary<byte, object>();
             foreach (var propertyInfo in paramsType.GetProperties()) {
                 if (Attribute.GetCustomAttribute(propertyInfo, typeof(PropertyKeyAttribute)) is PropertyKeyAttribute attr) {
-                    var propertyValue = propertyInfo.GetValue(paramsObject);
+                    var propertyValue = propertyInfo.GetValue(paramsObject, null);
                     if (propertyValue != null) {
                         dictionaryOut.Add(attr.Key, propertyValue);
                     } else if (!attr.IsOptional) {

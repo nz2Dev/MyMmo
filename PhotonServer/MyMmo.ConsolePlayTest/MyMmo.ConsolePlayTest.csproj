@@ -46,9 +46,9 @@
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\MyMmo.Client\MyMmo.Client.csproj">
+      <ProjectReference Include="..\MyMmo.ClientDotNet\MyMmo.ClientDotNet.csproj">
         <Project>{4840ea77-efd1-4fab-859e-2daed197a134}</Project>
-        <Name>MyMmo.Client</Name>
+        <Name>MyMmo.ClientDotNet</Name>
       </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

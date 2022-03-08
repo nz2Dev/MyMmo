@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4886792F-2A33-4293-8E7C-5CAEA5FD86BE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MyMmo.ClientUnity3D</RootNamespace>
+    <AssemblyName>MyMmo.ClientUnity3D</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\MyMmoClient - Unity\Assets\Libs\MyMmoClientUnity\debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\MyMmoClient - Unity\Assets\Libs\MyMmoClientUnity\release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Photon3Unity3D, Version=4.0.5.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>C:\Photon\Server\SDK_v4-0-29-11263\lib\Photon3Unity3D.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\MyMmo.ClientDotNet\Events\ItemEnterEvent.cs">
+      <Link>Events\ItemEnterEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\MyMmo.ClientDotNet\Events\ItemExitEvent.cs">
+      <Link>Events\ItemExitEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\MyMmo.ClientDotNet\Events\ItemLocationChangedEvent.cs">
+      <Link>Events\ItemLocationChangedEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\MyMmo.ClientDotNet\Game.cs">
+      <Link>Game.cs</Link>
+    </Compile>
+    <Compile Include="..\MyMmo.ClientDotNet\IGameListener.cs">
+      <Link>IGameListener.cs</Link>
+    </Compile>
+    <Compile Include="..\MyMmo.ClientDotNet\Item.cs">
+      <Link>Item.cs</Link>
+    </Compile>
+    <Compile Include="..\MyMmo.ClientDotNet\Params\ChangeLocationParams.cs">
+      <Link>Params\ChangeLocationParams.cs</Link>
+    </Compile>
+    <Compile Include="..\MyMmo.ClientDotNet\Params\CreateWorldParams.cs">
+      <Link>Params\CreateWorldParams.cs</Link>
+    </Compile>
+    <Compile Include="..\MyMmo.ClientDotNet\Params\EnterWorldParams.cs">
+      <Link>Params\EnterWorldParams.cs</Link>
+    </Compile>
+    <Compile Include="..\MyMmo.ClientDotNet\Response\EnterWorldResponse.cs">
+      <Link>Response\EnterWorldResponse.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MyMmo.Commons\MyMmo.Commons.csproj">
+      <Project>{06bb62b2-9fe5-4eb6-a5a0-9c36120e50e3}</Project>
+      <Name>MyMmo.Commons</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyMmo.Playground\MyMmo.Playground.csproj">
+      <Project>{f67180af-b8db-45de-a3d0-e462189eee1b}</Project>
+      <Name>MyMmo.Playground</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+</Project>

@@ -11,9 +11,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMmo.Commons", "MyMmo.Comm
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyMmo.Shared", "..\MyMmoClient - Unity\Assets\MyMmo.Shared\MyMmo.Shared.csproj", "{900BCD64-DFA9-49D8-A3C6-B2A6B3F86A15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMmo.Client", "MyMmo.Client\MyMmo.Client.csproj", "{4840EA77-EFD1-4FAB-859E-2DAED197A134}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMmo.ClientDotNet", "MyMmo.ClientDotNet\MyMmo.ClientDotNet.csproj", "{4840EA77-EFD1-4FAB-859E-2DAED197A134}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMmo.ConsolePlayTest", "MyMmo.ConsolePlayTest\MyMmo.ConsolePlayTest.csproj", "{0A448975-766A-4609-9C63-F4888139FB29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMmo.ClientUnity3D", "MyMmo.ClientUnity3D\MyMmo.ClientUnity3D.csproj", "{4886792F-2A33-4293-8E7C-5CAEA5FD86BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{0A448975-766A-4609-9C63-F4888139FB29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A448975-766A-4609-9C63-F4888139FB29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A448975-766A-4609-9C63-F4888139FB29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4886792F-2A33-4293-8E7C-5CAEA5FD86BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4886792F-2A33-4293-8E7C-5CAEA5FD86BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4886792F-2A33-4293-8E7C-5CAEA5FD86BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4886792F-2A33-4293-8E7C-5CAEA5FD86BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
