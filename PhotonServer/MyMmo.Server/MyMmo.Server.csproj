@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F1CA02EC-B01A-48BA-A227-41161F198C6E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MyMmo.Server</RootNamespace>
+    <AssemblyName>MyMmo.Server</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ExitGames.Logging.Log4Net, Version=1.0.4.0, Culture=neutral, PublicKeyToken=eac0edd9746a4aa0">
+      <HintPath>C:\Photon\Server\SDK_v4-0-29-11263\lib\ExitGames.Logging.Log4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="ExitGamesLibs, Version=1.0.4.0, Culture=neutral, PublicKeyToken=eac0edd9746a4aa0">
+      <HintPath>C:\Photon\Server\SDK_v4-0-29-11263\lib\ExitGamesLibs.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a">
+      <HintPath>C:\Photon\Server\SDK_v4-0-29-11263\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Photon.SocketServer, Version=4.0.28.11245, Culture=neutral, PublicKeyToken=48c2fa3b6988090e">
+      <HintPath>C:\Photon\Server\SDK_v4-0-29-11263\lib\Photon.SocketServer.dll</HintPath>
+    </Reference>
+    <Reference Include="PhotonHostRuntimeInterfaces, Version=3.58.0.0, Culture=neutral, PublicKeyToken=6cb1467adaa73020">
+      <HintPath>C:\Photon\Server\SDK_v4-0-29-11263\lib\PhotonHostRuntimeInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ClientInterestArea.cs" />
+    <Compile Include="Diagnostic\MessagesCounters.cs" />
+    <Compile Include="Events\ItemEnterData.cs" />
+    <Compile Include="Events\ItemExitData.cs" />
+    <Compile Include="Events\ItemLocationChangedData.cs" />
+    <Compile Include="FiberUtils.cs" />
+    <Compile Include="InterestArea.cs" />
+    <Compile Include="Item.cs" />
+    <Compile Include="ItemMessages.cs" />
+    <Compile Include="ItemCache.cs" />
+    <Compile Include="MmoEnteredWorldOperationsHandler.cs" />
+    <Compile Include="Operations\ChangeLocationOperation.cs" />
+    <Compile Include="Operations\EnterWorldResponseParams.cs" />
+    <Compile Include="RegionMessages.cs" />
+    <Compile Include="MmoApplication.cs" />
+    <Compile Include="MmoInitialOperationsHandler.cs" />
+    <Compile Include="MmoOperationsUtils.cs" />
+    <Compile Include="MmoPeer.cs" />
+    <Compile Include="Operations\CreateWorldOperation.cs" />
+    <Compile Include="Operations\EnterWorldOperation.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Region.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="World.cs" />
+    <Compile Include="WorldCache.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MyMmo.Commons\MyMmo.Commons.csproj">
+      <Project>{06bb62b2-9fe5-4eb6-a5a0-9c36120e50e3}</Project>
+      <Name>MyMmo.Commons</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets. -->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y /Q "$(TargetDir)*.*" "C:\Photon\Server\SDK_v4-0-29-11263\deploy\MyMmoServer\bin"</PostBuildEvent>
+  </PropertyGroup>
+</Project>
