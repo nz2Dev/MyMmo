@@ -1,23 +1,30 @@
 using System.Threading;
+using ExitGames.Client.Photon;
 using MyMmo.Client;
 using MyMmo.Client.Params;
 
 namespace MyMmo.ConsolePlayTest {
     public class ConsolePlayTest : IGameListener {
 
-        private Game game;
+        private readonly Game game;
 
         private string nickname;
         private bool connected;
         private const string WorldName = "UnityWorld";
 
-        public void Initialize(Game gameInstance) {
-            game = gameInstance;
+        public static void Main(string[] args) {
+            var playTest = new ConsolePlayTest(ConnectionProtocol.Tcp);
+            playTest.Start("localhost:4530");
         }
 
-        public void Run() {
-            game.ConnectDefault();
+        private ConsolePlayTest(ConnectionProtocol connectionProtocol) {
+            game = new Game(this);
+            game.Initialize(new PhotonPeer(game, connectionProtocol));
+        }
 
+        private void Start(string address) {
+            game.Connect(address);
+            
             var thread = new Thread(RunGameLoop);
             thread.IsBackground = true;
             thread.Start();
@@ -106,5 +113,8 @@ namespace MyMmo.ConsolePlayTest {
             PrintLog($"item {item.Id} changed its location -> {item.LocationId}");
         }
 
+        void IGameListener.OnLog(DebugLevel debugLevel, string message) {
+            PrintLog($"Game Log: {message}");
+        }
     }
 }

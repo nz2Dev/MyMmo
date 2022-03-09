@@ -1,3 +1,5 @@
+using ExitGames.Client.Photon;
+
 namespace MyMmo.Client {
     public interface IGameListener {
 
@@ -12,6 +14,8 @@ namespace MyMmo.Client {
         void OnItemExit(string itemId);
 
         void OnItemLocationChanged(Item item);
+
+        void OnLog(DebugLevel debugLevel, string message);
 
     }
 }

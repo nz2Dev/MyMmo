@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ExitGames.Client.Photon;
 using MyMmo.Client;
 using MyMmo.Client.Params;
@@ -9,7 +10,9 @@ public class PlayTest : MonoBehaviour, IGameListener {
 
     private Game game;
 
-    private bool isInTheWorld;
+    private bool isPlayState;
+    
+    private readonly List<string> logs = new List<string>();
     
     private void Awake() {
         Application.runInBackground = true;
@@ -19,13 +22,14 @@ public class PlayTest : MonoBehaviour, IGameListener {
         game = new Game(this);
         var peer = new PhotonPeer(game, ConnectionProtocol.Tcp);
         game.Initialize(peer);
-        game.ConnectDefault();
+        game.Connect("localhost:4530");
     }
 
     private string enteredUserName;
+    private Vector2 scrollPosition = Vector2.zero;
 
     private void OnGUI() {
-        if (!isInTheWorld) {
+        if (!isPlayState) {
             GUILayout.BeginHorizontal();
             GUILayout.Label("UserName:");
             enteredUserName = GUILayout.TextField(enteredUserName, GUILayout.MinWidth(100));
@@ -41,6 +45,14 @@ public class PlayTest : MonoBehaviour, IGameListener {
             }
             GUILayout.EndVertical();
         }
+        GUILayout.Label("----- logs ------");
+        scrollPosition = GUILayout.BeginScrollView(scrollPosition);
+        GUILayout.BeginVertical();
+        foreach (var logEntry in logs) {
+            GUILayout.Label(logEntry);
+        }
+        GUILayout.EndVertical();
+        GUILayout.EndScrollView();
     }
 
     private void FixedUpdate() {
@@ -67,7 +79,7 @@ public class PlayTest : MonoBehaviour, IGameListener {
 
     public void OnWorldEntered() {
         Debug.Log("OnWorldEntered");
-        isInTheWorld = true;
+        isPlayState = true;
     }
 
     public void OnItemEnter(Item item) {
@@ -82,4 +94,8 @@ public class PlayTest : MonoBehaviour, IGameListener {
         Debug.Log($"OnItemLocationChanged {item.Id}");
     }
 
+    public void OnLog(DebugLevel debugLevel, string message) {
+        logs.Add($"{debugLevel}: {message}");
+    }
+    
 }

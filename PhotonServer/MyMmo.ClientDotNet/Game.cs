@@ -20,9 +20,9 @@ namespace MyMmo.Client {
             this.listener = listener;
         }
 
-        public void Initialize(PhotonPeer photonPeer) {
+        public void Initialize(PhotonPeer photonPeer, DebugLevel internalDebugLevel = DebugLevel.ERROR) {
             peer = photonPeer;
-            debugLevel = DebugLevel.ERROR;
+            debugLevel = internalDebugLevel;
         }
 
         public ICollection<Item> Items => itemCache.Values;
@@ -38,7 +38,7 @@ namespace MyMmo.Client {
         
         public void Connect(string serverAddress) {
             DebugReturn(DebugLevel.INFO, $"Trying to connect to MyMmoServerApp at {serverAddress}");
-            peer.Connect(serverAddress, "MyMmoServerApp");
+            DebugReturn(DebugLevel.INFO, $"peer connection result: {peer.Connect(serverAddress, "MyMmoServerApp")}");
         }
 
         public void Update() {
@@ -60,6 +60,7 @@ namespace MyMmo.Client {
         }
 
         public void DebugReturn(DebugLevel level, string message) {
+            listener.OnLog(level, message);
             if (level <= debugLevel) {
                 System.Console.WriteLine($"{level}: {message}");
             }
