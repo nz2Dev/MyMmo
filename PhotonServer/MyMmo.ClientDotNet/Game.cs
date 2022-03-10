@@ -46,17 +46,17 @@ namespace MyMmo.Client {
         }
 
         public void CreateWorld(CreateWorldParams createWorldParams) {
-            peer.OpCustom((byte) OperationCode.CreateWorld, EventDataConverter.ToDictionary(createWorldParams), true);
+            peer.SendOperation((byte) OperationCode.CreateWorld, EventDataConverter.ToDictionary(createWorldParams), SendOptions.SendReliable);
         }
 
         public void EnterWorld(EnterWorldParams enterWorldParams) {
-            peer.OpCustom((byte) OperationCode.EnterWorld, EventDataConverter.ToDictionary(enterWorldParams), true);
+            peer.SendOperation((byte) OperationCode.EnterWorld, EventDataConverter.ToDictionary(enterWorldParams), SendOptions.SendReliable);
         }
 
         public void ChangeLocation(string itemId, int locationId) {
             var changeLocationParams = new ChangeLocationParams {ItemId = itemId, LocationId = locationId};
-            peer.OpCustom((byte) OperationCode.ChangeLocation, EventDataConverter.ToDictionary(changeLocationParams),
-                true);
+            peer.SendOperation((byte) OperationCode.ChangeLocation, EventDataConverter.ToDictionary(changeLocationParams),
+                SendOptions.SendReliable);
         }
 
         public void DebugReturn(DebugLevel level, string message) {
@@ -77,7 +77,7 @@ namespace MyMmo.Client {
 
                     case OperationCode.EnterWorld: {
                         var enterWorldResponse =
-                            EventDataConverter.Convert<EnterWorldResponse>(operationResponse.Parameters);
+                            EventDataConverter.Convert<EnterWorldResponse>(operationResponse.Parameters.paramDict);
                         avatarId = enterWorldResponse.AvatarItemId;
                         listener.OnWorldEntered();
                         break;
@@ -106,7 +106,7 @@ namespace MyMmo.Client {
             DebugReturn(DebugLevel.INFO, "event: " + eventData.ToStringFull());
             switch ((EventCode) eventData.Code) {
                 case EventCode.ItemEnterEvent: {
-                    var enterEvent = EventDataConverter.Convert<ItemEnterEvent>(eventData.Parameters);
+                    var enterEvent = EventDataConverter.Convert<ItemEnterEvent>(eventData.Parameters.paramDict);
                     var item = new Item(enterEvent.ItemId, enterEvent.LocationId);
                     itemCache.Add(item.Id, item);
                     listener.OnItemEnter(item);
@@ -114,7 +114,7 @@ namespace MyMmo.Client {
                 }
 
                 case EventCode.ItemExitEvent: {
-                    var exitEvent = EventDataConverter.Convert<ItemExitEvent>(eventData.Parameters);
+                    var exitEvent = EventDataConverter.Convert<ItemExitEvent>(eventData.Parameters.paramDict);
                     itemCache.Remove(exitEvent.ItemId);
                     listener.OnItemExit(exitEvent.ItemId);
                     break;
@@ -122,7 +122,7 @@ namespace MyMmo.Client {
 
                 case EventCode.ItemLocationChanged: {
                     var locationChangedEvent =
-                        EventDataConverter.Convert<ItemLocationChangedEvent>(eventData.Parameters);
+                        EventDataConverter.Convert<ItemLocationChangedEvent>(eventData.Parameters.paramDict);
                     if (itemCache.TryGetValue(locationChangedEvent.ItemId, out var item)) {
                         item.ChangeLocationId(locationChangedEvent.LocationId);
                     }

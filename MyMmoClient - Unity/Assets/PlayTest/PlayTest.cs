@@ -20,9 +20,8 @@ public class PlayTest : MonoBehaviour, IGameListener {
 
     private void Start() {
         game = new Game(this);
-        var peer = new PhotonPeer(game, ConnectionProtocol.Tcp);
-        game.Initialize(peer);
-        game.Connect("localhost:4530");
+        game.Initialize(new PlayTestPeer(game, ConnectionProtocol.WebSocket));
+        game.Connect("ws://localhost:9090");
     }
 
     private string enteredUserName;

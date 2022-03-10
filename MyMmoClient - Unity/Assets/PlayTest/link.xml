@@ -1,0 +1,5 @@
+<linker>
+    <assembly fullname="MyMmo.ClientUnity3D" preserve="all">
+        
+    </assembly>
+</linker>

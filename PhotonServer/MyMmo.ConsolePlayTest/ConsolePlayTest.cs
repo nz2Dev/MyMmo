@@ -13,8 +13,8 @@ namespace MyMmo.ConsolePlayTest {
         private const string WorldName = "UnityWorld";
 
         public static void Main(string[] args) {
-            var playTest = new ConsolePlayTest(ConnectionProtocol.Tcp);
-            playTest.Start("localhost:4530");
+            var playTest = new ConsolePlayTest(ConnectionProtocol.WebSocket);
+            playTest.Start("ws://localhost:9090");
         }
 
         private ConsolePlayTest(ConnectionProtocol connectionProtocol) {

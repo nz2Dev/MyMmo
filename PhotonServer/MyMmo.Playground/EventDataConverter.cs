@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace MyMmo.Playground {
     public class EventDataConverter {
 
-        public static T Convert<T>(Dictionary<byte, object> hashtable) where T : new() {
+        public static T Convert<T>(IDictionary<byte, object> hashtable) where T : new() {
             var type = typeof(T);
             var output = new T();
             foreach (var propertyInfo in type.GetProperties()) {
