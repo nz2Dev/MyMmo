@@ -42,7 +42,7 @@ namespace MyMmo.Client {
         }
 
         public void Update() {
-            peer.Service();
+            peer?.Service();
         }
 
         public void CreateWorld(CreateWorldParams createWorldParams) {

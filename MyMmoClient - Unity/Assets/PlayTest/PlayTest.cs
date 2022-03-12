@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ExitGames.Client.Photon;
 using MyMmo.Client;
@@ -10,25 +11,45 @@ public class PlayTest : MonoBehaviour, IGameListener {
 
     private Game game;
 
+    private bool isConnectState;
+    private bool isEnterState;
     private bool isPlayState;
     
     private readonly List<string> logs = new List<string>();
-    
+
     private void Awake() {
         Application.runInBackground = true;
     }
 
     private void Start() {
         game = new Game(this);
-        game.Initialize(new PlayTestPeer(game, ConnectionProtocol.WebSocket));
-        game.Connect("ws://localhost:9090");
+        isConnectState = true;
     }
 
+    private string serverAddress;
     private string enteredUserName;
     private Vector2 scrollPosition = Vector2.zero;
 
     private void OnGUI() {
-        if (!isPlayState) {
+        if (isConnectState) {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("server address:");
+            serverAddress = GUILayout.TextField(serverAddress, GUILayout.MinWidth(100));
+            GUILayout.EndHorizontal();
+            if (GUILayout.Button("Connect") && !string.IsNullOrEmpty(serverAddress)) {
+                var uri = new Uri(serverAddress);
+                if (uri.Scheme.Equals("ws")) {
+                    game.Initialize(new PlayTestPeer(game, ConnectionProtocol.WebSocket));
+                } else if (uri.Scheme.Equals("tcp")) {
+                    game.Initialize(new PlayTestPeer(game, ConnectionProtocol.Tcp));
+                } else {
+                    OnLog(DebugLevel.INFO, "uri.Schema is empty, init as tcp");
+                    game.Initialize(new PlayTestPeer(game, ConnectionProtocol.Tcp));
+                }
+                
+                game.Connect(serverAddress);
+            }
+        } else if (isEnterState) {
             GUILayout.BeginHorizontal();
             GUILayout.Label("UserName:");
             enteredUserName = GUILayout.TextField(enteredUserName, GUILayout.MinWidth(100));
@@ -36,7 +57,7 @@ public class PlayTest : MonoBehaviour, IGameListener {
             if (GUILayout.Button("Enter") && !string.IsNullOrEmpty(enteredUserName)) {
                 CreateWorld();
             }
-        } else {
+        } else if (isPlayState) {
             var currentItems = game.Items;
             GUILayout.BeginVertical();
             foreach (var item in currentItems) {
@@ -44,6 +65,7 @@ public class PlayTest : MonoBehaviour, IGameListener {
             }
             GUILayout.EndVertical();
         }
+        
         GUILayout.Label("----- logs ------");
         scrollPosition = GUILayout.BeginScrollView(scrollPosition);
         GUILayout.BeginVertical();
@@ -70,6 +92,8 @@ public class PlayTest : MonoBehaviour, IGameListener {
 
     public void OnConnected() {
         Debug.Log("OnConnected");
+        isConnectState = false;
+        isEnterState = true;
     }
 
     public void OnWorldCreated() {
@@ -78,6 +102,7 @@ public class PlayTest : MonoBehaviour, IGameListener {
 
     public void OnWorldEntered() {
         Debug.Log("OnWorldEntered");
+        isEnterState = false;
         isPlayState = true;
     }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using ExitGames.Client.Photon;
 using MyMmo.Client;
@@ -13,23 +14,37 @@ namespace MyMmo.ConsolePlayTest {
         private const string WorldName = "UnityWorld";
 
         public static void Main(string[] args) {
-            var playTest = new ConsolePlayTest(ConnectionProtocol.WebSocket);
-            playTest.Start("ws://localhost:9090");
+            var playTest = new ConsolePlayTest();
+            playTest.Start();
         }
 
-        private ConsolePlayTest(ConnectionProtocol connectionProtocol) {
+        private ConsolePlayTest() {
             game = new Game(this);
-            game.Initialize(new PhotonPeer(game, connectionProtocol));
         }
 
-        private void Start(string address) {
-            game.Connect(address);
-            
+        private void Start() {
             var thread = new Thread(RunGameLoop);
             thread.IsBackground = true;
             thread.Start();
 
+            Console.WriteLine("Started, press any key to begin");
+            TryConnectManually();
             RunUI();
+        }
+
+        private void TryConnectManually() {
+            ConnectNgrokWebSocket(); // ngrok
+            //ConnectLocalhostWebSocket(); //localhost
+        }
+
+        private void ConnectNgrokWebSocket() {
+            game.Initialize(new PhotonPeer(game, ConnectionProtocol.WebSocket));
+            game.Connect("ws://0256-62-122-202-232.ngrok.io:80");
+        }
+
+        private void ConnectLocalhostWebSocket() {
+            game.Initialize(new PhotonPeer(game, ConnectionProtocol.WebSocket));
+            game.Connect("ws://localhost:9090");
         }
 
         private void RunGameLoop() {
@@ -40,18 +55,15 @@ namespace MyMmo.ConsolePlayTest {
 
         private void RunUI() {
             while (true) {
-                if (!connected) {
-                    continue;
-                }
-
-                System.Console.ReadLine();
-                System.Console.Clear();
+                Console.ReadLine();
+                Console.Clear();
                 PrintUI();
 
-                System.Console.WriteLine("-e [nickname] create default world and enter it with nickname specified");
-                System.Console.WriteLine("-m [locationId] move avatar to location specified");
-                System.Console.WriteLine("Enter command:");
-                var input = System.Console.ReadLine();
+                Console.WriteLine("-c [address] uri address of server with schema");
+                Console.WriteLine("-e [nickname] create default world and enter it with nickname specified");
+                Console.WriteLine("-m [locationId] move avatar to location specified");
+                Console.WriteLine("Enter command:");
+                var input = Console.ReadLine();
                 if (string.IsNullOrEmpty(input)) {
                     PrintLog("nothing..");
                     continue;
@@ -59,13 +71,36 @@ namespace MyMmo.ConsolePlayTest {
 
                 var inputArg = input.Split(' ');
                 switch (inputArg[0]) {
+                    case "-c": {
+                        var address = inputArg[1];
+                        Console.WriteLine("input address: " + address);
+                        
+                        var uri = new Uri(address);
+                        if (uri.Scheme.Equals("ws")) {
+                            game.Initialize(new PhotonPeer(game, ConnectionProtocol.WebSocket));
+                        } else if (uri.Scheme.Equals("tcp")) {
+                            game.Initialize(new PhotonPeer(game, ConnectionProtocol.Tcp));
+                        } else {
+                            PrintLog("uri.Schema is empty, init as tcp");
+                        }
+                        
+                        game.Initialize(new PhotonPeer(game, ConnectionProtocol.Tcp));
+                        game.Connect(address);
+                        break;
+                    }
                     case "-e": {
+                        if (!connected) {
+                            continue;
+                        }
                         nickname = inputArg[1];
                         game.CreateWorld(new CreateWorldParams {WorldName = WorldName});
                         break;
                     }
 
                     case "-m": {
+                        if (!connected) {
+                            continue;
+                        }
                         var locationId = int.Parse(inputArg[1]);
                         game.ChangeLocation(game.AvatarItem.Id, locationId);
                         break;
@@ -75,16 +110,21 @@ namespace MyMmo.ConsolePlayTest {
         }
 
         private void PrintUI() {
-            System.Console.WriteLine("-----------");
+            if (!connected) {
+                Console.WriteLine("[not connected]");
+                return;
+            }
+            
+            Console.WriteLine($"----------- connected");
             foreach (var item in game.Items) {
-                System.Console.WriteLine($"+item id={item.Id} location={item.LocationId}");
+                Console.WriteLine($"+item id={item.Id} location={item.LocationId}");
             }
 
-            System.Console.WriteLine("-----------");
+            Console.WriteLine("-----------");
         }
 
         private static void PrintLog(string message) {
-            System.Console.WriteLine(message + "  >> press any key to continue <<");
+            Console.WriteLine(message + "  >> press any key to continue <<");
         }
 
         public void OnConnected() {
