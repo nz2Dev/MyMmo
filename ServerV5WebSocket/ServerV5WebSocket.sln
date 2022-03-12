@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32106.194
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerV5WebSocket", "ServerV5WebSocket\ServerV5WebSocket.csproj", "{4742418C-A693-4650-835B-419A1F47C8F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "V5ConsolePlayTest", "V5ConsolePlayTest\V5ConsolePlayTest.csproj", "{86397597-BB9D-4845-9424-E4573F160699}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4742418C-A693-4650-835B-419A1F47C8F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4742418C-A693-4650-835B-419A1F47C8F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4742418C-A693-4650-835B-419A1F47C8F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4742418C-A693-4650-835B-419A1F47C8F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86397597-BB9D-4845-9424-E4573F160699}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86397597-BB9D-4845-9424-E4573F160699}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86397597-BB9D-4845-9424-E4573F160699}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86397597-BB9D-4845-9424-E4573F160699}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F84814DB-B654-48E8-B5ED-1A37F8A3D3B1}
+	EndGlobalSection
+EndGlobal
