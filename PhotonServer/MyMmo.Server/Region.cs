@@ -1,8 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using ExitGames.Concurrency.Channels;
 using ExitGames.Concurrency.Fibers;
-using MyMmo.Server.Diagnostic;
-using Photon.SocketServer.Concurrency;
 
 namespace MyMmo.Server {
     [SuppressMessage("ReSharper", "ConvertToAutoProperty")]
@@ -10,14 +9,14 @@ namespace MyMmo.Server {
 
         private readonly int id;
 
-        private readonly MessageChannel<RequestItemSnapshotMessage> requestItemSnapshotChannel =
-            new MessageChannel<RequestItemSnapshotMessage>(MessagesCounters.OtherMessagesSendCounter);
+        private readonly Channel<RequestItemSnapshotMessage> requestItemSnapshotChannel =
+            new Channel<RequestItemSnapshotMessage>();
         
-        private readonly MessageChannel<ItemRegionChangedMessage> itemRegionChangedChannel =
-            new MessageChannel<ItemRegionChangedMessage>(MessagesCounters.OtherMessagesSendCounter);
+        private readonly Channel<ItemRegionChangedMessage> itemRegionChangedChannel =
+            new Channel<ItemRegionChangedMessage>();
         
-        private readonly MessageChannel<ItemEventMessage> regionalItemEventChannel =
-            new MessageChannel<ItemEventMessage>(MessagesCounters.OtherMessagesSendCounter);
+        private readonly Channel<ItemEventMessage> regionalItemEventChannel =
+            new Channel<ItemEventMessage>();
         
         public Region(int id) {
             this.id = id;

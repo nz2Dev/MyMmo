@@ -42,7 +42,7 @@ namespace MyMmo.Server {
 
                     WatchLocation(item.LocationId);
 
-                    followingSubscription = new UnsubscriberCollection(
+                    followingSubscription = new SubscriptionsCollection(
                         item.SubscribeLocationChanged(subscriptionManagementFiber, message => {
                             logger.Info($"interest area {id} receive LocationChanged {message.LocationId} from followed item, so it's going to follow that location");
                             WatchLocation(message.LocationId);

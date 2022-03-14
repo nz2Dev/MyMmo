@@ -33,8 +33,8 @@ namespace MyMmo.ConsolePlayTest {
         }
 
         private void TryConnectManually() {
-            ConnectNgrokWebSocket(); // ngrok
-            //ConnectLocalhostWebSocket(); //localhost
+            //ConnectNgrokWebSocket(); // ngrok
+            ConnectLocalhostWebSocket(); //localhost
         }
 
         private void ConnectNgrokWebSocket() {

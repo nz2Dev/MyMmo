@@ -1,12 +1,11 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using ExitGames.Concurrency.Channels;
 using ExitGames.Concurrency.Fibers;
 using ExitGames.Logging;
 using MyMmo.Commons;
-using MyMmo.Server.Diagnostic;
 using MyMmo.Server.Events;
 using Photon.SocketServer;
-using Photon.SocketServer.Concurrency;
 
 namespace MyMmo.Server {
     public class Item : IDisposable {
@@ -17,14 +16,9 @@ namespace MyMmo.Server {
         private readonly World world;
         private readonly PeerBase owner;
 
-        private readonly MessageChannel<ItemEventMessage> itemEventChannel =
-            new MessageChannel<ItemEventMessage>(MessagesCounters.ItemEventSendCounter);
-
-        private readonly MessageChannel<ItemLocationChangedMessage> locationChangedChannel =
-            new MessageChannel<ItemLocationChangedMessage>(MessagesCounters.OtherMessagesSendCounter);
-
-        private readonly MessageChannel<ItemDisposedMessage> disposeChannel =
-            new MessageChannel<ItemDisposedMessage>(MessagesCounters.OtherMessagesSendCounter);
+        private readonly Channel<ItemEventMessage> itemEventChannel = new Channel<ItemEventMessage>();
+        private readonly Channel<ItemLocationChangedMessage> locationChangedChannel = new Channel<ItemLocationChangedMessage>();
+        private readonly Channel<ItemDisposedMessage> disposeChannel = new Channel<ItemDisposedMessage>();
 
         private int locationId;
         private Region currentRegion;
@@ -97,7 +91,7 @@ namespace MyMmo.Server {
             regionSubscription?.Dispose();
             logger.Info($"item {id} subscribes to region {newRegion.Id}' RequestItemSnapshot, now it's a resident of that region");
             logger.Info($"item {id} subscribes to its ItemEvent to transmit messages to its new region {newRegion.Id}");
-            regionSubscription = new UnsubscriberCollection(
+            regionSubscription = new SubscriptionsCollection(
                 newRegion.SubscribeRequestItemSnapshot(owner.RequestFiber, message => {
                     logger.Info($"item {id} receive RequestItemSnapshot, region {newRegion.Id} request our snapshot, " +
                                 "calling back with it");
@@ -123,9 +117,7 @@ namespace MyMmo.Server {
                 disposed = true;
                 currentRegion = null;
                 regionSubscription?.Dispose();
-                locationChangedChannel.Dispose();
                 disposeChannel.Publish(new ItemDisposedMessage(this));
-                disposeChannel.Dispose();
             }
         }
 

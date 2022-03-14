@@ -4,11 +4,15 @@ using ExitGames.Logging;
 using ExitGames.Logging.Log4Net;
 using log4net;
 using log4net.Config;
+using Microsoft.Extensions.Configuration;
 using Photon.SocketServer;
 using LogManager = ExitGames.Logging.LogManager;
 
 namespace MyMmo.Server {
     public class MmoApplication : ApplicationBase {
+
+        public MmoApplication() : base(new ConfigurationManager()) {
+        }
 
         protected override PeerBase CreatePeer(InitRequest initRequest) {
             return new MmoPeer(initRequest);
