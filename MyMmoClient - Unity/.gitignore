@@ -44,4 +44,4 @@ Logs/
 
 #intermediate build folder, used to route build files from MyMmo.Shared proj.
 intermediate/
-WebGLBuild/
+WebGL Builds/
