@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\MyMmoClient - Unity\Assets\Libs\MyMmoClientUnity\debug\</OutputPath>
+    <OutputPath>..\..\MyMmoClient - Unity\Assets\Photon\MyMmoClient\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -26,7 +26,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\MyMmoClient - Unity\Assets\Libs\MyMmoClientUnity\release\</OutputPath>
+    <OutputPath>..\..\MyMmoClient - Unity\Assets\Photon\MyMmoClient\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -82,6 +82,11 @@
       <Project>{f67180af-b8db-45de-a3d0-e462189eee1b}</Project>
       <Name>MyMmo.Playground</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="linker.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

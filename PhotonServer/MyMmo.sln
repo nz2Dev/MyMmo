@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMmo.Playground", "MyMmo.P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMmo.Commons", "MyMmo.Commons\MyMmo.Commons.csproj", "{06BB62B2-9FE5-4EB6-A5A0-9C36120E50E3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyMmo.Shared", "..\MyMmoClient - Unity\Assets\MyMmo.Shared\MyMmo.Shared.csproj", "{900BCD64-DFA9-49D8-A3C6-B2A6B3F86A15}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMmo.ClientDotNet", "MyMmo.ClientDotNet\MyMmo.ClientDotNet.csproj", "{4840EA77-EFD1-4FAB-859E-2DAED197A134}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMmo.ConsolePlayTest", "MyMmo.ConsolePlayTest\MyMmo.ConsolePlayTest.csproj", "{0A448975-766A-4609-9C63-F4888139FB29}"
@@ -35,10 +33,6 @@ Global
 		{06BB62B2-9FE5-4EB6-A5A0-9C36120E50E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06BB62B2-9FE5-4EB6-A5A0-9C36120E50E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06BB62B2-9FE5-4EB6-A5A0-9C36120E50E3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{900BCD64-DFA9-49D8-A3C6-B2A6B3F86A15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{900BCD64-DFA9-49D8-A3C6-B2A6B3F86A15}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{900BCD64-DFA9-49D8-A3C6-B2A6B3F86A15}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{900BCD64-DFA9-49D8-A3C6-B2A6B3F86A15}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4840EA77-EFD1-4FAB-859E-2DAED197A134}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4840EA77-EFD1-4FAB-859E-2DAED197A134}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4840EA77-EFD1-4FAB-859E-2DAED197A134}.Release|Any CPU.ActiveCfg = Release|Any CPU
