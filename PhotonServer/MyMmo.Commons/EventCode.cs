@@ -1,11 +1,13 @@
 namespace MyMmo.Commons {
     public enum EventCode : byte {
         
-        ItemEnterEvent,
+        ItemSubscribedEvent,
 
-        ItemExitEvent,
+        ItemUnsubscribedEvent,
         
-        ItemLocationChanged
+        ItemLocationChanged,
+
+        ItemDestroyEvent
 
     }
 }

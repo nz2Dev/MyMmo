@@ -233,8 +233,9 @@
   <ItemGroup>
     <Compile Include="ClientInterestArea.cs" />
     <Compile Include="Diagnostic\MessagesCounters.cs" />
-    <Compile Include="Events\ItemEnterData.cs" />
-    <Compile Include="Events\ItemExitData.cs" />
+    <Compile Include="Events\ItemDestroyData.cs" />
+    <Compile Include="Events\ItemSubscribedData.cs" />
+    <Compile Include="Events\ItemUnsubscribedData.cs" />
     <Compile Include="Events\ItemLocationChangedData.cs" />
     <Compile Include="FiberUtils.cs" />
     <Compile Include="InterestArea.cs" />

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ExitGames.Client.Photon;
 using MyMmo.Client;
 using MyMmo.Client.Params;
@@ -9,21 +10,29 @@ public class PlayTest : MonoBehaviour, IGameListener {
 
     private const string WorldName = "UnityWorld";
 
+    public GameObject playerPrefab;
+    
     private Game game;
 
     private bool isConnectState;
     private bool isEnterState;
     private bool isPlayState;
+    private bool isManualSetup;
+    private bool isLogGUIEnabled;
     
     private readonly List<string> logs = new List<string>();
 
     private void Awake() {
         Application.runInBackground = true;
+        Application.targetFrameRate = 60;
     }
 
     private void Start() {
+        isManualSetup = true;
+        isLogGUIEnabled = false;
         game = new Game(this);
-        isConnectState = true;
+        game.Initialize(new PlayTestPeer(game, ConnectionProtocol.Tcp));
+        game.Connect("localhost:4530");
     }
 
     private string serverAddress;
@@ -65,15 +74,18 @@ public class PlayTest : MonoBehaviour, IGameListener {
             }
             GUILayout.EndVertical();
         }
-        
-        GUILayout.Label("----- logs ------");
-        scrollPosition = GUILayout.BeginScrollView(scrollPosition);
-        GUILayout.BeginVertical();
-        foreach (var logEntry in logs) {
-            GUILayout.Label(logEntry);
+
+        if (isLogGUIEnabled) {
+            GUILayout.Label("----- logs ------");
+            scrollPosition = GUILayout.BeginScrollView(scrollPosition);
+            GUILayout.BeginVertical();
+            foreach (var logEntry in logs) {
+                GUILayout.Label(logEntry);
+            }
+
+            GUILayout.EndVertical();
+            GUILayout.EndScrollView();
         }
-        GUILayout.EndVertical();
-        GUILayout.EndScrollView();
     }
 
     private void FixedUpdate() {
@@ -94,6 +106,10 @@ public class PlayTest : MonoBehaviour, IGameListener {
         Debug.Log("OnConnected");
         isConnectState = false;
         isEnterState = true;
+        if (isManualSetup) {
+            enteredUserName = "ping_unity_hardcoded";
+            CreateWorld();
+        }
     }
 
     public void OnWorldCreated() {
@@ -106,12 +122,27 @@ public class PlayTest : MonoBehaviour, IGameListener {
         isPlayState = true;
     }
 
-    public void OnItemEnter(Item item) {
-        Debug.Log($"OnItemEnter {item.Id}");
+    public void OnItemSubscribed(Item item) {
+        Debug.Log($"OnItemSubscribed {item.Id}");
+        var target = FindObjectsOfType<AvatarItem>().FirstOrDefault(i => i.source.Id == item.Id);
+        if (target != null) {
+            target.source = item;
+            return;
+        }
+        
+        var spawnOffset = game.Items.Count;
+        var player = Instantiate(playerPrefab, new Vector3(spawnOffset, 0, spawnOffset), Quaternion.identity);
+        player.GetComponent<AvatarItem>().source = item;
     }
 
-    public void OnItemExit(string itemId) {
-        Debug.Log($"OnItemExit {itemId}");
+    public void OnItemUnsubscribed(Item item) {
+        Debug.Log($"OnItemUnsubscribed {item}");
+    }
+
+    public void OnItemDestroyed(Item item) {
+        Debug.Log($"OnItemDestroyed {item.Id}");
+        var target = FindObjectsOfType<AvatarItem>().First(i => i.source.Id == item.Id);
+        Destroy(target.gameObject); 
     }
 
     public void OnItemLocationChanged(Item item) {
@@ -120,6 +151,7 @@ public class PlayTest : MonoBehaviour, IGameListener {
 
     public void OnLog(DebugLevel debugLevel, string message) {
         logs.Add($"{debugLevel}: {message}");
+        Debug.Log($"{debugLevel}: {message}");
     }
     
 }

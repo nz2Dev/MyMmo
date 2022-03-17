@@ -7,23 +7,19 @@ namespace MyMmo.Server.Events {
     
     [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
     [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
-    public class ItemEnterData : DataContract {
+    public class ItemExitData {
 
         [DataMember(Code = (byte) ParameterCode.ItemId, IsOptional = false)]
         public string ItemId { get; }
 
-        [DataMember(Code = (byte) ParameterCode.LocationId, IsOptional = false)]
-        public int LocationId { get; }
-
-        public ItemEnterData(string itemId, int locationId) {
-            LocationId = locationId;
+        public ItemExitData(string itemId) {
             ItemId = itemId;
         }
 
-        public static EventData CreateEventData(string itemId, int locationId) {
+        public static EventData CreateEventData(string itemId) {
             return new EventData(
-                (byte) EventCode.ItemEnterEvent,
-                new ItemEnterData(itemId, locationId)
+                (byte) EventCode.ItemUnsubscribedEvent,
+                new ItemExitData(itemId)
             );
         }
     }

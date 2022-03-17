@@ -40,17 +40,13 @@ namespace MyMmo.Server {
         public int LocationId => locationId;
         public bool Disposed => disposed;
 
-        public void SendEvent(EventData eventData, SendParameters sendParameters = new SendParameters()) {
-            var eventMessage = new ItemEventMessage(eventData, this, sendParameters);
-            itemEventChannel.Publish(eventMessage);
-        }
-
         public void ChangeLocation(int locationId) {
             this.locationId = locationId;
 
             logger.Info($"item {id} publish ItemEvent with changed location {locationId}");
             var locationChangedData = new ItemLocationChangedData {ItemId = id, LocationId = locationId};
-            SendEvent(new EventData((byte) EventCode.ItemLocationChanged, locationChangedData));
+            var locationChangedEvent = new EventData((byte) EventCode.ItemLocationChanged, locationChangedData);
+            itemEventChannel.Publish(new ItemEventMessage(locationChangedEvent, this, new SendParameters()));
 
             logger.Info($"item {id} start interest management update");
             UpdateInterestManagement();
@@ -59,13 +55,8 @@ namespace MyMmo.Server {
             locationChangedChannel.Publish(new ItemLocationChangedMessage(locationId));
         }
 
-        public IDisposable
-            SubscribeLocationChanged(IFiber fiber, Action<ItemLocationChangedMessage> onLocationChanged) {
-            return locationChangedChannel.Subscribe(fiber, onLocationChanged);
-        }
-
-        public IDisposable SubscribeOnDispose(IFiber fiber, Action<ItemDisposedMessage> onDisposed) {
-            return disposeChannel.Subscribe(fiber, onDisposed);
+        public IDisposable SubscribeLocationChanged(IFiber fiber, Action<ItemLocationChangedMessage> onLocChanged) {
+            return locationChangedChannel.Subscribe(fiber, onLocChanged);
         }
 
         private void UpdateInterestManagement() {
@@ -105,10 +96,20 @@ namespace MyMmo.Server {
             );
         }
 
+        public void Destroy() {
+            var itemDestroyData = new ItemDestroyData(Id);
+            var eventData = new EventData((byte) EventCode.ItemDestroyEvent, itemDestroyData);
+            itemEventChannel.Publish(new ItemEventMessage(eventData, this, new SendParameters()));
+        }
+        
         public void Dispose() {
             logger.Info($"item {id} is going to dispose");
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public IDisposable SubscribeOnDispose(IFiber fiber, Action<ItemDisposedMessage> onDisposed) {
+            return disposeChannel.Subscribe(fiber, onDisposed);
         }
 
         [SuppressMessage("ReSharper", "InvertIf")]

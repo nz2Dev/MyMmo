@@ -56,8 +56,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Events\ItemExitEvent.cs" />
-    <Compile Include="Events\ItemEnterEvent.cs" />
+    <Compile Include="Events\ItemDestroyEvent.cs" />
+    <Compile Include="Events\ItemUnsubscribedEvent.cs" />
+    <Compile Include="Events\ItemSubscribedEvent.cs" />
     <Compile Include="Events\ItemLocationChangedEvent.cs" />
     <Compile Include="IGameListener.cs" />
     <Compile Include="Item.cs" />
@@ -69,10 +70,6 @@
     <Compile Include="Response\EnterWorldResponse.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MyMmoClient - Unity\Assets\MyMmo.Shared\MyMmo.Shared.csproj">
-      <Project>{900bcd64-dfa9-49d8-a3c6-b2a6b3f86a15}</Project>
-      <Name>MyMmo.Shared</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MyMmo.Commons\MyMmo.Commons.csproj">
       <Project>{06bb62b2-9fe5-4eb6-a5a0-9c36120e50e3}</Project>
       <Name>MyMmo.Commons</Name>

@@ -41,14 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\MyMmo.ClientDotNet\Events\ItemEnterEvent.cs">
-      <Link>Events\ItemEnterEvent.cs</Link>
-    </Compile>
-    <Compile Include="..\MyMmo.ClientDotNet\Events\ItemExitEvent.cs">
-      <Link>Events\ItemExitEvent.cs</Link>
+    <Compile Include="..\MyMmo.ClientDotNet\Events\ItemDestroyEvent.cs">
+      <Link>Events\ItemDestroyEvent.cs</Link>
     </Compile>
     <Compile Include="..\MyMmo.ClientDotNet\Events\ItemLocationChangedEvent.cs">
       <Link>Events\ItemLocationChangedEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\MyMmo.ClientDotNet\Events\ItemSubscribedEvent.cs">
+      <Link>Events\ItemSubscribedEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\MyMmo.ClientDotNet\Events\ItemUnsubscribedEvent.cs">
+      <Link>Events\ItemUnsubscribedEvent.cs</Link>
     </Compile>
     <Compile Include="..\MyMmo.ClientDotNet\Game.cs">
       <Link>Game.cs</Link>

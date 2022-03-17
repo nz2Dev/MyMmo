@@ -48,11 +48,13 @@ namespace MyMmo.Server {
 
         public void OnDisconnect(PeerBase peer) {
             logger.Info($"entered world operation handler of avatar {avatarItem.Id} is going to disconnect");
-            ((Peer) peer).SetCurrentOperationHandler(null);
-            peer.Dispose();
             
+            avatarItem.Destroy();
             avatarItem.Dispose();
             interestArea.Dispose();
+            
+            ((Peer) peer).SetCurrentOperationHandler(null);
+            peer.Dispose();
         }
 
     }

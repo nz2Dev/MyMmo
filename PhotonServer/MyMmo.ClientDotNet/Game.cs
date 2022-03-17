@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ExitGames.Client.Photon;
 using MyMmo.Client.Events;
@@ -62,7 +63,7 @@ namespace MyMmo.Client {
         public void DebugReturn(DebugLevel level, string message) {
             listener.OnLog(level, message);
             if (level <= debugLevel) {
-                System.Console.WriteLine($"{level}: {message}");
+                Console.WriteLine($"{level}: {message}");
             }
         }
 
@@ -105,18 +106,26 @@ namespace MyMmo.Client {
         public void OnEvent(EventData eventData) {
             DebugReturn(DebugLevel.INFO, "event: " + eventData.ToStringFull());
             switch ((EventCode) eventData.Code) {
-                case EventCode.ItemEnterEvent: {
-                    var enterEvent = EventDataConverter.Convert<ItemEnterEvent>(eventData.Parameters.paramDict);
-                    var item = new Item(enterEvent.ItemId, enterEvent.LocationId);
-                    itemCache.Add(item.Id, item);
-                    listener.OnItemEnter(item);
+                case EventCode.ItemSubscribedEvent: {
+                    var subscribeEvent = EventDataConverter.Convert<ItemSubscribedEvent>(eventData.Parameters.paramDict);
+                    Item item;
+                    if (itemCache.TryGetValue(subscribeEvent.ItemId, out var itemInCache)) {
+                        itemInCache.LocationId = subscribeEvent.LocationId;
+                        item = itemInCache;
+                    } else {
+                        var newItem = new Item(subscribeEvent.ItemId, subscribeEvent.LocationId);
+                        itemCache.Add(newItem.Id, newItem);
+                        item = newItem;
+                    }
+                    listener.OnItemSubscribed(item);
                     break;
                 }
 
-                case EventCode.ItemExitEvent: {
-                    var exitEvent = EventDataConverter.Convert<ItemExitEvent>(eventData.Parameters.paramDict);
-                    itemCache.Remove(exitEvent.ItemId);
-                    listener.OnItemExit(exitEvent.ItemId);
+                case EventCode.ItemUnsubscribedEvent: {
+                    var unsubscribedEvent = EventDataConverter.Convert<ItemUnsubscribedEvent>(eventData.Parameters.paramDict);
+                    if (itemCache.TryGetValue(unsubscribedEvent.ItemId, out var itemInCache)) {
+                        listener.OnItemUnsubscribed(itemInCache);
+                    }
                     break;
                 }
 
@@ -124,10 +133,19 @@ namespace MyMmo.Client {
                     var locationChangedEvent =
                         EventDataConverter.Convert<ItemLocationChangedEvent>(eventData.Parameters.paramDict);
                     if (itemCache.TryGetValue(locationChangedEvent.ItemId, out var item)) {
-                        item.ChangeLocationId(locationChangedEvent.LocationId);
+                        item.LocationId = locationChangedEvent.LocationId;
                     }
 
                     listener.OnItemLocationChanged(item);
+                    break;
+                }
+
+                case EventCode.ItemDestroyEvent: {
+                    var itemDestroyEvent = EventDataConverter.Convert<ItemDestroyEvent>(eventData.Parameters.paramDict);
+                    if (itemCache.TryGetValue(itemDestroyEvent.ItemId, out var itemInCache)) {
+                        itemInCache.IsDestroyed = itemCache.Remove(itemDestroyEvent.ItemId);
+                        listener.OnItemDestroyed(itemInCache);
+                    }
                     break;
                 }
             }

@@ -141,12 +141,16 @@ namespace MyMmo.ConsolePlayTest {
             PrintLog("WorldEntered...");
         }
 
-        public void OnItemEnter(Item item) {
+        public void OnItemSubscribed(Item item) {
             PrintLog($"item {item.Id} entered in our interest area...");
         }
 
-        public void OnItemExit(string itemId) {
-            PrintLog($"item {itemId} exited from our interest area...");
+        public void OnItemUnsubscribed(Item item) {
+            PrintLog($"item {item} exited from our interest area...");
+        }
+
+        public void OnItemDestroyed(Item item) {
+            PrintLog($"item {item} is destroyed...");
         }
 
         public void OnItemLocationChanged(Item item) {
