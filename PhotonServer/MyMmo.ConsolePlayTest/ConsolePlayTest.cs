@@ -3,6 +3,7 @@ using System.Threading;
 using ExitGames.Client.Photon;
 using MyMmo.Client;
 using MyMmo.Client.Params;
+using MyMmo.Commons.Scripts;
 
 namespace MyMmo.ConsolePlayTest {
     public class ConsolePlayTest : IGameListener {
@@ -166,5 +167,14 @@ namespace MyMmo.ConsolePlayTest {
         void IGameListener.OnLog(DebugLevel debugLevel, string message) {
             PrintLog($"Game Log: {message}");
         }
+
+        public void OnRegionUpdate(int locationId, ChangeLocationScript[] scripts) {
+            PrintLog($"region {locationId} updates with scripts");
+            foreach (var script in scripts) {
+                PrintLog($"script \"performs\", and is going to affect the state, change item {script.ItemId} location to: {script.ToLocation}");
+                game.ApplyPerformedScript(script);
+            }
+        }
+
     }
 }

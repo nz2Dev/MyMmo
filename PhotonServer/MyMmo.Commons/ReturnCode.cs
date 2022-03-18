@@ -28,7 +28,9 @@ namespace MyMmo.Commons {
         /// </summary>
         WorldAlreadyExist,
 
-        InternalException
+        InternalException,
+
+        AvatarRegistrationError
 
     }
 }

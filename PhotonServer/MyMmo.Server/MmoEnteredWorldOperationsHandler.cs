@@ -10,12 +10,14 @@ namespace MyMmo.Server {
 
         private readonly ILogger logger = LogManager.GetCurrentClassLogger();
 
+        private readonly World world;
         private readonly Item avatarItem;
         private readonly InterestArea interestArea;
 
-        public MmoEnteredWorldOperationsHandler(Item avatarItem, InterestArea interestArea) {
+        public MmoEnteredWorldOperationsHandler(Item avatarItem, InterestArea interestArea, World world) {
             this.avatarItem = avatarItem;
             this.interestArea = interestArea;
+            this.world = world;
         }
 
         public OperationResponse OnOperationRequest(PeerBase peer, OperationRequest operationRequest,
@@ -41,8 +43,9 @@ namespace MyMmo.Server {
                 return MmoOperationsUtils.OperationWrongDataContract(operationRequest, operationChangeLocation);
             }
 
-            avatarItem.ChangeLocation(operationChangeLocation.LocationId);
-            
+            var avatarLocation = world.GetLocation(avatarItem.LocationId);
+            avatarLocation.RequestChangeItemLocation(avatarItem, operationChangeLocation.LocationId);
+
             return MmoOperationsUtils.OperationSuccess(operationRequest);
         }
 

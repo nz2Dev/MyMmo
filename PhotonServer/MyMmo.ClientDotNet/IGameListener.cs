@@ -1,4 +1,5 @@
 using ExitGames.Client.Photon;
+using MyMmo.Commons.Scripts;
 
 namespace MyMmo.Client {
     public interface IGameListener {
@@ -31,6 +32,8 @@ namespace MyMmo.Client {
         void OnItemLocationChanged(Item item);
 
         void OnLog(DebugLevel debugLevel, string message);
+        
+        void OnRegionUpdate(int locationId, ChangeLocationScript[] scripts);
 
     }
 }

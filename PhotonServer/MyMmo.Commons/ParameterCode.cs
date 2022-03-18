@@ -7,7 +7,9 @@ namespace MyMmo.Commons {
 
         ItemId,
 
-        LocationId
+        LocationId,
+
+        ScriptsList
 
     }
 }

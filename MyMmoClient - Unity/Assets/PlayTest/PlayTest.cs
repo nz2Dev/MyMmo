@@ -4,6 +4,7 @@ using System.Linq;
 using ExitGames.Client.Photon;
 using MyMmo.Client;
 using MyMmo.Client.Params;
+using MyMmo.Commons.Scripts;
 using UnityEngine;
 
 public class PlayTest : MonoBehaviour, IGameListener {
@@ -126,24 +127,17 @@ public class PlayTest : MonoBehaviour, IGameListener {
         Debug.Log($"OnItemSubscribed {item.Id}");
         var target = FindObjectsOfType<AvatarItem>().FirstOrDefault(i => i.source.Id == item.Id);
         if (target != null) {
-            target.source = item;
+            Debug.LogWarning("Current representation might be not with sync with item: " + item.Id);
             return;
         }
 
-        const int distanceOffset = 2;
-        var centerOfLocation = Vector3.zero;
-        var avatarsOnLocation = FindObjectsOfType<AvatarItem>().Where(avatar => avatar.source.LocationId == item.LocationId).ToArray();
-        var radianStep = (1 / ((float) avatarsOnLocation.Length + 1) /*plus spawned*/) * Mathf.PI;
-        for (var i = 0; i < avatarsOnLocation.Length; i++) {
-            var direction = new Vector3(Mathf.Sin(radianStep * i), 0, Mathf.Cos(radianStep * i));
-            avatarsOnLocation[i].MoveTo(centerOfLocation + direction * distanceOffset);
+        var targetLocation = FindObjectsOfType<Location>().FirstOrDefault(location => location.Id == item.LocationId);
+        if (targetLocation == null) {
+            Debug.LogWarning("Target location not found, location id: " + item.LocationId);
+            return;
         }
-
-        const int spawnHeight = 5;
-        var spawnRadians = radianStep * avatarsOnLocation.Length + 1;
-        var spawnPoint = new Vector3(Mathf.Sin(spawnRadians), spawnHeight, Mathf.Cos(spawnRadians));
-        var player = Instantiate(playerPrefab, spawnPoint, Quaternion.identity);
-        player.GetComponent<AvatarItem>().source = item;
+        
+        targetLocation.SpawnAvatar(playerPrefab, item);
     }
 
     public void OnItemUnsubscribed(Item item) {
@@ -164,5 +158,12 @@ public class PlayTest : MonoBehaviour, IGameListener {
         logs.Add($"{debugLevel}: {message}");
         Debug.Log($"{debugLevel}: {message}");
     }
-    
+
+    public void OnRegionUpdate(int locationId, ChangeLocationScript[] scripts) {
+        foreach (var script in scripts) {
+            OnLog(DebugLevel.INFO, $"should be shown how item {script.ItemId} changes location to {script.ToLocation}");
+            game.ApplyPerformedScript(script);
+        }
+    }
+
 }

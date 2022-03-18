@@ -1,4 +1,5 @@
 using System;
+using Photon.SocketServer;
 
 namespace MyMmo.Server {
     public class RequestItemSnapshotMessage {
@@ -21,6 +22,18 @@ namespace MyMmo.Server {
             From = @from;
             To = to;
             Who = who;
+        }
+
+    }
+
+    public class RegionEventMessage {
+
+        public EventData EventData { get; }
+        public SendParameters SendParameters { get; }
+
+        public RegionEventMessage(EventData eventData, SendParameters sendParameters) {
+            EventData = eventData;
+            SendParameters = sendParameters;
         }
 
     }

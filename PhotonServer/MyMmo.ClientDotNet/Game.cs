@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using ExitGames.Client.Photon;
+using MyMmo.Client.Consumers;
 using MyMmo.Client.Events;
 using MyMmo.Client.Params;
 using MyMmo.Client.Response;
 using MyMmo.Commons;
+using MyMmo.Commons.Scripts;
 using MyMmo.Playground;
 
 namespace MyMmo.Client {
@@ -16,9 +18,20 @@ namespace MyMmo.Client {
         private DebugLevel debugLevel;
 
         private string avatarId;
+        private readonly ChangeLocationClientScriptReader scriptReader;
 
+        static Game() {
+            Protocol.TryRegisterType(
+                typeof(ChangeLocationScript),
+                (byte) CommonTypeCode.ChangeLocationScriptType,
+                ChangeLocationScript.Serialize,
+                ChangeLocationScript.Deserialize
+            );
+        }
+        
         public Game(IGameListener listener) {
             this.listener = listener;
+            scriptReader = new ChangeLocationClientScriptReader(itemCache);
         }
 
         public void Initialize(PhotonPeer photonPeer, DebugLevel internalDebugLevel = DebugLevel.ERROR) {
@@ -58,6 +71,13 @@ namespace MyMmo.Client {
             var changeLocationParams = new ChangeLocationParams {ItemId = itemId, LocationId = locationId};
             peer.SendOperation((byte) OperationCode.ChangeLocation, EventDataConverter.ToDictionary(changeLocationParams),
                 SendOptions.SendReliable);
+        }
+
+        public void ApplyPerformedScript(ChangeLocationScript script) {
+            // modify internal state
+            // todo move internal state to it's ClientWorld domain
+            // that would represent internal state for scripts to take last state information
+            scriptReader.ApplyScript(script);
         }
 
         public void DebugReturn(DebugLevel level, string message) {
@@ -146,6 +166,13 @@ namespace MyMmo.Client {
                         itemInCache.IsDestroyed = itemCache.Remove(itemDestroyEvent.ItemId);
                         listener.OnItemDestroyed(itemInCache);
                     }
+                    break;
+                }
+
+                case EventCode.RegionUpdated: {
+                    var regionUpdateEvent =
+                        EventDataConverter.Convert<RegionUpdateEvent>(eventData.Parameters.paramDict);
+                    listener.OnRegionUpdate(regionUpdateEvent.LocationId, regionUpdateEvent.Scripts);
                     break;
                 }
             }

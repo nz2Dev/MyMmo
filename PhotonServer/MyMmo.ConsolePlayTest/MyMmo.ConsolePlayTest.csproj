@@ -49,6 +49,10 @@
         <Project>{4840ea77-efd1-4fab-859e-2daed197a134}</Project>
         <Name>MyMmo.ClientDotNet</Name>
       </ProjectReference>
+      <ProjectReference Include="..\MyMmo.Commons\MyMmo.Commons.csproj">
+        <Project>{06bb62b2-9fe5-4eb6-a5a0-9c36120e50e3}</Project>
+        <Name>MyMmo.Commons</Name>
+      </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

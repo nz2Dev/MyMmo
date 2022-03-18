@@ -56,10 +56,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Consumers\ChangeLocationClientScriptReader.cs" />
     <Compile Include="Events\ItemDestroyEvent.cs" />
     <Compile Include="Events\ItemUnsubscribedEvent.cs" />
     <Compile Include="Events\ItemSubscribedEvent.cs" />
     <Compile Include="Events\ItemLocationChangedEvent.cs" />
+    <Compile Include="Events\RegionUpdateEvent.cs" />
     <Compile Include="IGameListener.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Params\ChangeLocationParams.cs" />

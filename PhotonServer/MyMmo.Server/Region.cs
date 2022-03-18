@@ -18,6 +18,9 @@ namespace MyMmo.Server {
         private readonly Channel<ItemEventMessage> regionalItemEventChannel =
             new Channel<ItemEventMessage>();
         
+        private readonly Channel<RegionEventMessage> regionEventChannel = 
+            new Channel<RegionEventMessage>();
+        
         public Region(int id) {
             this.id = id;
         }
@@ -47,6 +50,14 @@ namespace MyMmo.Server {
 
         public IDisposable SubscribeItemEvent(IFiber fiber, Action<ItemEventMessage> onItemEvent) {
             return regionalItemEventChannel.Subscribe(fiber, onItemEvent);
+        }
+
+        public void PublishRegionEvent(RegionEventMessage regionEventMessage) {
+            regionEventChannel.Publish(regionEventMessage);
+        }
+
+        public IDisposable SubscribeRegionEvent(IFiber fiber, Action<RegionEventMessage> onRegionEvent) {
+            return regionEventChannel.Subscribe(fiber, onRegionEvent);
         }
     }
 }

@@ -21,6 +21,12 @@ namespace MyMmo.Server {
             }
         }
 
+        public bool TryGetItem(string itemId, out Item item) {
+            using (ReadLock.TryEnter(readWriteLock, Settings.MaxLockWaitTimeMilliseconds)) {
+                return items.TryGetValue(itemId, out item);
+            }
+        }
+        
         public void Remove(Item item) {
             using (WriteLock.TryEnter(readWriteLock, Settings.MaxLockWaitTimeMilliseconds)) {
                 items.Remove(item.Id);

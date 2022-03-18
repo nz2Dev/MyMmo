@@ -41,6 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\MyMmo.ClientDotNet\Consumers\ChangeLocationClientScriptReader.cs">
+      <Link>Consumers\ChangeLocationClientScriptReader.cs</Link>
+    </Compile>
     <Compile Include="..\MyMmo.ClientDotNet\Events\ItemDestroyEvent.cs">
       <Link>Events\ItemDestroyEvent.cs</Link>
     </Compile>
@@ -52,6 +55,9 @@
     </Compile>
     <Compile Include="..\MyMmo.ClientDotNet\Events\ItemUnsubscribedEvent.cs">
       <Link>Events\ItemUnsubscribedEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\MyMmo.ClientDotNet\Events\RegionUpdateEvent.cs">
+      <Link>Events\RegionUpdateEvent.cs</Link>
     </Compile>
     <Compile Include="..\MyMmo.ClientDotNet\Game.cs">
       <Link>Game.cs</Link>

@@ -18,10 +18,16 @@ namespace MyMmo.Server {
 
         protected override void OnRegionEnter(Region region) {
             logger.Info($"client interest area {Id} subscribe to region {region.Id}' ItemEvent, so new event published on that region will be sent to peer {peer.ConnectionId}");
-            regionEventSubscriptions.Add(region, region.SubscribeItemEvent(peer.RequestFiber, message => {
-                logger.Info($"client interest area {Id} receive ItemEvent with eventCode {message.Event.Code} from region {region.Id}, sending event to peer {peer.ConnectionId}");
-                peer.SendEvent(message.Event, message.SendParameters);
-            }));
+            regionEventSubscriptions.Add(region, new SubscriptionsCollection(
+                region.SubscribeItemEvent(peer.RequestFiber, message => {
+                    logger.Info($"client interest area {Id} receive ItemEvent with eventCode {message.Event.Code} from region {region.Id}, sending event to peer {peer.ConnectionId}");
+                    peer.SendEvent(message.Event, message.SendParameters);
+                }),
+                region.SubscribeRegionEvent(peer.RequestFiber, message => {
+                    logger.Info($"client interest area {Id} receive RegionEvent with eventCode {message.EventData.Code} from region {region.Id}, sending event to peer {peer.ConnectionId}");
+                    peer.SendEvent(message.EventData, message.SendParameters);
+                })
+            ));
         }
 
         protected override void OnRegionExit(Region region) {

@@ -66,12 +66,22 @@ namespace MyMmo.Server {
             }
 
             var actorAvatar = new Item(enterWorldOperation.UserName, peer, world);
+            if (!world.RegisterItem(actorAvatar)) {
+                return MmoOperationsUtils.OperationError(
+                    operationRequest,
+                    ReturnCode.AvatarRegistrationError,
+                    $"World can't register Avatar, it's already exist, specified UserName: {enterWorldOperation.UserName}"
+                );
+            }
+            
+            // todo do this via Location, so it's all sync with the scripts things
+            // and todo make it clear what methods relate to the interest management and what with update/scripts things
             actorAvatar.ChangeLocation(World.RootLocationId);
 
             var interestArea = new ClientInterestArea(peer, world, enterWorldOperation.UserName);
             interestArea.FollowLocationOf(actorAvatar);
 
-            var enteredWorldOperationHandler = new MmoEnteredWorldOperationsHandler(actorAvatar, interestArea);
+            var enteredWorldOperationHandler = new MmoEnteredWorldOperationsHandler(actorAvatar, interestArea, world);
             ((Peer) peer).SetCurrentOperationHandler(enteredWorldOperationHandler);
             
             var responseParams = new EnterWorldResponseParams {AvatarItemId = actorAvatar.Id};

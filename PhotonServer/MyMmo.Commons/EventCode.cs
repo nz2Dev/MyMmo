@@ -5,9 +5,11 @@ namespace MyMmo.Commons {
 
         ItemUnsubscribedEvent,
         
-        ItemLocationChanged,
+        ItemLocationChanged /*todo delete*/,
 
-        ItemDestroyEvent
+        ItemDestroyEvent,
+
+        RegionUpdated
 
     }
 }
