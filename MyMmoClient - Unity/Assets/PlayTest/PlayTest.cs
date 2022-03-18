@@ -129,9 +129,20 @@ public class PlayTest : MonoBehaviour, IGameListener {
             target.source = item;
             return;
         }
-        
-        var spawnOffset = game.Items.Count;
-        var player = Instantiate(playerPrefab, new Vector3(spawnOffset, 0, spawnOffset), Quaternion.identity);
+
+        const int distanceOffset = 2;
+        var centerOfLocation = Vector3.zero;
+        var avatarsOnLocation = FindObjectsOfType<AvatarItem>().Where(avatar => avatar.source.LocationId == item.LocationId).ToArray();
+        var radianStep = (1 / ((float) avatarsOnLocation.Length + 1) /*plus spawned*/) * Mathf.PI;
+        for (var i = 0; i < avatarsOnLocation.Length; i++) {
+            var direction = new Vector3(Mathf.Sin(radianStep * i), 0, Mathf.Cos(radianStep * i));
+            avatarsOnLocation[i].MoveTo(centerOfLocation + direction * distanceOffset);
+        }
+
+        const int spawnHeight = 5;
+        var spawnRadians = radianStep * avatarsOnLocation.Length + 1;
+        var spawnPoint = new Vector3(Mathf.Sin(spawnRadians), spawnHeight, Mathf.Cos(spawnRadians));
+        var player = Instantiate(playerPrefab, spawnPoint, Quaternion.identity);
         player.GetComponent<AvatarItem>().source = item;
     }
 

@@ -34,7 +34,8 @@ namespace MyMmo.ConsolePlayTest {
 
         private void TryConnectManually() {
             //ConnectNgrokWebSocket(); // ngrok
-            ConnectLocalhostWebSocket(); //localhost
+            //ConnectLocalhostWebSocket(); //localhost websocket
+            ConnectLocalhostTcp(); // localhost tcp
         }
 
         private void ConnectNgrokWebSocket() {
@@ -45,6 +46,11 @@ namespace MyMmo.ConsolePlayTest {
         private void ConnectLocalhostWebSocket() {
             game.Initialize(new PhotonPeer(game, ConnectionProtocol.WebSocket));
             game.Connect("ws://localhost:9090");
+        }
+
+        private void ConnectLocalhostTcp() {
+            game.Initialize(new PhotonPeer(game, ConnectionProtocol.Tcp));
+            game.Connect("localhost:4530");
         }
 
         private void RunGameLoop() {
