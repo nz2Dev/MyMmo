@@ -160,10 +160,13 @@ public class PlayTest : MonoBehaviour, IGameListener {
     }
 
     public void OnRegionUpdate(int locationId, ChangeLocationScript[] scripts) {
-        foreach (var script in scripts) {
-            OnLog(DebugLevel.INFO, $"should be shown how item {script.ItemId} changes location to {script.ToLocation}");
-            game.ApplyPerformedScript(script);
+        var targetLocation = FindObjectsOfType<Location>().FirstOrDefault(location => location.Id == locationId);
+        if (targetLocation == null) {
+            Debug.LogError("location: " + locationId + " not found for updateScript execution");
+            return;
         }
+        
+        targetLocation.ExecuteScripts(scripts, game);
     }
 
 }

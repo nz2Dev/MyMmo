@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Linq;
 using MyMmo.Client;
+using MyMmo.Commons.Scripts;
 using UnityEngine;
 
 public class Location : MonoBehaviour {
@@ -21,6 +23,25 @@ public class Location : MonoBehaviour {
         var spawnDirectionFromCenter = new Vector3(Mathf.Sin(spawnRadians), spawnHeight, Mathf.Cos(spawnRadians));
         var player = Instantiate(playerPrefab, centerOfLocation + spawnDirectionFromCenter * distanceOffset, Quaternion.identity);
         player.GetComponent<AvatarItem>().source = item;
+    }
+
+    public void ExecuteScripts(ChangeLocationScript[] scripts, Game game) {
+        IEnumerator nextProcess = null;
+        foreach (var script in scripts.Reverse()) {
+            nextProcess = BuildCoroutine(new ChangeLocationScriptExecutor(script, game), nextProcess);
+        }
+        StartCoroutine(nextProcess);
+    }
+
+    private IEnumerator BuildCoroutine(ChangeLocationScriptExecutor executor, IEnumerator continuation) {
+        var needUpdate = true;
+        while (needUpdate) {
+            executor.Update();
+            needUpdate = executor.IsRunning;
+            yield return new WaitForEndOfFrame();
+        }
+
+        yield return StartCoroutine(continuation);
     }
 
 }
