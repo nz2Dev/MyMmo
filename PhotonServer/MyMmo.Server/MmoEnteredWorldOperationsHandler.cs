@@ -54,6 +54,7 @@ namespace MyMmo.Server {
             
             avatarItem.Destroy();
             avatarItem.Dispose();
+            world.RemoveItem(avatarItem);
             interestArea.Dispose();
             
             ((Peer) peer).SetCurrentOperationHandler(null);

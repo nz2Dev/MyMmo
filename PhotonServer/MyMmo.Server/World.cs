@@ -59,6 +59,10 @@ namespace MyMmo.Server {
             return itemRegistry.TryAdd(item);
         }
 
+        public void RemoveItem(Item item) {
+            itemRegistry.Remove(item);
+        }
+
         public bool TryGetItem(string itemId, out Item item) {
             return itemRegistry.TryGetItem(itemId, out item);
         }
