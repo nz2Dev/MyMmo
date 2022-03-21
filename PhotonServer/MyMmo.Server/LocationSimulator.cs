@@ -41,7 +41,7 @@ namespace MyMmo.Server {
         public void RequestMoveItemRandomly(Item item) {
             lock (requestLock) {
                 CheckScheduling();
-                producers.Add(new ChangePositionProducer(world, item.Id));
+                producers.Add(new MoveItemRandomlyProducer(world, item.Id));
             }
         }
 
@@ -61,6 +61,7 @@ namespace MyMmo.Server {
                 foreach (var producer in producers) {
                     scripts.Add(producer.ProduceImmediately());
                 }
+                producers.Clear();
 
                 // then to apply state from them, so server will be the first one
                 foreach (var script in scripts) {

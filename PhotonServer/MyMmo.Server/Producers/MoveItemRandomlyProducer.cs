@@ -2,12 +2,12 @@ using System;
 using MyMmo.Server.Scripts;
 
 namespace MyMmo.Server.Producers {
-    public class ChangePositionProducer : IScriptProducer<ChangePositionScript> {
+    public class MoveItemRandomlyProducer : IScriptProducer<ChangePositionScript> {
 
         private readonly World world;
         private readonly string sourceItemId;
 
-        public ChangePositionProducer(World world, string sourceItemId) {
+        public MoveItemRandomlyProducer(World world, string sourceItemId) {
             this.world = world;
             this.sourceItemId = sourceItemId;
         }

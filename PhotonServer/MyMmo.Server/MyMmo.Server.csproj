@@ -253,7 +253,7 @@
     <Compile Include="Operations\EnterWorldResponseParams.cs" />
     <Compile Include="Operations\MoveAvatarRandomlyOperation.cs" />
     <Compile Include="Producers\ChangeLocationProducer.cs" />
-    <Compile Include="Producers\ChangePositionProducer.cs" />
+    <Compile Include="Producers\MoveItemRandomlyProducer.cs" />
     <Compile Include="Scripts\ChangeLocationScript.cs" />
     <Compile Include="Scripts\MappingUtils.cs" />
     <Compile Include="Scripts\ChangePositionScript.cs" />
