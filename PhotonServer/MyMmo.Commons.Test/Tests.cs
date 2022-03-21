@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using MyMmo.Commons.Scripts;
+﻿using MyMmo.Commons.Scripts;
 using NUnit.Framework;
 
 namespace TestProject1 {
@@ -9,9 +8,22 @@ namespace TestProject1 {
         [Test]
         public void Test1() {
             Assert.True(true);
-            var bytes = ScriptsDataProtocol.Serialize(new ScriptsClip {Scripts = new[] {new ChangeLocationScript("it1", 1, 2)}});
+            var bytes = ScriptsDataProtocol.Serialize(new ScriptsDataClip {
+                ScriptsData = new BaseScriptData[] {
+                    new ChangeLocationScriptData {
+                        ItemId = "it1", 
+                        FromLocation = 1,
+                        ToLocation = 2
+                    },
+                    new ChangePositionScriptData {
+                    }
+                }
+            });
+            
             var scriptsClip = ScriptsDataProtocol.Deserialize(bytes);
-            Assert.AreEqual(scriptsClip.Scripts[0].ItemId, "it1");
+            Assert.IsInstanceOf<ChangeLocationScriptData>(scriptsClip.ScriptsData[0]);
+            Assert.AreEqual(((ChangeLocationScriptData) scriptsClip.ScriptsData[0]).ItemId, "it1");
+            
         }
 
     }

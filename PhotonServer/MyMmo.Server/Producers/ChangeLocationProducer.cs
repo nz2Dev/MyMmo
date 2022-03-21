@@ -1,21 +1,28 @@
-using MyMmo.Commons.Scripts;
+using System;
+using MyMmo.Server.Scripts;
 
 namespace MyMmo.Server.Producers {
-    public class ChangeLocationProducer {
+    public class ChangeLocationProducer : IScriptProducer<ChangeLocationScript> {
 
-        public Item Item { get; set; }
-        public int NewLocationId { get; set; }
+        private World world;
+        private string itemId;
+        private int newLocationId;
 
-        public ChangeLocationProducer(Item item, int newLocationId) {
-            Item = item;
-            NewLocationId = newLocationId;
+        public ChangeLocationProducer(string itemId, int newLocationId, World world) {
+            this.itemId = itemId;
+            this.newLocationId = newLocationId;
+            this.world = world;
         }
 
-        public ChangeLocationScript ProduceImmediatelyForEntireInterval() {
+        public ChangeLocationScript ProduceImmediately() {
+            if (!world.TryGetItem(itemId, out var item)) {
+                throw new Exception("item not found: " + itemId);
+            }
+            
             return new ChangeLocationScript(
-                Item.Id,
-                Item.LocationId,
-                NewLocationId
+                item.Id,
+                item.LocationId,
+                newLocationId
             );
         }
 

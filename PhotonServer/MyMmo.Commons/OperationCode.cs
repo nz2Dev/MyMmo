@@ -7,5 +7,7 @@
         
         ChangeLocation,
 
+        MoveAvatarRandomly
+
     }
 }

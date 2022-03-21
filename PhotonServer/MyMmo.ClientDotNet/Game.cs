@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ExitGames.Client.Photon;
-using MyMmo.Client.Consumers;
 using MyMmo.Client.Events;
 using MyMmo.Client.Params;
 using MyMmo.Client.Response;
+using MyMmo.Client.Scripts;
 using MyMmo.Commons;
 using MyMmo.Commons.Scripts;
 using MyMmo.Playground;
@@ -16,22 +17,19 @@ namespace MyMmo.Client {
         private readonly IGameListener listener;
         private readonly Dictionary<string, Item> itemCache = new Dictionary<string, Item>();
         private DebugLevel debugLevel;
-
         private string avatarId;
-        private readonly ChangeLocationClientScriptReader scriptReader;
-
+        
         public Game(IGameListener listener) {
             this.listener = listener;
-            scriptReader = new ChangeLocationClientScriptReader(itemCache);
         }
+
+        public ICollection<Item> Items => itemCache.Values;
+        public Item AvatarItem => string.IsNullOrEmpty(avatarId) ? null : itemCache[avatarId];
 
         public void Initialize(PhotonPeer photonPeer, DebugLevel internalDebugLevel = DebugLevel.ERROR) {
             peer = photonPeer;
             debugLevel = internalDebugLevel;
         }
-
-        public ICollection<Item> Items => itemCache.Values;
-        public Item AvatarItem => string.IsNullOrEmpty(avatarId) ? null : itemCache[avatarId];
 
         public void ConnectDefault() {
             Connect("6.tcp.ngrok.io:17091");
@@ -64,11 +62,8 @@ namespace MyMmo.Client {
                 SendOptions.SendReliable);
         }
 
-        public void ApplyPerformedScript(ChangeLocationScript script) {
-            // modify internal state
-            // todo move internal state to it's ClientWorld domain
-            // that would represent internal state for scripts to take last state information
-            scriptReader.ApplyScript(script);
+        public void MoveAvatarRandomly() {
+            peer.SendOperation((byte) OperationCode.MoveAvatarRandomly, new Dictionary<byte, object>(), SendOptions.SendUnreliable);
         }
 
         public void DebugReturn(DebugLevel level, string message) {
@@ -164,7 +159,13 @@ namespace MyMmo.Client {
                     var regionUpdateEvent =
                         EventDataConverter.Convert<RegionUpdateEvent>(eventData.Parameters.paramDict);
                     var scriptsClip = ScriptsDataProtocol.Deserialize(regionUpdateEvent.ScriptsBytes);
-                    listener.OnRegionUpdate(regionUpdateEvent.LocationId, scriptsClip.Scripts);
+                    
+                    var clientScripts = scriptsClip.ScriptsData.Select(data => ClientScriptsFactory.Create(data));
+                    foreach (var clientScript in clientScripts) {
+                        clientScript.ApplyClientState(itemCache);
+                    }
+                    
+                    listener.OnRegionUpdate(regionUpdateEvent.LocationId, scriptsClip.ScriptsData);
                     break;
                 }
             }

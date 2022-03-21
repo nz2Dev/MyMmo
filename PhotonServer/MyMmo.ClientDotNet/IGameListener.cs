@@ -33,7 +33,7 @@ namespace MyMmo.Client {
 
         void OnLog(DebugLevel debugLevel, string message);
         
-        void OnRegionUpdate(int locationId, ChangeLocationScript[] scripts);
+        void OnRegionUpdate(int locationId, BaseScriptData[] scriptsData);
 
     }
 }

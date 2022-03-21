@@ -42,14 +42,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Primitives\Vector2.cs" />
     <Compile Include="EventCode.cs" />
     <Compile Include="OperationCode.cs" />
     <Compile Include="ParameterCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReturnCode.cs" />
-    <Compile Include="Scripts\ChangeLocationScript.cs" />
+    <Compile Include="Scripts\BaseScriptData.cs" />
+    <Compile Include="Scripts\ChangeLocationScriptData.cs" />
     <Compile Include="CommonTypeCode.cs" />
-    <Compile Include="Scripts\ScriptsClip.cs" />
+    <Compile Include="Scripts\ChangePositionScriptData.cs" />
+    <Compile Include="Scripts\ScriptsDataClip.cs" />
     <Compile Include="Scripts\ScriptsDataProtocol.cs" />
   </ItemGroup>
   <ItemGroup>

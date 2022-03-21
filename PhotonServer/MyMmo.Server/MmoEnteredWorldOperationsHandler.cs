@@ -27,6 +27,10 @@ namespace MyMmo.Server {
                     return OperationChangeLocation(peer, operationRequest, sendParameters);
                 }
 
+                case OperationCode.MoveAvatarRandomly: {
+                    return OperationMoveAvatarRandomly(peer, operationRequest, sendParameters);
+                }
+
                 case OperationCode.CreateWorld:
                 case OperationCode.EnterWorld:
                     return MmoOperationsUtils.OperationWrongState(operationRequest);
@@ -43,8 +47,20 @@ namespace MyMmo.Server {
                 return MmoOperationsUtils.OperationWrongDataContract(operationRequest, operationChangeLocation);
             }
 
-            var avatarLocation = world.GetLocation(avatarItem.LocationId);
+            var avatarLocation = world.GetLocationSimulator(avatarItem.LocationId);
             avatarLocation.RequestChangeItemLocation(avatarItem, operationChangeLocation.LocationId);
+
+            return MmoOperationsUtils.OperationSuccess(operationRequest);
+        }
+
+        private OperationResponse OperationMoveAvatarRandomly(PeerBase peer, OperationRequest operationRequest, SendParameters sendParameters) {
+            var operationMove = new MoveAvatarRandomlyOperation(peer.Protocol, operationRequest);
+            if (!operationMove.IsValid) {
+                return MmoOperationsUtils.OperationWrongDataContract(operationRequest, operationMove);
+            }
+
+            var avatarLocation = world.GetLocationSimulator(avatarItem.LocationId);
+            avatarLocation.RequestMoveItemRandomly(avatarItem);
 
             return MmoOperationsUtils.OperationSuccess(operationRequest);
         }

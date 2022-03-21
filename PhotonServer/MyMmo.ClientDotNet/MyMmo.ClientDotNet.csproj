@@ -56,12 +56,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Consumers\ChangeLocationClientScriptReader.cs" />
     <Compile Include="Events\ItemDestroyEvent.cs" />
     <Compile Include="Events\ItemUnsubscribedEvent.cs" />
     <Compile Include="Events\ItemSubscribedEvent.cs" />
     <Compile Include="Events\ItemLocationChangedEvent.cs" />
     <Compile Include="Events\RegionUpdateEvent.cs" />
+    <Compile Include="IClientScript.cs" />
     <Compile Include="IGameListener.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Params\ChangeLocationParams.cs" />
@@ -70,6 +70,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Response\EnterWorldResponse.cs" />
+    <Compile Include="Scripts\ChangeLocationClientScript.cs" />
+    <Compile Include="Scripts\ChangePositionClientScript.cs" />
+    <Compile Include="Scripts\ClientScriptsFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyMmo.Commons\MyMmo.Commons.csproj">

@@ -25,19 +25,18 @@ public class Location : MonoBehaviour {
         player.GetComponent<AvatarItem>().source = item;
     }
 
-    public void ExecuteScripts(ChangeLocationScript[] scripts, Game game) {
+    public void ExecuteScripts(BaseScriptData[] scriptsData) {
         IEnumerator nextProcess = null;
-        foreach (var script in scripts.Reverse()) {
-            nextProcess = BuildCoroutine(new ChangeLocationScriptExecutor(script, game), nextProcess);
+        foreach (var script in scriptsData.Reverse()) {
+            nextProcess = BuildCoroutine(UnityScriptFactory.Create(script), nextProcess);
         }
         StartCoroutine(nextProcess);
     }
 
-    private IEnumerator BuildCoroutine(ChangeLocationScriptExecutor executor, IEnumerator continuation) {
+    private IEnumerator BuildCoroutine(IUnityScript unityScript, IEnumerator continuation) {
         var needUpdate = true;
-        while (needUpdate) {
-            executor.Update();
-            needUpdate = executor.IsRunning;
+        while (needUpdate) { 
+            needUpdate = unityScript.UpdateUnityState();
             yield return new WaitForEndOfFrame();
         }
 

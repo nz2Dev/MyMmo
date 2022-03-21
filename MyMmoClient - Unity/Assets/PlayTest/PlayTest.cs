@@ -159,14 +159,14 @@ public class PlayTest : MonoBehaviour, IGameListener {
         Debug.Log($"{debugLevel}: {message}");
     }
 
-    public void OnRegionUpdate(int locationId, ChangeLocationScript[] scripts) {
+    public void OnRegionUpdate(int locationId, BaseScriptData[] scripts) {
         var targetLocation = FindObjectsOfType<Location>().FirstOrDefault(location => location.Id == locationId);
         if (targetLocation == null) {
             Debug.LogError("location: " + locationId + " not found for updateScript execution");
             return;
         }
         
-        targetLocation.ExecuteScripts(scripts, game);
+        targetLocation.ExecuteScripts(scripts);
     }
 
 }

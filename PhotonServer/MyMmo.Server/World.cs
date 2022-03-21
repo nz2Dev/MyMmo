@@ -12,9 +12,13 @@ namespace MyMmo.Server {
         private readonly Region secondRegion;
         private readonly Region thirdRegion;
 
-        private readonly Location rootLocation;
-        private readonly Location secondLocation;
-        private readonly Location thirdLocation;
+        private readonly LocationArea rootLocationArea;
+        private readonly LocationArea secondLocationArea;
+        private readonly LocationArea thirdLocationArea;
+        
+        private readonly LocationSimulator rootLocationSimulator;
+        private readonly LocationSimulator secondLocationSimulator;
+        private readonly LocationSimulator thirdLocationSimulator;
         
         private readonly ItemCache itemRegistry = new ItemCache();
 
@@ -23,9 +27,13 @@ namespace MyMmo.Server {
             secondRegion = new Region(SecondLocationId);
             thirdRegion = new Region(ThirdLocationId);
             
-            rootLocation = new Location(this, RootLocationId);
-            secondLocation = new Location(this, SecondLocationId);
-            thirdLocation = new Location(this, ThirdLocationId);
+            rootLocationArea = new LocationArea(RootLocationId);
+            secondLocationArea = new LocationArea(SecondLocationId);
+            thirdLocationArea = new LocationArea(ThirdLocationId);
+            
+            rootLocationSimulator = new LocationSimulator(this, RootLocationId);
+            secondLocationSimulator = new LocationSimulator(this, SecondLocationId);
+            thirdLocationSimulator = new LocationSimulator(this, ThirdLocationId);
         }
 
         public Region GetRegion(int locationId) {
@@ -33,7 +41,7 @@ namespace MyMmo.Server {
                 case RootLocationId: return rootRegion;
                 case SecondLocationId: return secondRegion;
                 case ThirdLocationId: return thirdRegion;
-                default: throw new ArgumentOutOfRangeException();
+                default: throw new ArgumentOutOfRangeException($"locationId: {locationId}");
             }
         }
 
@@ -42,16 +50,25 @@ namespace MyMmo.Server {
                 case RootLocationId: return new HashSet<Region> {rootRegion, secondRegion};
                 case SecondLocationId: return new HashSet<Region> {rootRegion, secondRegion, thirdRegion};
                 case ThirdLocationId: return new HashSet<Region> {secondRegion, thirdRegion};
-                default: throw new ArgumentOutOfRangeException();
+                default: throw new ArgumentOutOfRangeException($"locationId: {locationId}");
             }
         }
 
-        public Location GetLocation(int locationId) {
+        public LocationArea GetLocationArea(int locationId) {
             switch (locationId) {
-                case RootLocationId: return rootLocation;
-                case SecondLocationId: return secondLocation;
-                case ThirdLocationId: return thirdLocation;
-                default: throw new ArgumentOutOfRangeException();
+                case RootLocationId: return rootLocationArea;
+                case SecondLocationId: return secondLocationArea;
+                case ThirdLocationId: return thirdLocationArea;
+                default: throw new ArgumentOutOfRangeException($"locationId: {locationId}");
+            }
+        }
+
+        public LocationSimulator GetLocationSimulator(int locationId) {
+            switch (locationId) {
+                case RootLocationId: return rootLocationSimulator;
+                case SecondLocationId: return secondLocationSimulator;
+                case ThirdLocationId: return thirdLocationSimulator;
+                default: throw new ArgumentOutOfRangeException($"locationId: {locationId}");
             }
         }
 

@@ -1,11 +1,12 @@
 using ProtoBuf;
 
 namespace MyMmo.Commons.Scripts {
+    
     [ProtoContract]
-    public class ScriptsClip {
+    public class ScriptsDataClip {
 
         [ProtoMember(1)]
-        public ChangeLocationScript[] Scripts { get; set; }
+        public BaseScriptData[] ScriptsData { get; set; }
 
     }
 }

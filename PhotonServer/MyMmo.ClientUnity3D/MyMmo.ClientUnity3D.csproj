@@ -41,9 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\MyMmo.ClientDotNet\Consumers\ChangeLocationClientScriptReader.cs">
-      <Link>Consumers\ChangeLocationClientScriptReader.cs</Link>
-    </Compile>
     <Compile Include="..\MyMmo.ClientDotNet\Events\ItemDestroyEvent.cs">
       <Link>Events\ItemDestroyEvent.cs</Link>
     </Compile>
@@ -62,6 +59,9 @@
     <Compile Include="..\MyMmo.ClientDotNet\Game.cs">
       <Link>Game.cs</Link>
     </Compile>
+    <Compile Include="..\MyMmo.ClientDotNet\IClientScript.cs">
+      <Link>IClientScript.cs</Link>
+    </Compile>
     <Compile Include="..\MyMmo.ClientDotNet\IGameListener.cs">
       <Link>IGameListener.cs</Link>
     </Compile>
@@ -79,6 +79,15 @@
     </Compile>
     <Compile Include="..\MyMmo.ClientDotNet\Response\EnterWorldResponse.cs">
       <Link>Response\EnterWorldResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\MyMmo.ClientDotNet\Scripts\ChangeLocationClientScript.cs">
+      <Link>Scripts\ChangeLocationClientScript.cs</Link>
+    </Compile>
+    <Compile Include="..\MyMmo.ClientDotNet\Scripts\ChangePositionClientScript.cs">
+      <Link>Scripts\ChangePositionClientScript.cs</Link>
+    </Compile>
+    <Compile Include="..\MyMmo.ClientDotNet\Scripts\ClientScriptsFactory.cs">
+      <Link>Scripts\ClientScriptsFactory.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

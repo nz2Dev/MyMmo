@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 using ExitGames.Concurrency.Channels;
 using ExitGames.Concurrency.Fibers;
 using ExitGames.Logging;
@@ -25,6 +26,8 @@ namespace MyMmo.Server {
         private IDisposable regionSubscription;
         private bool disposed;
 
+        private Vector2 positionInLocation;
+
         public Item(string id, PeerBase owner, World world) {
             this.id = id;
             this.owner = owner;
@@ -39,6 +42,7 @@ namespace MyMmo.Server {
         public Region CurrentRegion => currentRegion;
         public int LocationId => locationId;
         public bool Disposed => disposed;
+        public Vector2 PositionInLocation => positionInLocation;
 
         public void ChangeLocation(int locationId) {
             this.locationId = locationId;
@@ -57,6 +61,10 @@ namespace MyMmo.Server {
 
         public IDisposable SubscribeLocationChanged(IFiber fiber, Action<ItemLocationChangedMessage> onLocChanged) {
             return locationChangedChannel.Subscribe(fiber, onLocChanged);
+        }
+        
+        public void ChangePositionInLocation(Vector2 vector2) {
+            positionInLocation = vector2;
         }
 
         private void UpdateInterestManagement() {

@@ -69,6 +69,7 @@ namespace MyMmo.ConsolePlayTest {
                 Console.WriteLine("-c [address] uri address of server with schema");
                 Console.WriteLine("-e [nickname] create default world and enter it with nickname specified");
                 Console.WriteLine("-m [locationId] move avatar to location specified");
+                Console.WriteLine("-p change item position randomly in the same location");
                 Console.WriteLine("Enter command:");
                 var input = Console.ReadLine();
                 if (string.IsNullOrEmpty(input)) {
@@ -110,6 +111,14 @@ namespace MyMmo.ConsolePlayTest {
                         }
                         var locationId = int.Parse(inputArg[1]);
                         game.ChangeLocation(game.AvatarItem.Id, locationId);
+                        break;
+                    }
+
+                    case "-p": {
+                        if (!connected) {
+                            continue;
+                        }
+                        game.MoveAvatarRandomly();
                         break;
                     }
                 }
@@ -168,11 +177,13 @@ namespace MyMmo.ConsolePlayTest {
             PrintLog($"Game Log: {message}");
         }
 
-        public void OnRegionUpdate(int locationId, ChangeLocationScript[] scripts) {
+        public void OnRegionUpdate(int locationId, BaseScriptData[] scriptsData) {
             PrintLog($"region {locationId} updates with scripts");
-            foreach (var script in scripts) {
-                PrintLog($"script \"performs\", and is going to affect the state, change item {script.ItemId} location to: {script.ToLocation}");
-                game.ApplyPerformedScript(script);
+            foreach (var scriptData in scriptsData) {
+                if (scriptData is ChangeLocationScriptData data) {
+                    PrintLog($"item {data.ItemId} changes location from {data.FromLocation} to {data.ToLocation}");
+                }
+                
             }
         }
 
