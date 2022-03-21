@@ -31,7 +31,7 @@ public class ChangeLocationScriptExecutor {
 
     public void Update() {
         targetAvatar.transform.position =
-            Vector3.Lerp(targetAvatar.transform.position, targetLocation.transform.position, Time.deltaTime * 5);
+            Vector3.Lerp(targetAvatar.transform.position, targetLocation.transform.position, Time.deltaTime * 1);
         var arrived = (targetLocation.transform.position - targetAvatar.transform.position).magnitude < 0.5f;
         if (arrived) {
             targetAvatar.transform.position = targetLocation.transform.position;

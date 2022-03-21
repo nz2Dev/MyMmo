@@ -20,15 +20,6 @@ namespace MyMmo.Client {
         private string avatarId;
         private readonly ChangeLocationClientScriptReader scriptReader;
 
-        static Game() {
-            Protocol.TryRegisterType(
-                typeof(ChangeLocationScript),
-                (byte) CommonTypeCode.ChangeLocationScriptType,
-                ChangeLocationScript.Serialize,
-                ChangeLocationScript.Deserialize
-            );
-        }
-        
         public Game(IGameListener listener) {
             this.listener = listener;
             scriptReader = new ChangeLocationClientScriptReader(itemCache);
@@ -172,7 +163,8 @@ namespace MyMmo.Client {
                 case EventCode.RegionUpdated: {
                     var regionUpdateEvent =
                         EventDataConverter.Convert<RegionUpdateEvent>(eventData.Parameters.paramDict);
-                    listener.OnRegionUpdate(regionUpdateEvent.LocationId, regionUpdateEvent.Scripts);
+                    var scriptsClip = ScriptsDataProtocol.Deserialize(regionUpdateEvent.ScriptsBytes);
+                    listener.OnRegionUpdate(regionUpdateEvent.LocationId, scriptsClip.Scripts);
                     break;
                 }
             }

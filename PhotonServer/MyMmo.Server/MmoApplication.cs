@@ -4,8 +4,6 @@ using ExitGames.Logging.Log4Net;
 using log4net;
 using log4net.Config;
 using Microsoft.Extensions.Configuration;
-using MyMmo.Commons;
-using MyMmo.Commons.Scripts;
 using Photon.SocketServer;
 using LogManager = ExitGames.Logging.LogManager;
 
@@ -20,13 +18,6 @@ namespace MyMmo.Server {
         }
         
         protected override void Setup() {
-            Protocol.TryRegisterCustomType(
-                typeof(ChangeLocationScript),
-                (byte) CommonTypeCode.ChangeLocationScriptType,
-                ChangeLocationScript.Serialize,
-                ChangeLocationScript.Deserialize
-            );
-            
             GlobalContext.Properties["Photon:ApplicationLogPath"] = Path.Combine(ApplicationRootPath, "log");
             var configFileInfo = new FileInfo(Path.Combine(BinaryPath, "log4net.config"));
             if (configFileInfo.Exists)

@@ -41,7 +41,9 @@ public class Location : MonoBehaviour {
             yield return new WaitForEndOfFrame();
         }
 
-        yield return StartCoroutine(continuation);
+        if (continuation != null) {
+            yield return StartCoroutine(continuation);
+        }
     }
 
 }

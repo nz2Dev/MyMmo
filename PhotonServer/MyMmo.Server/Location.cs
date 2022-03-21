@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ExitGames.Concurrency.Fibers;
+using ExitGames.Logging;
 using MyMmo.Commons;
 using MyMmo.Commons.Scripts;
 using MyMmo.Server.Events;
@@ -16,6 +17,7 @@ namespace MyMmo.Server {
         public int Id { get; }
 
         private readonly object requestLock = new object();
+        private readonly ILogger logger = LogManager.GetCurrentClassLogger();
         private readonly IFiber fiber;
         private bool scheduled;
         private readonly List<ChangeLocationProducer> producers = new List<ChangeLocationProducer>();
@@ -66,7 +68,9 @@ namespace MyMmo.Server {
                 
                 // and send all the script to everyone interested in them.
                 var region = world.GetRegion(Id);
-                var regionUpdateData = new RegionUpdatedData(scripts.ToArray(), Id);
+                var serializedScripts = ScriptsDataProtocol.Serialize(new ScriptsClip {Scripts = scripts.ToArray()});
+                logger.Info($"location serialized scripts clip object to bytes[{serializedScripts.Length}]: " + serializedScripts);
+                var regionUpdateData = new RegionUpdatedData(serializedScripts, Id);
                 var regionUpdateEvent = new EventData((byte) EventCode.RegionUpdated, regionUpdateData);
                 region.PublishRegionEvent(new RegionEventMessage(regionUpdateEvent, new SendParameters()));
             }
