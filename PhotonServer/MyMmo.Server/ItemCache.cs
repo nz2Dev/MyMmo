@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using ExitGames.Threading;
 
@@ -24,6 +25,12 @@ namespace MyMmo.Server {
         public bool TryGetItem(string itemId, out Item item) {
             using (ReadLock.TryEnter(readWriteLock, Settings.MaxLockWaitTimeMilliseconds)) {
                 return items.TryGetValue(itemId, out item);
+            }
+        }
+
+        public IEnumerable<Item> GetItemsWithLocationId(int locationId) {
+            using (ReadLock.TryEnter(readWriteLock, Settings.MaxLockWaitTimeMilliseconds)) {
+                return items.Values.Where(item => item.LocationId == locationId);
             }
         }
         

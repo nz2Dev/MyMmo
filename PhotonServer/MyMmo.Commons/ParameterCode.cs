@@ -9,7 +9,9 @@ namespace MyMmo.Commons {
 
         LocationId,
 
-        SerializedScripts
+        SerializedScripts,
+
+        SerializedLocationSnapshot
 
     }
 }

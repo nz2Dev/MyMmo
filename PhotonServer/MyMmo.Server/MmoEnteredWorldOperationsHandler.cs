@@ -1,4 +1,3 @@
-using System;
 using ExitGames.Logging;
 using MyMmo.Commons;
 using MyMmo.Server.Operations;
@@ -47,7 +46,7 @@ namespace MyMmo.Server {
                 return MmoOperationsUtils.OperationWrongDataContract(operationRequest, operationChangeLocation);
             }
 
-            var avatarLocation = world.GetLocationSimulator(avatarItem.LocationId);
+            var avatarLocation = world.GetLocation(avatarItem.LocationId);
             avatarLocation.RequestChangeItemLocation(avatarItem, operationChangeLocation.LocationId);
 
             return MmoOperationsUtils.OperationSuccess(operationRequest);
@@ -59,7 +58,7 @@ namespace MyMmo.Server {
                 return MmoOperationsUtils.OperationWrongDataContract(operationRequest, operationMove);
             }
 
-            var avatarLocation = world.GetLocationSimulator(avatarItem.LocationId);
+            var avatarLocation = world.GetLocation(avatarItem.LocationId);
             avatarLocation.RequestMoveItemRandomly(avatarItem);
 
             return MmoOperationsUtils.OperationSuccess(operationRequest);

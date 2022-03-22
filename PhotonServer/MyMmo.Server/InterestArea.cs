@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ExitGames.Concurrency.Fibers;
 using ExitGames.Logging;
-using Photon.SocketServer.Concurrency;
 
 namespace MyMmo.Server {
     public class InterestArea : IDisposable {
@@ -14,8 +13,7 @@ namespace MyMmo.Server {
         private readonly string id;
         private readonly World world;
 
-        private readonly HashSet<Region> enteredRegions = new HashSet<Region>();
-        private readonly IDictionary<Region, IDisposable> regionSubscriptions = new Dictionary<Region, IDisposable>();
+        private readonly HashSet<Location> enteredLocations = new HashSet<Location>();
         private readonly IFiber subscriptionManagementFiber;
 
         private IDisposable followingSubscription;
@@ -64,84 +62,42 @@ namespace MyMmo.Server {
         }
 
         private void WatchLocation(int locationId) {
-            logger.Info($"interest area {id} starts watching surround regions of location {locationId} included");
-            var regionsInFocus = world.GetSurroundedRegionsIncluded(locationId);
-            var outOfFocusRegions = enteredRegions.Except(regionsInFocus).ToArray();
-            UnsubscribeRegions(outOfFocusRegions);
-            SubscribeRegions(regionsInFocus);
+            logger.Info($"interest area {id} starts watching surround locations of location {locationId} included");
+            var locationsInFocus = world.GetSurroundedLocationsIncluded(locationId);
+            var outOfFocusLocation = enteredLocations.Except(locationsInFocus).ToArray();
+            UnsubscribeLocations(outOfFocusLocation);
+            SubscribeLocations(locationsInFocus);
         }
 
-        private void SubscribeRegions(IEnumerable<Region> regions) {
-            foreach (var region in regions) {
-                if (!enteredRegions.Contains(region)) {
-                    enteredRegions.Add(region);
-                    logger.Info($"interest area {id} is going to enter region {region.Id}");
-                    EnterRegion(region);
-                    logger.Info($"interest area {id} publish RequestItemSnapshot on region {region.Id} with enter callback");
-                    region.PublishRequestItemSnapshot(snapshot => {
-                        logger.Info($"interest area {id}' enter callback, item {snapshot.Id} send its snapshot from region {region.Id}");
-                        OnItemEnter(snapshot);
+        private void SubscribeLocations(IEnumerable<Location> locations) {
+            foreach (var location in locations) {
+                if (!enteredLocations.Contains(location)) {
+                    enteredLocations.Add(location);
+                    logger.Info($"interest area {id} is going to enter location {location.Id}");
+                    
+                    logger.Info($"interest area {id} enqueue location {location.Id} snapshot callback");
+                    location.EnqueueLocationSnapshot(snapshot => {
+                        logger.Info($"interest area {id}' location {snapshot.Source.Id} callback with snapshot");
+                        OnLocationEnter(snapshot);
                     });
                 }
             }
         }
+        
+        protected virtual void OnLocationEnter(LocationSnapshot snapshot) {
+        }
 
-        private void UnsubscribeRegions(IEnumerable<Region> regions) {
-            foreach (var region in regions) {
-                enteredRegions.Remove(region);
-                logger.Info($"interest area {id} is going to exit region {region.Id}");
-                ExitRegion(region);
-                logger.Info($"interest area {id} publish RequestItemSnapshot on region {region.Id} with exit callback");
-                region.PublishRequestItemSnapshot(snapshot => {
-                    logger.Info($"interest area {id}' exit callback, item {snapshot.Id} send its snapshot from region {region.Id}");
-                    OnItemExit(snapshot.Source);
-                });
+        private void UnsubscribeLocations(IEnumerable<Location> locations) {
+            foreach (var location in locations) {
+                logger.Info($"interest area {id} is going to exit location {location.Id}");
+                enteredLocations.Remove(location);
+
+                logger.Info($"interest area {id}' location {location.Id} onLocationExit");
+                OnLocationExit(location);
             }
         }
 
-        private void EnterRegion(Region region) {
-            logger.Info($"interest area {id} subscribes to region {region.Id}'s ItemRegionChanged");
-            regionSubscriptions[region] = region.SubscribeItemRegionChanged(subscriptionManagementFiber, message => {
-                logger.Info($"interest area {id} receive ItemRegionChanged from region {region.Id}, item {message.Who.Id} changed its region {message.From?.Id} -> {message.To?.Id}");
-                OnItemRegionChanged(message);
-            });
-            OnRegionEnter(region);
-        }
-
-        protected virtual void OnRegionEnter(Region region) {
-        }
-
-        private void ExitRegion(Region region) {
-            logger.Info($"interest area {id} disposes subscription to region {region.Id}'s ItemRegionChangedMessage, and will not be notified of any item region changes of that region");
-            if (regionSubscriptions.TryGetValue(region, out var subscription)) {
-                regionSubscriptions.Remove(region);
-                subscription.Dispose();
-            }
-            OnRegionExit(region);
-        }
-
-        protected virtual void OnRegionExit(Region region) {
-        }
-
-        private void OnItemRegionChanged(ItemRegionChangedMessage message) {
-            var exitFromOurs = enteredRegions.Contains(message.From);
-            var enterToOurs = enteredRegions.Contains(message.To);
-            if (exitFromOurs && enterToOurs) {
-                logger.Info($"interest area {id}, item {message.Who.Id} is going to move between our enteredRegions");
-                // do nothing
-            } else if (exitFromOurs) {
-                logger.Info($"interest area {id}, item {message.Who.Id} is going to exit");
-                OnItemExit(message.Who.Source);
-            } else if (enterToOurs) {
-                logger.Info($"interest area {id}, item {message.Who.Id} is going to enter");
-                OnItemEnter(message.Who);
-            }
-        }
-
-        protected virtual void OnItemEnter(Item.Snapshot snapshot) {
-        }
-
-        protected virtual void OnItemExit(Item item) {
+        protected virtual void OnLocationExit(Location item) {
         }
 
         public void Dispose() {
@@ -152,12 +108,7 @@ namespace MyMmo.Server {
 
         private void Dispose(bool dispose) {
             if (dispose) {
-                foreach (var regionSubscription in regionSubscriptions.Values) {
-                    regionSubscription.Dispose();
-                }
-
-                regionSubscriptions.Clear();
-                enteredRegions.Clear();
+                enteredLocations.Clear();
                 subscriptionManagementFiber.Dispose();
                 followingSubscription?.Dispose();
                 followingItem = null;

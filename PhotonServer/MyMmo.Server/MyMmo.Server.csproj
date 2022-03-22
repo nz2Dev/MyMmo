@@ -234,9 +234,8 @@
     <Compile Include="ClientInterestArea.cs" />
     <Compile Include="Diagnostic\MessagesCounters.cs" />
     <Compile Include="Events\ItemDestroyData.cs" />
-    <Compile Include="Events\ItemSubscribedData.cs" />
-    <Compile Include="Events\ItemUnsubscribedData.cs" />
-    <Compile Include="Events\ItemLocationChangedData.cs" />
+    <Compile Include="Events\LocationEnterData.cs" />
+    <Compile Include="Events\LocationExitData.cs" />
     <Compile Include="Events\RegionUpdatedData.cs" />
     <Compile Include="FiberUtils.cs" />
     <Compile Include="InterestArea.cs" />
@@ -247,8 +246,11 @@
     <Compile Include="ItemMessages.cs" />
     <Compile Include="ItemCache.cs" />
     <Compile Include="ItemNotFound.cs" />
-    <Compile Include="LocationSimulator.cs" />
+    <Compile Include="ItemSnapshot.cs" />
+    <Compile Include="Location.cs" />
     <Compile Include="LocationArea.cs" />
+    <Compile Include="LocationMessages.cs" />
+    <Compile Include="LocationSnapshot.cs" />
     <Compile Include="MmoEnteredWorldOperationsHandler.cs" />
     <Compile Include="Operations\ChangeLocationOperation.cs" />
     <Compile Include="Operations\EnterWorldResponseParams.cs" />
@@ -258,7 +260,6 @@
     <Compile Include="Scripts\ChangeLocationScript.cs" />
     <Compile Include="Scripts\MappingUtils.cs" />
     <Compile Include="Scripts\ChangePositionScript.cs" />
-    <Compile Include="RegionMessages.cs" />
     <Compile Include="MmoApplication.cs" />
     <Compile Include="MmoInitialOperationsHandler.cs" />
     <Compile Include="MmoOperationsUtils.cs" />
@@ -266,7 +267,6 @@
     <Compile Include="Operations\CreateWorldOperation.cs" />
     <Compile Include="Operations\EnterWorldOperation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Region.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="World.cs" />
     <Compile Include="WorldCache.cs" />

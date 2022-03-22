@@ -112,46 +112,30 @@ namespace MyMmo.Client {
         public void OnEvent(EventData eventData) {
             DebugReturn(DebugLevel.INFO, "event: " + eventData.ToStringFull());
             switch ((EventCode) eventData.Code) {
-                case EventCode.ItemSubscribedEvent: {
-                    var subscribeEvent = EventDataConverter.Convert<ItemSubscribedEvent>(eventData.Parameters.paramDict);
-                    Item item;
-                    if (itemCache.TryGetValue(subscribeEvent.ItemId, out var itemInCache)) {
-                        itemInCache.LocationId = subscribeEvent.LocationId;
-                        item = itemInCache;
-                    } else {
-                        var newItem = new Item(subscribeEvent.ItemId, subscribeEvent.LocationId);
-                        itemCache.Add(newItem.Id, newItem);
-                        item = newItem;
+                case EventCode.LocationEnterEvent: {
+                    var enterEvent = EventDataConverter.Convert<LocationEnterEvent>(eventData.Parameters.paramDict);
+                    var locationSnapshotData = enterEvent.DeserializeLocationSnapshotData();
+
+                    var itemsAtLocation = itemCache.Values.Where(item => item.LocationId == locationSnapshotData.LocationId);
+                    foreach (var item in itemsAtLocation) {
+                        itemCache.Remove(item.Id);
                     }
-                    listener.OnItemSubscribed(item);
+                    
+                    foreach (var itemSnapshotData in locationSnapshotData.ItemsSnapshotData) {
+                        itemCache.Add(itemSnapshotData.ItemId, new Item(
+                            itemSnapshotData.ItemId,
+                            itemSnapshotData.LocationId,
+                            itemSnapshotData.PositionInLocation
+                        ));
+                    }
+                    
+                    listener.OnLocationEntered(locationSnapshotData);
                     break;
                 }
 
-                case EventCode.ItemUnsubscribedEvent: {
-                    var unsubscribedEvent = EventDataConverter.Convert<ItemUnsubscribedEvent>(eventData.Parameters.paramDict);
-                    if (itemCache.TryGetValue(unsubscribedEvent.ItemId, out var itemInCache)) {
-                        listener.OnItemUnsubscribed(itemInCache);
-                    }
-                    break;
-                }
-
-                case EventCode.ItemLocationChanged: {
-                    var locationChangedEvent =
-                        EventDataConverter.Convert<ItemLocationChangedEvent>(eventData.Parameters.paramDict);
-                    if (itemCache.TryGetValue(locationChangedEvent.ItemId, out var item)) {
-                        item.LocationId = locationChangedEvent.LocationId;
-                    }
-
-                    listener.OnItemLocationChanged(item);
-                    break;
-                }
-
-                case EventCode.ItemDestroyEvent: {
-                    var itemDestroyEvent = EventDataConverter.Convert<ItemDestroyEvent>(eventData.Parameters.paramDict);
-                    if (itemCache.TryGetValue(itemDestroyEvent.ItemId, out var itemInCache)) {
-                        itemInCache.IsDestroyed = itemCache.Remove(itemDestroyEvent.ItemId);
-                        listener.OnItemDestroyed(itemInCache);
-                    }
+                case EventCode.LocationExitEvent: {
+                    var exitEvent = EventDataConverter.Convert<LocationExitEvent>(eventData.Parameters.paramDict);
+                    listener.OnLocationExit(exitEvent.LocationId);
                     break;
                 }
 

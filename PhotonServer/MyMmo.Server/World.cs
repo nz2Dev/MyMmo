@@ -1,55 +1,41 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MyMmo.Server {
     public class World /*todo Dispose*/ {
+
+        private readonly object syncRoot = new object();
 
         public const int RootLocationId = 0;
         public const int SecondLocationId = 1;
         public const int ThirdLocationId = 2;
 
-        private readonly Region rootRegion;
-        private readonly Region secondRegion;
-        private readonly Region thirdRegion;
-
         private readonly LocationArea rootLocationArea;
         private readonly LocationArea secondLocationArea;
         private readonly LocationArea thirdLocationArea;
-        
-        private readonly LocationSimulator rootLocationSimulator;
-        private readonly LocationSimulator secondLocationSimulator;
-        private readonly LocationSimulator thirdLocationSimulator;
-        
+
+        private readonly Location rootLocation;
+        private readonly Location secondLocation;
+        private readonly Location thirdLocation;
+
         private readonly ItemCache itemRegistry = new ItemCache();
 
         public World() {
-            rootRegion = new Region(RootLocationId);
-            secondRegion = new Region(SecondLocationId);
-            thirdRegion = new Region(ThirdLocationId);
-            
             rootLocationArea = new LocationArea(RootLocationId);
             secondLocationArea = new LocationArea(SecondLocationId);
             thirdLocationArea = new LocationArea(ThirdLocationId);
-            
-            rootLocationSimulator = new LocationSimulator(this, RootLocationId);
-            secondLocationSimulator = new LocationSimulator(this, SecondLocationId);
-            thirdLocationSimulator = new LocationSimulator(this, ThirdLocationId);
+
+            rootLocation = new Location(this, RootLocationId);
+            secondLocation = new Location(this, SecondLocationId);
+            thirdLocation = new Location(this, ThirdLocationId);
         }
 
-        public Region GetRegion(int locationId) {
+        public HashSet<Location> GetSurroundedLocationsIncluded(int locationId) {
             switch (locationId) {
-                case RootLocationId: return rootRegion;
-                case SecondLocationId: return secondRegion;
-                case ThirdLocationId: return thirdRegion;
-                default: throw new ArgumentOutOfRangeException($"locationId: {locationId}");
-            }
-        }
-
-        public HashSet<Region> GetSurroundedRegionsIncluded(int locationId) {
-            switch (locationId) {
-                case RootLocationId: return new HashSet<Region> {rootRegion, secondRegion};
-                case SecondLocationId: return new HashSet<Region> {rootRegion, secondRegion, thirdRegion};
-                case ThirdLocationId: return new HashSet<Region> {secondRegion, thirdRegion};
+                case RootLocationId: return new HashSet<Location> {rootLocation, secondLocation};
+                case SecondLocationId: return new HashSet<Location> {rootLocation, secondLocation, thirdLocation};
+                case ThirdLocationId: return new HashSet<Location> {secondLocation, thirdLocation};
                 default: throw new ArgumentOutOfRangeException($"locationId: {locationId}");
             }
         }
@@ -63,13 +49,25 @@ namespace MyMmo.Server {
             }
         }
 
-        public LocationSimulator GetLocationSimulator(int locationId) {
+        public Location GetLocation(int locationId) {
             switch (locationId) {
-                case RootLocationId: return rootLocationSimulator;
-                case SecondLocationId: return secondLocationSimulator;
-                case ThirdLocationId: return thirdLocationSimulator;
+                case RootLocationId: return rootLocation;
+                case SecondLocationId: return secondLocation;
+                case ThirdLocationId: return thirdLocation;
                 default: throw new ArgumentOutOfRangeException($"locationId: {locationId}");
             }
+        }
+
+        public void ExecuteStateScripts(IEnumerable<IScript> scripts) {
+            lock (syncRoot) {
+                foreach (var script in scripts) {
+                    script.ApplyState(this);
+                }
+            }
+        }
+
+        public ICollection<ItemSnapshot> GetItemSnapshotsAtLocation(int locationId) {
+            return itemRegistry.GetItemsWithLocationId(locationId).Select(item => item.GenerateItemSnapshot()).ToArray();
         }
 
         public bool RegisterItem(Item item) {

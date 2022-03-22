@@ -41,17 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\MyMmo.ClientDotNet\Events\ItemDestroyEvent.cs">
-      <Link>Events\ItemDestroyEvent.cs</Link>
+    <Compile Include="..\MyMmo.ClientDotNet\Events\LocationEnterEvent.cs">
+      <Link>Events\LocationEnterEvent.cs</Link>
     </Compile>
-    <Compile Include="..\MyMmo.ClientDotNet\Events\ItemLocationChangedEvent.cs">
-      <Link>Events\ItemLocationChangedEvent.cs</Link>
-    </Compile>
-    <Compile Include="..\MyMmo.ClientDotNet\Events\ItemSubscribedEvent.cs">
-      <Link>Events\ItemSubscribedEvent.cs</Link>
-    </Compile>
-    <Compile Include="..\MyMmo.ClientDotNet\Events\ItemUnsubscribedEvent.cs">
-      <Link>Events\ItemUnsubscribedEvent.cs</Link>
+    <Compile Include="..\MyMmo.ClientDotNet\Events\LocationExitEvent.cs">
+      <Link>Events\LocationExitEvent.cs</Link>
     </Compile>
     <Compile Include="..\MyMmo.ClientDotNet\Events\RegionUpdateEvent.cs">
       <Link>Events\RegionUpdateEvent.cs</Link>
@@ -88,6 +82,9 @@
     </Compile>
     <Compile Include="..\MyMmo.ClientDotNet\Scripts\ClientScriptsFactory.cs">
       <Link>Scripts\ClientScriptsFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\MyMmo.ClientDotNet\Snapshots\LocationClientSnapshot.cs">
+      <Link>Snapshots\LocationClientSnapshot.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

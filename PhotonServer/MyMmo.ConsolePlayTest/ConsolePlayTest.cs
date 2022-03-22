@@ -4,6 +4,7 @@ using ExitGames.Client.Photon;
 using MyMmo.Client;
 using MyMmo.Client.Params;
 using MyMmo.Commons.Scripts;
+using MyMmo.Commons.Snapshots;
 
 namespace MyMmo.ConsolePlayTest {
     public class ConsolePlayTest : IGameListener {
@@ -157,20 +158,12 @@ namespace MyMmo.ConsolePlayTest {
             PrintLog("WorldEntered...");
         }
 
-        public void OnItemSubscribed(Item item) {
-            PrintLog($"item {item.Id} entered in our interest area...");
+        public void OnLocationEntered(LocationSnapshotData locationSnapshotData) {
+            PrintLog($"On location {locationSnapshotData.LocationId} entered, and we recreate its state representation...");
         }
 
-        public void OnItemUnsubscribed(Item item) {
-            PrintLog($"item {item} exited from our interest area...");
-        }
-
-        public void OnItemDestroyed(Item item) {
-            PrintLog($"item {item} is destroyed...");
-        }
-
-        public void OnItemLocationChanged(Item item) {
-            PrintLog($"item {item.Id} changed its location -> {item.LocationId}");
+        public void OnLocationExit(int locationId) {
+            PrintLog("On location exit, we won't receive its update for now, and will definetly recreate it if it will enter again");
         }
 
         void IGameListener.OnLog(DebugLevel debugLevel, string message) {
@@ -183,7 +176,6 @@ namespace MyMmo.ConsolePlayTest {
                 if (scriptData is ChangeLocationScriptData data) {
                     PrintLog($"item {data.ItemId} changes location from {data.FromLocation} to {data.ToLocation}");
                 }
-                
             }
         }
 

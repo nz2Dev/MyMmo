@@ -54,6 +54,9 @@
     <Compile Include="Scripts\ChangePositionScriptData.cs" />
     <Compile Include="Scripts\ScriptsDataClip.cs" />
     <Compile Include="Scripts\ScriptsDataProtocol.cs" />
+    <Compile Include="Snapshots\ItemSnapshotData.cs" />
+    <Compile Include="Snapshots\SnapshotsDataProtocol.cs" />
+    <Compile Include="Snapshots\LocationSnapshotData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

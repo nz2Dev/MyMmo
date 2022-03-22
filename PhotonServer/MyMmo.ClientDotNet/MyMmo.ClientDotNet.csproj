@@ -56,10 +56,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Events\ItemDestroyEvent.cs" />
-    <Compile Include="Events\ItemUnsubscribedEvent.cs" />
-    <Compile Include="Events\ItemSubscribedEvent.cs" />
-    <Compile Include="Events\ItemLocationChangedEvent.cs" />
+    <Compile Include="Events\LocationEnterEvent.cs" />
+    <Compile Include="Events\LocationExitEvent.cs" />
     <Compile Include="Events\RegionUpdateEvent.cs" />
     <Compile Include="IClientScript.cs" />
     <Compile Include="IGameListener.cs" />
@@ -73,6 +71,7 @@
     <Compile Include="Scripts\ChangeLocationClientScript.cs" />
     <Compile Include="Scripts\ChangePositionClientScript.cs" />
     <Compile Include="Scripts\ClientScriptsFactory.cs" />
+    <Compile Include="Snapshots\LocationClientSnapshot.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MyMmo.Commons\MyMmo.Commons.csproj">

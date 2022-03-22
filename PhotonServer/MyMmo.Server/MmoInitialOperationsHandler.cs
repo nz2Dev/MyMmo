@@ -65,7 +65,7 @@ namespace MyMmo.Server {
                 );
             }
 
-            var actorAvatar = new Item(enterWorldOperation.UserName, peer, world);
+            var actorAvatar = new Item(enterWorldOperation.UserName, peer);
             if (!world.RegisterItem(actorAvatar)) {
                 return MmoOperationsUtils.OperationError(
                     operationRequest,

@@ -5,12 +5,14 @@ namespace MyMmo.Client {
 
         public string Id { get; }
         public int LocationId { get; set; }
-        public bool IsDestroyed { get; set; }
         public Vector2 PositionInLocation { get; set; }
+        
+        public bool IsDestroyed { get; set; }
 
-        public Item(string id, int locationId) {
+        public Item(string id, int locationId, Vector2 positionInLocation) {
             Id = id;
             LocationId = locationId;
+            PositionInLocation = positionInLocation;
         }
 
     }
