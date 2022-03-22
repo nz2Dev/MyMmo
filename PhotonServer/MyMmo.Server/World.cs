@@ -84,6 +84,10 @@ namespace MyMmo.Server {
             return itemRegistry.TryGetItem(itemId, out item);
         }
 
+        public Item GetItem(string itemId) {
+            return TryGetItem(itemId, out var item) ? item : throw new ItemNotFound(itemId, this);
+        }
+
         public static World CreateDefaultWorld() {
             return new World();
         }

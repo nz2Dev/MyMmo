@@ -246,6 +246,7 @@
     <Compile Include="Item.cs" />
     <Compile Include="ItemMessages.cs" />
     <Compile Include="ItemCache.cs" />
+    <Compile Include="ItemNotFound.cs" />
     <Compile Include="LocationSimulator.cs" />
     <Compile Include="LocationArea.cs" />
     <Compile Include="MmoEnteredWorldOperationsHandler.cs" />
