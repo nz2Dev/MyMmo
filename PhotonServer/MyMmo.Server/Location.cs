@@ -6,7 +6,6 @@ using ExitGames.Concurrency.Fibers;
 using MyMmo.Commons;
 using MyMmo.Commons.Scripts;
 using MyMmo.Server.Events;
-using MyMmo.Server.Producers;
 using Photon.SocketServer;
 
 namespace MyMmo.Server {
@@ -45,32 +44,11 @@ namespace MyMmo.Server {
         public IDisposable SubscribeEvent(IFiber fiber, Action<LocationEventMessage> onLocationEventMessage) {
             return locationEventChannel.Subscribe(fiber, onLocationEventMessage);
         }
-        
-        public void RequestSpawnItem(SpawnClientAvatarProducer spawnClientAvatarProducer) {
-            lock (requestLock) {
-                CheckScheduling();
-                producers.Add(spawnClientAvatarProducer);
-            }
-        }
-        
-        public void RequestDestroyItem(string itemId) {
-            lock (requestLock) {
-                CheckScheduling();
-                producers.Add(new DestroyItemProducer(itemId));
-            }   
-        }
-        
-        public void RequestChangeItemLocation(Item item, int newLocation) {
-            lock (requestLock) {
-                CheckScheduling();
-                producers.Add(new ChangeLocationProducer(item.Id, newLocation));
-            }
-        }
 
-        public void RequestMoveItemRandomly(Item item) {
+        public void RequestProducer(IScriptProducer<IScript> scriptProducer) {
             lock (requestLock) {
                 CheckScheduling();
-                producers.Add(new MoveItemRandomlyProducer(item.Id));
+                producers.Add(scriptProducer);
             }
         }
 

@@ -82,7 +82,7 @@ namespace MyMmo.Server {
                 if (snapshot.Source.Id == spawnLocation.Id) { 
                     // we wait to make RequestSpawn until our target location callback,
                     // because there is a chance that location will consume our spawn request before state construction
-                    spawnLocation.RequestSpawnItem(spawnItemProducer);        
+                    spawnLocation.RequestProducer(spawnItemProducer);        
                 }
             });
             
