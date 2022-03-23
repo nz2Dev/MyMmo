@@ -233,7 +233,6 @@
   <ItemGroup>
     <Compile Include="ClientInterestArea.cs" />
     <Compile Include="Diagnostic\MessagesCounters.cs" />
-    <Compile Include="Events\ItemDestroyData.cs" />
     <Compile Include="Events\LocationEnterData.cs" />
     <Compile Include="Events\LocationExitData.cs" />
     <Compile Include="Events\LocationUpdatedData.cs" />

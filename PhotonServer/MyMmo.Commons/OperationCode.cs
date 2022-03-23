@@ -1,7 +1,7 @@
 ﻿namespace MyMmo.Commons {
     public enum OperationCode : byte {
 
-        EnterWorld = 1,
+        EnterWorld,
 
         CreateWorld,
         

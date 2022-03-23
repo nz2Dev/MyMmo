@@ -101,7 +101,7 @@ namespace MyMmo.Server {
             var scriptsData = scripts.Select(script => script.ToScriptData()).ToArray();
             var scriptsClip = ScriptsDataProtocol.Serialize(new ScriptsDataClip {ScriptsData = scriptsData});
             var regionUpdateData = new LocationUpdatedData(scriptsClip, id);
-            var regionUpdateEvent = new EventData((byte) EventCode.RegionUpdated, regionUpdateData);
+            var regionUpdateEvent = new EventData((byte) EventCode.LocationUpdated, regionUpdateData);
             locationEventChannel.Publish(new LocationEventMessage(regionUpdateEvent, new SendParameters()));
         }
 
