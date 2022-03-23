@@ -52,6 +52,7 @@
     <Compile Include="Scripts\ChangeLocationScriptData.cs" />
     <Compile Include="CommonTypeCode.cs" />
     <Compile Include="Scripts\ChangePositionScriptData.cs" />
+    <Compile Include="Scripts\DestroyItemScriptData.cs" />
     <Compile Include="Scripts\ScriptsDataClip.cs" />
     <Compile Include="Scripts\ScriptsDataProtocol.cs" />
     <Compile Include="Scripts\SpawnItemScriptData.cs" />

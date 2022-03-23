@@ -69,7 +69,9 @@ namespace MyMmo.Server {
         public void OnDisconnect(PeerBase peer) {
             logger.Info($"entered world operation handler of avatar {avatarItemId} is going to disconnect");
             
-            // todo call location.Request destroy item of avatarItemId
+            var avatarItem = world.GetItem(avatarItemId);
+            var avatarLocation = world.GetLocation(avatarItem.LocationId);
+            avatarLocation.RequestDestroyItem(avatarItem.Id);
             interestArea.Dispose();
             
             ((Peer) peer).SetCurrentOperationHandler(null);

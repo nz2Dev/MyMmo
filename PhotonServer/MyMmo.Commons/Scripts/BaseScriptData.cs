@@ -6,6 +6,7 @@ namespace MyMmo.Commons.Scripts {
     [ProtoInclude(1, typeof(ChangePositionScriptData))]
     [ProtoInclude(2, typeof(ChangeLocationScriptData))]
     [ProtoInclude(3, typeof(SpawnItemScriptData))]
+    [ProtoInclude(4, typeof(DestroyItemScriptData))]
     public class BaseScriptData {
     }
 }

@@ -48,6 +48,7 @@
         <Compile Include="Scripts\ChangeLocationConsoleUpdateScript.cs" />
         <Compile Include="Scripts\ChangePositionConsoleUpdateScript.cs" />
         <Compile Include="Scripts\ConsoleUpdateScriptsFactory.cs" />
+        <Compile Include="Scripts\DestroyItemConsoleUpdateScript.cs" />
         <Compile Include="Scripts\SpawnItemConsoleUpdateScript.cs" />
     </ItemGroup>
     <ItemGroup>

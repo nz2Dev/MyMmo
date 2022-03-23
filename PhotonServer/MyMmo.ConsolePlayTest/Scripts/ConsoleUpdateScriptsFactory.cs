@@ -11,6 +11,8 @@ namespace MyMmo.ConsolePlayTest.Scripts {
                 return new ChangePositionConsoleUpdateScript(changePositionScriptData);
             } else if (baseScriptData is SpawnItemScriptData spawnItemScriptData) {
                 return new SpawnItemConsoleUpdateScript(spawnItemScriptData);
+            } else if (baseScriptData is DestroyItemScriptData destroyItemScriptData) {
+                return new DestroyItemConsoleUpdateScript(destroyItemScriptData);
             } else {
                 throw new Exception("No factory found for scriptData: " + baseScriptData);
             }

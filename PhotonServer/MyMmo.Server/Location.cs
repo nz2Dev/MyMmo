@@ -53,6 +53,13 @@ namespace MyMmo.Server {
             }
         }
         
+        public void RequestDestroyItem(string itemId) {
+            lock (requestLock) {
+                CheckScheduling();
+                producers.Add(new DestroyItemProducer(itemId));
+            }   
+        }
+        
         public void RequestChangeItemLocation(Item item, int newLocation) {
             lock (requestLock) {
                 CheckScheduling();

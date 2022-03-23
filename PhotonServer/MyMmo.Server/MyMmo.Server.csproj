@@ -256,9 +256,11 @@
     <Compile Include="Operations\EnterWorldResponseParams.cs" />
     <Compile Include="Operations\MoveAvatarRandomlyOperation.cs" />
     <Compile Include="Producers\ChangeLocationProducer.cs" />
+    <Compile Include="Producers\DestroyItemProducer.cs" />
     <Compile Include="Producers\MoveItemRandomlyProducer.cs" />
     <Compile Include="Producers\SpawnClientAvatarProducer.cs" />
     <Compile Include="Scripts\ChangeLocationScript.cs" />
+    <Compile Include="Scripts\DestroyItemScript.cs" />
     <Compile Include="Scripts\MappingUtils.cs" />
     <Compile Include="Scripts\ChangePositionScript.cs" />
     <Compile Include="MmoApplication.cs" />
