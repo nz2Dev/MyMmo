@@ -4,11 +4,13 @@ using MyMmo.Commons.Scripts;
 namespace MyMmo.ConsolePlayTest.Scripts {
     public static class ClientScriptsFactory {
         
-        public static IClientScript Create(BaseScriptData baseScriptData) {
+        public static IConsoleUpdateScript Create(BaseScriptData baseScriptData) {
             if (baseScriptData is ChangeLocationScriptData changeLocationScriptData) {
-                return new ChangeLocationClientScript(changeLocationScriptData);
+                return new ChangeLocationConsoleUpdateScript(changeLocationScriptData);
             } else if (baseScriptData is ChangePositionScriptData changePositionScriptData) {
-                return new ChangePositionClientScript(changePositionScriptData);
+                return new ChangePositionConsoleUpdateScript(changePositionScriptData);
+            } else if (baseScriptData is SpawnItemScriptData spawnItemScriptData) {
+                return new SpawnItemConsoleUpdateScript(spawnItemScriptData);
             } else {
                 throw new Exception("No factory found for scriptData: " + baseScriptData);
             }

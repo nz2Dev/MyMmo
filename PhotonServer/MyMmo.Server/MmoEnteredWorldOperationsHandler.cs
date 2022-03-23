@@ -10,11 +10,11 @@ namespace MyMmo.Server {
         private readonly ILogger logger = LogManager.GetCurrentClassLogger();
 
         private readonly World world;
-        private readonly Item avatarItem;
+        private readonly string avatarItemId;
         private readonly InterestArea interestArea;
 
-        public MmoEnteredWorldOperationsHandler(Item avatarItem, InterestArea interestArea, World world) {
-            this.avatarItem = avatarItem;
+        public MmoEnteredWorldOperationsHandler(string avatarItemId, InterestArea interestArea, World world) {
+            this.avatarItemId = avatarItemId;
             this.interestArea = interestArea;
             this.world = world;
         }
@@ -46,6 +46,7 @@ namespace MyMmo.Server {
                 return MmoOperationsUtils.OperationWrongDataContract(operationRequest, operationChangeLocation);
             }
 
+            var avatarItem = world.GetItem(avatarItemId);
             var avatarLocation = world.GetLocation(avatarItem.LocationId);
             avatarLocation.RequestChangeItemLocation(avatarItem, operationChangeLocation.LocationId);
 
@@ -58,6 +59,7 @@ namespace MyMmo.Server {
                 return MmoOperationsUtils.OperationWrongDataContract(operationRequest, operationMove);
             }
 
+            var avatarItem = world.GetItem(avatarItemId);
             var avatarLocation = world.GetLocation(avatarItem.LocationId);
             avatarLocation.RequestMoveItemRandomly(avatarItem);
 
@@ -65,11 +67,9 @@ namespace MyMmo.Server {
         }
 
         public void OnDisconnect(PeerBase peer) {
-            logger.Info($"entered world operation handler of avatar {avatarItem.Id} is going to disconnect");
+            logger.Info($"entered world operation handler of avatar {avatarItemId} is going to disconnect");
             
-            avatarItem.Destroy();
-            avatarItem.Dispose();
-            world.RemoveItem(avatarItem);
+            // todo call location.Request destroy item of avatarItemId
             interestArea.Dispose();
             
             ((Peer) peer).SetCurrentOperationHandler(null);

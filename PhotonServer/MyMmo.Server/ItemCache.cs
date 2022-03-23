@@ -10,6 +10,12 @@ namespace MyMmo.Server {
 
         // Used to synchronize access to the cache.
         private readonly ReaderWriterLockSlim readWriteLock = new ReaderWriterLockSlim();
+
+        public void Add(Item item) {
+            if (!TryAdd(item)) {
+                throw new ItemAlreadyExist(item);
+            }
+        }
         
         public bool TryAdd(Item item) {
             using (WriteLock.TryEnter(readWriteLock, Settings.MaxLockWaitTimeMilliseconds)) {
@@ -22,6 +28,14 @@ namespace MyMmo.Server {
             }
         }
 
+        public Item GetItem(string itemId) {
+            if (!TryGetItem(itemId, out var item)) {
+                throw new ItemNotFound(itemId);
+            }
+
+            return item;
+        }
+        
         public bool TryGetItem(string itemId, out Item item) {
             using (ReadLock.TryEnter(readWriteLock, Settings.MaxLockWaitTimeMilliseconds)) {
                 return items.TryGetValue(itemId, out item);
@@ -40,9 +54,9 @@ namespace MyMmo.Server {
             }
         }
 
-        public bool Contain(Item item) {
+        public bool Contain(string itemId) {
             using (ReadLock.TryEnter(readWriteLock, Settings.MaxLockWaitTimeMilliseconds)) {
-                return items.ContainsKey(item.Id);
+                return items.ContainsKey(itemId);
             }
         }
 

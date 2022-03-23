@@ -1,7 +1,7 @@
-using System;
 using ExitGames.Logging;
 using MyMmo.Commons;
 using MyMmo.Server.Operations;
+using MyMmo.Server.Producers;
 using Photon.SocketServer;
 using Photon.SocketServer.Rpc;
 
@@ -65,26 +65,31 @@ namespace MyMmo.Server {
                 );
             }
 
-            var actorAvatar = new Item(enterWorldOperation.UserName, peer);
-            if (!world.RegisterItem(actorAvatar)) {
+            var spawnLocation = world.GetLocation(World.RootLocationId);
+            var interestArea = new ClientInterestArea(peer, world, enterWorldOperation.UserName);
+            var spawnItemProducer = new SpawnClientAvatarProducer(enterWorldOperation.UserName, spawnLocation.Id, interestArea, peer);
+            if (!spawnItemProducer.IsValidAt(world)) {
+                interestArea.Dispose();
                 return MmoOperationsUtils.OperationError(
                     operationRequest,
                     ReturnCode.AvatarRegistrationError,
-                    $"World can't register Avatar, it's already exist, specified UserName: {enterWorldOperation.UserName}"
+                    $"Can't register Avatar, it's already exist, specified UserName: {enterWorldOperation.UserName}"
                 );
             }
-
-            var avatarSpawnLocation = world.GetLocation(World.RootLocationId);
-            avatarSpawnLocation.RequestSpawnItem(actorAvatar);
-
-            var interestArea = new ClientInterestArea(peer, world, enterWorldOperation.UserName);
-            interestArea.SetLocationManually(World.RootLocationId);
-            interestArea.FollowLocationOf(actorAvatar);
-
-            var enteredWorldOperationHandler = new MmoEnteredWorldOperationsHandler(actorAvatar, interestArea, world);
+            
+            interestArea.WatchLocationManually(spawnLocation.Id, snapshot => {
+                // every entered location during one time manual management will callback with it's snapshot
+                if (snapshot.Source.Id == spawnLocation.Id) { 
+                    // we wait to make RequestSpawn until our target location callback,
+                    // because there is a chance that location will consume our spawn request before state construction
+                    spawnLocation.RequestSpawnItem(spawnItemProducer);        
+                }
+            });
+            
+            var enteredWorldOperationHandler = new MmoEnteredWorldOperationsHandler(spawnItemProducer.itemId, interestArea, world);
             ((Peer) peer).SetCurrentOperationHandler(enteredWorldOperationHandler);
             
-            var responseParams = new EnterWorldResponseParams {AvatarItemId = actorAvatar.Id};
+            var responseParams = new EnterWorldResponseParams {AvatarItemId = spawnItemProducer.itemId};
             return MmoOperationsUtils.OperationSuccess(operationRequest, responseParams);
         }
 

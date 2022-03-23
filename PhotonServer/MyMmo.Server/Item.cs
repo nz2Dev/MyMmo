@@ -17,10 +17,9 @@ namespace MyMmo.Server {
         private readonly Channel<ItemLocationChangedMessage> locationChangedChannel = new Channel<ItemLocationChangedMessage>();
         private readonly Channel<ItemDisposedMessage> disposeChannel = new Channel<ItemDisposedMessage>();
 
-        private int locationId;
+        private int locationId = -1;
         private bool disposed;
         private bool destroyed;
-        private bool spawned;
 
         private Vector2 positionInLocation;
 
@@ -38,16 +37,21 @@ namespace MyMmo.Server {
         public bool Disposed => disposed;
         public bool Destroyed => destroyed;
         public PeerBase Owner => owner;
-        public bool Spawned => spawned;
         public Vector2 PositionInLocation => positionInLocation;
 
-        public void Spawn(int spawnLocationId, Vector2 positionState) {
-            spawned = true;
+        public void Spawn(int spawnLocationId) {
+            if (locationId != -1) {
+                throw new Exception("Spawning item with non default location id");
+            }
+            
             ChangeLocation(spawnLocationId);
-            ChangePositionInLocation(positionState);
         }
         
         public void ChangeLocation(int newLocationId) {
+            if (newLocationId < 0) {
+                throw new Exception("newLocationId can't be negative integer");
+            }
+            
             locationId = newLocationId;
             locationChangedChannel.Publish(new ItemLocationChangedMessage(newLocationId));
         }

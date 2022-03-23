@@ -59,21 +59,21 @@ namespace MyMmo.Server {
             }
         }
 
-        public void SetLocationManually(int locationId) {
+        public void WatchLocationManually(int locationId, Action<LocationSnapshot> onLocationEnteredCallback) {
             subscriptionManagementFiber.Enqueue(() => {
-                WatchLocation(locationId);
+                WatchLocation(locationId, onLocationEnteredCallback);
             });
         }
 
-        private void WatchLocation(int locationId) {
+        private void WatchLocation(int locationId, Action<LocationSnapshot> onLocationEnteredCallback = null) {
             logger.Info($"interest area {id} starts watching surround locations of location {locationId} included");
             var locationsInFocus = world.GetSurroundedLocationsIncluded(locationId);
             var outOfFocusLocation = enteredLocations.Except(locationsInFocus).ToArray();
             UnsubscribeLocations(outOfFocusLocation);
-            SubscribeLocations(locationsInFocus);
+            SubscribeLocations(locationsInFocus, onLocationEnteredCallback);
         }
 
-        private void SubscribeLocations(IEnumerable<Location> locations) {
+        private void SubscribeLocations(IEnumerable<Location> locations, Action<LocationSnapshot> onLocationSnapshotCallback) {
             foreach (var location in locations) {
                 if (!enteredLocations.Contains(location)) {
                     enteredLocations.Add(location);
@@ -82,6 +82,7 @@ namespace MyMmo.Server {
                     logger.Info($"interest area {id} enqueue location {location.Id} snapshot callback");
                     location.EnqueueLocationSnapshot(snapshot => {
                         logger.Info($"interest area {id}' location {snapshot.Source.Id} callback with snapshot");
+                        onLocationSnapshotCallback?.Invoke(snapshot);
                         OnLocationEnter(snapshot);
                     });
                 }

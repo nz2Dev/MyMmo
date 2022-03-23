@@ -14,7 +14,7 @@ namespace MyMmo.Server.Producers {
             this.world = world;
         }
 
-        public ChangeLocationScript ProduceImmediately() {
+        public ChangeLocationScript ProduceImmediately(World world1) {
             if (!world.TryGetItem(itemId, out var item)) {
                 throw new Exception("item not found: " + itemId);
             }

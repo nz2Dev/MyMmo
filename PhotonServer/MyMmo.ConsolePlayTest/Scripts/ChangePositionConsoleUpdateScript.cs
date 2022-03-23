@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using MyMmo.Commons.Scripts;
 
 namespace MyMmo.ConsolePlayTest.Scripts {
-    public class ChangePositionClientScript : IClientScript {
+    public class ChangePositionConsoleUpdateScript : IConsoleUpdateScript {
 
         private readonly ChangePositionScriptData scriptData;
 
-        public ChangePositionClientScript(ChangePositionScriptData changePositionScriptData) {
+        public ChangePositionConsoleUpdateScript(ChangePositionScriptData changePositionScriptData) {
             scriptData = changePositionScriptData;
         }
 

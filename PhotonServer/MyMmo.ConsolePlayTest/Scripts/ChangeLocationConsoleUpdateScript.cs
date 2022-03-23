@@ -4,11 +4,11 @@ using MyMmo.Commons.Scripts;
 
 namespace MyMmo.ConsolePlayTest.Scripts {
     
-    public class ChangeLocationClientScript : IClientScript {
+    public class ChangeLocationConsoleUpdateScript : IConsoleUpdateScript {
 
         private readonly ChangeLocationScriptData scriptData;
         
-        public ChangeLocationClientScript(ChangeLocationScriptData scriptData) {
+        public ChangeLocationConsoleUpdateScript(ChangeLocationScriptData scriptData) {
             this.scriptData = scriptData;
         }
 

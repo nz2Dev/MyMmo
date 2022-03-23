@@ -70,8 +70,8 @@ namespace MyMmo.Server {
             return itemRegistry.GetItemsWithLocationId(locationId).Select(item => item.GenerateItemSnapshot()).ToArray();
         }
 
-        public bool RegisterItem(Item item) {
-            return itemRegistry.TryAdd(item);
+        public void RegisterItem(Item item) {
+            itemRegistry.Add(item);
         }
 
         public void RemoveItem(Item item) {
@@ -83,7 +83,11 @@ namespace MyMmo.Server {
         }
 
         public Item GetItem(string itemId) {
-            return TryGetItem(itemId, out var item) ? item : throw new ItemNotFound(itemId, this);
+            return itemRegistry.GetItem(itemId);
+        }
+
+        public bool ContainItem(string itemId) {
+            return itemRegistry.Contain(itemId);
         }
 
         public static World CreateDefaultWorld() {

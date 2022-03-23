@@ -131,6 +131,8 @@ public class PlayTest : MonoBehaviour, IGameListener {
         if (targetLocation == null) {
             throw new Exception("Location not found: " + locationSnapshotData.LocationId);
         }
+        
+        Debug.Log($"location {locationSnapshotData.LocationId} enters, with items snapshots [{locationSnapshotData.ItemsSnapshotData.AggregateToString()}]");
         foreach (var itemSnapshotData in locationSnapshotData.ItemsSnapshotData) {
             targetLocation.ReplaceAvatar(playerPrefab, itemSnapshotData);
         }
@@ -152,7 +154,7 @@ public class PlayTest : MonoBehaviour, IGameListener {
             return;
         }
         
-        Debug.Log($"on location update: {locationId} with scripts[{scripts.Length}]");
+        Debug.Log($"on location update: {locationId} with scripts[{scripts.Length}] [{scripts.AggregateToString()}]");
         targetLocation.ExecuteScripts(scripts);
     }
 

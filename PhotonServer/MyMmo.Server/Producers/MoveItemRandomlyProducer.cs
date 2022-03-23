@@ -12,7 +12,7 @@ namespace MyMmo.Server.Producers {
             this.sourceItemId = sourceItemId;
         }
 
-        public ChangePositionScript ProduceImmediately() {
+        public ChangePositionScript ProduceImmediately(World world1) {
             if (!world.TryGetItem(sourceItemId, out var sourceItem)) {
                 throw new Exception("Item not found: " + sourceItemId);
             }

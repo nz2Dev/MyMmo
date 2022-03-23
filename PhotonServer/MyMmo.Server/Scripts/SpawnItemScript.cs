@@ -1,18 +1,24 @@
 using System.Numerics;
 using MyMmo.Commons.Scripts;
 using MyMmo.Commons.Snapshots;
+using Photon.SocketServer;
 
 namespace MyMmo.Server.Scripts {
     public class SpawnItemScript : IScript {
 
-        private string itemId;
-        private int locationId;
-        private Vector2 position;
+        private readonly string itemId;
+        private readonly int locationId;
+        private readonly Vector2 position;
+        private readonly PeerBase owner;
+        private readonly ClientInterestArea interestArea;
 
-        public SpawnItemScript(string itemId, int locationId, Vector2 position) {
+        public SpawnItemScript(string itemId, int locationId, Vector2 position, PeerBase owner,
+            ClientInterestArea interestArea) {
             this.itemId = itemId;
             this.locationId = locationId;
             this.position = position;
+            this.owner = owner;
+            this.interestArea = interestArea;
         }
 
         public BaseScriptData ToScriptData() {
@@ -26,8 +32,11 @@ namespace MyMmo.Server.Scripts {
         }
 
         public void ApplyState(World world) {
-            var itemToSpawn = world.GetItem(itemId);
-            itemToSpawn.Spawn(locationId, position);
+            var item = new Item(itemId, owner);
+            world.RegisterItem(item);
+            item.ChangePositionInLocation(position);
+            item.Spawn(locationId);
+            interestArea.FollowLocationOf(item);
         }
     }
 }

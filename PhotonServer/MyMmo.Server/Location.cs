@@ -46,10 +46,10 @@ namespace MyMmo.Server {
             return locationEventChannel.Subscribe(fiber, onLocationEventMessage);
         }
         
-        public void RequestSpawnItem(Item item) {
+        public void RequestSpawnItem(SpawnClientAvatarProducer spawnClientAvatarProducer) {
             lock (requestLock) {
                 CheckScheduling();
-                producers.Add(new SpawnItemProducer(item.Id, id, world));
+                producers.Add(spawnClientAvatarProducer);
             }
         }
         
@@ -81,7 +81,7 @@ namespace MyMmo.Server {
 
                 // first phase is to generate script
                 foreach (var producer in producers) {
-                    scripts.Add(producer.ProduceImmediately());
+                    scripts.Add(producer.ProduceImmediately(world));
                 }
                 
                 producers.Clear();
