@@ -1,4 +1,3 @@
-using System;
 using MyMmo.Commons.Scripts;
 
 namespace MyMmo.Server.Scripts {
@@ -24,10 +23,7 @@ namespace MyMmo.Server.Scripts {
         }
 
         public void ApplyState(World world) {
-            if (!world.TryGetItem(itemId, out var item)) {
-                throw new Exception("item from script not found: " + itemId);
-            }         
-            
+            var item = world.GetItem(itemId);
             item.ChangeLocation(toLocationId);
         }
 

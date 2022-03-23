@@ -1,6 +1,5 @@
 using System.Numerics;
 using MyMmo.Commons.Scripts;
-using MyMmo.Server.Producers;
 
 namespace MyMmo.Server.Scripts {
     public class ChangePositionScript : IScript {
@@ -24,9 +23,8 @@ namespace MyMmo.Server.Scripts {
         }
 
         public void ApplyState(World world) {
-            if (!world.TryGetItem(itemId, out var item)) {
-                item.ChangePositionInLocation(toPosition);
-            }
+            var item = world.GetItem(itemId);
+            item.ChangePositionInLocation(toPosition);
         }
 
     }

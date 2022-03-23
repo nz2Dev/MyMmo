@@ -63,14 +63,14 @@ namespace MyMmo.Server {
         public void RequestChangeItemLocation(Item item, int newLocation) {
             lock (requestLock) {
                 CheckScheduling();
-                producers.Add(new ChangeLocationProducer(item.Id, newLocation, world));
+                producers.Add(new ChangeLocationProducer(item.Id, newLocation));
             }
         }
 
         public void RequestMoveItemRandomly(Item item) {
             lock (requestLock) {
                 CheckScheduling();
-                producers.Add(new MoveItemRandomlyProducer(world, item.Id));
+                producers.Add(new MoveItemRandomlyProducer(item.Id));
             }
         }
 
