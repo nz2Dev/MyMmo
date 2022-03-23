@@ -46,6 +46,13 @@ namespace MyMmo.Server {
             return locationEventChannel.Subscribe(fiber, onLocationEventMessage);
         }
         
+        public void RequestSpawnItem(Item item) {
+            lock (requestLock) {
+                CheckScheduling();
+                producers.Add(new SpawnItemProducer(item.Id, id, world));
+            }
+        }
+        
         public void RequestChangeItemLocation(Item item, int newLocation) {
             lock (requestLock) {
                 CheckScheduling();

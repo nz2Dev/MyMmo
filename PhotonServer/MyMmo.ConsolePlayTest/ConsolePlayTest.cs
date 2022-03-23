@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using ExitGames.Client.Photon;
 using MyMmo.Client;
 using MyMmo.Client.Params;
 using MyMmo.Commons.Scripts;
 using MyMmo.Commons.Snapshots;
+using MyMmo.ConsolePlayTest.Scripts;
 
 namespace MyMmo.ConsolePlayTest {
     public class ConsolePlayTest : IGameListener {
@@ -14,6 +17,8 @@ namespace MyMmo.ConsolePlayTest {
         private string nickname;
         private bool connected;
         private const string WorldName = "UnityWorld";
+
+        private readonly Dictionary<string, PlayTestItem> itemCache = new Dictionary<string, PlayTestItem>();
 
         public static void Main(string[] args) {
             var playTest = new ConsolePlayTest();
@@ -111,7 +116,7 @@ namespace MyMmo.ConsolePlayTest {
                             continue;
                         }
                         var locationId = int.Parse(inputArg[1]);
-                        game.ChangeLocation(game.AvatarItem.Id, locationId);
+                        game.ChangeLocation(game.AvatarId, locationId);
                         break;
                     }
 
@@ -133,14 +138,14 @@ namespace MyMmo.ConsolePlayTest {
             }
             
             Console.WriteLine($"----------- connected");
-            foreach (var item in game.Items) {
-                Console.WriteLine($"+item id={item.Id} location={item.LocationId}");
+            foreach (var item in itemCache.Values) {
+                Console.WriteLine($"+item id={item.ItemId} location={item.LocationId}");
             }
 
             Console.WriteLine("-----------");
         }
 
-        private static void PrintLog(string message) {
+        public static void PrintLog(string message) {
             Console.WriteLine(message + "  >> press any key to continue <<");
         }
 
@@ -160,6 +165,16 @@ namespace MyMmo.ConsolePlayTest {
 
         public void OnLocationEntered(LocationSnapshotData locationSnapshotData) {
             PrintLog($"On location {locationSnapshotData.LocationId} entered, and we recreate its state representation...");
+            var itemsAtLocation = itemCache.Values.Where(item => item.LocationId == locationSnapshotData.LocationId);
+            foreach (var item in itemsAtLocation) {
+                itemCache.Remove(item.ItemId);
+            }
+                    
+            foreach (var itemSnapshotData in locationSnapshotData.ItemsSnapshotData) {
+                itemCache.Add(itemSnapshotData.ItemId, new PlayTestItem(
+                    itemSnapshotData
+                ));
+            }
         }
 
         public void OnLocationExit(int locationId) {
@@ -172,10 +187,9 @@ namespace MyMmo.ConsolePlayTest {
 
         public void OnRegionUpdate(int locationId, BaseScriptData[] scriptsData) {
             PrintLog($"region {locationId} updates with scripts");
-            foreach (var scriptData in scriptsData) {
-                if (scriptData is ChangeLocationScriptData data) {
-                    PrintLog($"item {data.ItemId} changes location from {data.FromLocation} to {data.ToLocation}");
-                }
+            var clientScripts = scriptsData.Select(data => ClientScriptsFactory.Create(data));
+            foreach (var clientScript in clientScripts) {
+                clientScript.ApplyClientState(itemCache);
             }
         }
 

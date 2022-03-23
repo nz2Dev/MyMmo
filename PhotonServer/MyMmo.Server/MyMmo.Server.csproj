@@ -257,6 +257,7 @@
     <Compile Include="Operations\MoveAvatarRandomlyOperation.cs" />
     <Compile Include="Producers\ChangeLocationProducer.cs" />
     <Compile Include="Producers\MoveItemRandomlyProducer.cs" />
+    <Compile Include="Producers\SpawnItemProducer.cs" />
     <Compile Include="Scripts\ChangeLocationScript.cs" />
     <Compile Include="Scripts\MappingUtils.cs" />
     <Compile Include="Scripts\ChangePositionScript.cs" />
@@ -267,6 +268,7 @@
     <Compile Include="Operations\CreateWorldOperation.cs" />
     <Compile Include="Operations\EnterWorldOperation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scripts\SpawnItemScript.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="World.cs" />
     <Compile Include="WorldCache.cs" />

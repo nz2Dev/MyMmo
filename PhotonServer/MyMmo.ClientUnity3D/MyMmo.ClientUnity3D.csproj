@@ -53,14 +53,8 @@
     <Compile Include="..\MyMmo.ClientDotNet\Game.cs">
       <Link>Game.cs</Link>
     </Compile>
-    <Compile Include="..\MyMmo.ClientDotNet\IClientScript.cs">
-      <Link>IClientScript.cs</Link>
-    </Compile>
     <Compile Include="..\MyMmo.ClientDotNet\IGameListener.cs">
       <Link>IGameListener.cs</Link>
-    </Compile>
-    <Compile Include="..\MyMmo.ClientDotNet\Item.cs">
-      <Link>Item.cs</Link>
     </Compile>
     <Compile Include="..\MyMmo.ClientDotNet\Params\ChangeLocationParams.cs">
       <Link>Params\ChangeLocationParams.cs</Link>
@@ -73,18 +67,6 @@
     </Compile>
     <Compile Include="..\MyMmo.ClientDotNet\Response\EnterWorldResponse.cs">
       <Link>Response\EnterWorldResponse.cs</Link>
-    </Compile>
-    <Compile Include="..\MyMmo.ClientDotNet\Scripts\ChangeLocationClientScript.cs">
-      <Link>Scripts\ChangeLocationClientScript.cs</Link>
-    </Compile>
-    <Compile Include="..\MyMmo.ClientDotNet\Scripts\ChangePositionClientScript.cs">
-      <Link>Scripts\ChangePositionClientScript.cs</Link>
-    </Compile>
-    <Compile Include="..\MyMmo.ClientDotNet\Scripts\ClientScriptsFactory.cs">
-      <Link>Scripts\ClientScriptsFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\MyMmo.ClientDotNet\Snapshots\LocationClientSnapshot.cs">
-      <Link>Snapshots\LocationClientSnapshot.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

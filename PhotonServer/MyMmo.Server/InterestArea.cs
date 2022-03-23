@@ -37,9 +37,7 @@ namespace MyMmo.Server {
             lock (syncRoot) {
                 if (followingItem == null) {
                     followingItem = item;
-
-                    WatchLocation(item.LocationId);
-
+                    
                     followingSubscription = new SubscriptionsCollection(
                         item.SubscribeLocationChanged(subscriptionManagementFiber, message => {
                             logger.Info($"interest area {id} receive LocationChanged {message.LocationId} from followed item, so it's going to follow that location");
@@ -59,6 +57,12 @@ namespace MyMmo.Server {
                 followingSubscription?.Dispose();
                 followingItem = null;
             }
+        }
+
+        public void SetLocationManually(int locationId) {
+            subscriptionManagementFiber.Enqueue(() => {
+                WatchLocation(locationId);
+            });
         }
 
         private void WatchLocation(int locationId) {

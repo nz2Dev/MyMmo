@@ -42,7 +42,12 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="ConsolePlayTest.cs" />
+        <Compile Include="IConsoleUpdateScript.cs" />
+        <Compile Include="ConsoleItem.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="Scripts\ChangeLocationConsoleScript.cs" />
+        <Compile Include="Scripts\ChangePositionConsoleScript.cs" />
+        <Compile Include="Scripts\ConsoleUpdateScriptsFactory.cs" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\MyMmo.ClientDotNet\MyMmo.ClientDotNet.csproj">

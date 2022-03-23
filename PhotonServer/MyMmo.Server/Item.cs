@@ -20,6 +20,7 @@ namespace MyMmo.Server {
         private int locationId;
         private bool disposed;
         private bool destroyed;
+        private bool spawned;
 
         private Vector2 positionInLocation;
 
@@ -37,12 +38,17 @@ namespace MyMmo.Server {
         public bool Disposed => disposed;
         public bool Destroyed => destroyed;
         public PeerBase Owner => owner;
+        public bool Spawned => spawned;
         public Vector2 PositionInLocation => positionInLocation;
 
+        public void Spawn(int spawnLocationId, Vector2 positionState) {
+            spawned = true;
+            ChangeLocation(spawnLocationId);
+            ChangePositionInLocation(positionState);
+        }
+        
         public void ChangeLocation(int newLocationId) {
             locationId = newLocationId;
-            
-            logger.Info($"item {id} publish ItemLocationChanged {newLocationId}");
             locationChangedChannel.Publish(new ItemLocationChangedMessage(newLocationId));
         }
 

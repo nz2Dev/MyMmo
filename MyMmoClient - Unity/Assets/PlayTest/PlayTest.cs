@@ -10,6 +10,7 @@ using UnityEngine;
 
 public class PlayTest : MonoBehaviour, IGameListener {
 
+    public static PlayTest Instance;
     private const string WorldName = "UnityWorld";
 
     public GameObject playerPrefab;
@@ -25,6 +26,7 @@ public class PlayTest : MonoBehaviour, IGameListener {
     private readonly List<string> logs = new List<string>();
 
     private void Awake() {
+        Instance = this;
         Application.runInBackground = true;
         Application.targetFrameRate = 60;
     }
@@ -69,10 +71,10 @@ public class PlayTest : MonoBehaviour, IGameListener {
                 CreateWorld();
             }
         } else if (isPlayState) {
-            var currentItems = game.Items;
+            var currentItems = FindObjectsOfType<AvatarItem>();
             GUILayout.BeginVertical();
             foreach (var item in currentItems) {
-                GUILayout.Label($"+id={item.Id} location={item.LocationId}");
+                GUILayout.Label($"+id={item.state.ItemId} location={item.state.LocationId}");
             }
             GUILayout.EndVertical();
         }
@@ -150,6 +152,7 @@ public class PlayTest : MonoBehaviour, IGameListener {
             return;
         }
         
+        Debug.Log($"on location update: {locationId} with scripts[{scripts.Length}]");
         targetLocation.ExecuteScripts(scripts);
     }
 

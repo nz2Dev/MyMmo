@@ -9,6 +9,8 @@ public static class UnityScriptFactory {
             return new ChangeLocationUnityScript(changeLocationScriptData);
         } else if (data is ChangePositionScriptData changePositionScriptData) {
             return new ChangePositionUnityScript(changePositionScriptData);
+        } else if (data is SpawnItemScriptData spawnItemScriptData) {
+            return new SpawnItemUnityScript(spawnItemScriptData);
         } else {
             throw new Exception($"Unity script is not implemented for script data: " + data);
         }

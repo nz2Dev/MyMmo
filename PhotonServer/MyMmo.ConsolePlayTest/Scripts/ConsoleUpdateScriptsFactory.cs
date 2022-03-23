@@ -1,7 +1,7 @@
 using System;
 using MyMmo.Commons.Scripts;
 
-namespace MyMmo.Client.Scripts {
+namespace MyMmo.ConsolePlayTest.Scripts {
     public static class ClientScriptsFactory {
         
         public static IClientScript Create(BaseScriptData baseScriptData) {

@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using ExitGames.Client.Photon;
 using MyMmo.Client.Events;
 using MyMmo.Client.Params;
 using MyMmo.Client.Response;
-using MyMmo.Client.Scripts;
 using MyMmo.Commons;
 using MyMmo.Commons.Scripts;
 using MyMmo.Playground;
@@ -15,7 +13,6 @@ namespace MyMmo.Client {
 
         private PhotonPeer peer;
         private readonly IGameListener listener;
-        private readonly Dictionary<string, Item> itemCache = new Dictionary<string, Item>();
         private DebugLevel debugLevel;
         private string avatarId;
         
@@ -23,8 +20,7 @@ namespace MyMmo.Client {
             this.listener = listener;
         }
 
-        public ICollection<Item> Items => itemCache.Values;
-        public Item AvatarItem => string.IsNullOrEmpty(avatarId) ? null : itemCache[avatarId];
+        public string AvatarId => avatarId;
 
         public void Initialize(PhotonPeer photonPeer, DebugLevel internalDebugLevel = DebugLevel.ERROR) {
             peer = photonPeer;
@@ -115,20 +111,6 @@ namespace MyMmo.Client {
                 case EventCode.LocationEnterEvent: {
                     var enterEvent = EventDataConverter.Convert<LocationEnterEvent>(eventData.Parameters.paramDict);
                     var locationSnapshotData = enterEvent.DeserializeLocationSnapshotData();
-
-                    var itemsAtLocation = itemCache.Values.Where(item => item.LocationId == locationSnapshotData.LocationId);
-                    foreach (var item in itemsAtLocation) {
-                        itemCache.Remove(item.Id);
-                    }
-                    
-                    foreach (var itemSnapshotData in locationSnapshotData.ItemsSnapshotData) {
-                        itemCache.Add(itemSnapshotData.ItemId, new Item(
-                            itemSnapshotData.ItemId,
-                            itemSnapshotData.LocationId,
-                            itemSnapshotData.PositionInLocation
-                        ));
-                    }
-                    
                     listener.OnLocationEntered(locationSnapshotData);
                     break;
                 }
@@ -143,12 +125,6 @@ namespace MyMmo.Client {
                     var regionUpdateEvent =
                         EventDataConverter.Convert<RegionUpdateEvent>(eventData.Parameters.paramDict);
                     var scriptsClip = ScriptsDataProtocol.Deserialize(regionUpdateEvent.ScriptsBytes);
-                    
-                    var clientScripts = scriptsClip.ScriptsData.Select(data => ClientScriptsFactory.Create(data));
-                    foreach (var clientScript in clientScripts) {
-                        clientScript.ApplyClientState(itemCache);
-                    }
-                    
                     listener.OnRegionUpdate(regionUpdateEvent.LocationId, scriptsClip.ScriptsData);
                     break;
                 }
