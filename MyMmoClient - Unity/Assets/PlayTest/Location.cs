@@ -9,34 +9,23 @@ public class Location : MonoBehaviour {
     public int Id;
 
     public void SpawnAvatar(GameObject playerPrefab, ItemSnapshotData snapshotData) {
-        const int distanceOffset = 2;
-        var centerOfLocation = transform.position;
-        var avatarsOnLocation = FindObjectsOfType<AvatarItem>()
-            .Where(avatar => avatar.state.LocationId == snapshotData.LocationId).ToArray();
-        var radianStep = (1 / ((float) avatarsOnLocation.Length + 1) /*plus spawned*/) * Mathf.PI;
-        for (var i = 0; i < avatarsOnLocation.Length; i++) {
-            var direction = new Vector3(Mathf.Sin(radianStep * i), 0, Mathf.Cos(radianStep * i));
-            avatarsOnLocation[i].MoveTo(centerOfLocation + direction * distanceOffset);
-        }
-
         const int spawnHeight = 5;
-        var spawnRadians = radianStep * avatarsOnLocation.Length + 1;
-        var spawnDirectionFromCenter = new Vector3(Mathf.Sin(spawnRadians), spawnHeight, Mathf.Cos(spawnRadians));
-        var player = Instantiate(playerPrefab, centerOfLocation + spawnDirectionFromCenter * distanceOffset,
-            Quaternion.identity);
-        player.GetComponent<AvatarItem>().state = snapshotData;
+        var centerOfLocation = transform.position;
+        var initPosition = snapshotData.PositionInLocation.ToUnityVector3() + Vector3.up * spawnHeight;
+        var player = Instantiate(playerPrefab, centerOfLocation + initPosition, Quaternion.identity);
+        player.GetComponent<AvatarItem>().SetState(snapshotData);
     }
 
     public void ReplaceAvatar(GameObject playerPrefab, ItemSnapshotData itemSnapshotData) {
-        var target = FindObjectsOfType<AvatarItem>().FirstOrDefault(i => i.state.ItemId == itemSnapshotData.ItemId);
+        var target = FindObjectsOfType<AvatarItem>().FirstOrDefault(i => i.State.ItemId == itemSnapshotData.ItemId);
         if (target != null) {
             Destroy(target.gameObject);
         }
 
         var centerOfLocation = transform.position;
-        var playerGO = Instantiate(playerPrefab,
-            centerOfLocation + itemSnapshotData.PositionInLocation.ToUnityVector3(), Quaternion.identity);
-        playerGO.GetComponent<AvatarItem>().SetState(itemSnapshotData);
+        var initPosition = itemSnapshotData.PositionInLocation.ToUnityVector3();
+        var player = Instantiate(playerPrefab, centerOfLocation + initPosition, Quaternion.identity);
+        player.GetComponent<AvatarItem>().SetState(itemSnapshotData);
     }
 
     public void ExecuteScripts(BaseScriptData[] scriptsData) {

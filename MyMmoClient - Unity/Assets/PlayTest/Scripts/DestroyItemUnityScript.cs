@@ -12,7 +12,7 @@ public class DestroyItemUnityScript : IUnityScript {
     }
     
     public bool UpdateUnityState() {
-        var targetItem = Object.FindObjectsOfType<AvatarItem>().FirstOrDefault(item => item.state.ItemId == scriptData.ItemId);
+        var targetItem = Object.FindObjectsOfType<AvatarItem>().FirstOrDefault(item => item.State.ItemId == scriptData.ItemId);
         if (targetItem == null) {
             throw new Exception($"target item {scriptData.ItemId} not found");
         }

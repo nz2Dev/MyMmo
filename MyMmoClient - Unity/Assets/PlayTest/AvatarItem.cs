@@ -3,20 +3,16 @@ using UnityEngine;
 
 public class AvatarItem : MonoBehaviour {
 
-    public ItemSnapshotData state;
-
     private Rigidbody capsuleRigidbody;
     
+    public ItemSnapshotData State { get; private set; }
+
     private void Awake() {
         capsuleRigidbody = GetComponentInChildren<Rigidbody>();
     }
 
     public void SetState(ItemSnapshotData snapshotData) {
-        state = snapshotData;
-    }
-
-    public void MoveTo(Vector3 position) {
-        transform.position = position;
+        State = snapshotData;
     }
 
     private void OnCollisionEnter(Collision other) {

@@ -15,7 +15,7 @@ public class ChangePositionUnityScript : IUnityScript {
     public ChangePositionUnityScript(ChangePositionScriptData scriptData) {
         this.scriptData = scriptData;
         
-        avatar = Object.FindObjectsOfType<AvatarItem>().FirstOrDefault(avatar => avatar.state.ItemId == scriptData.ItemId);
+        avatar = Object.FindObjectsOfType<AvatarItem>().FirstOrDefault(avatar => avatar.State.ItemId == scriptData.ItemId);
         if (avatar == null) {
             throw new Exception("can't find script target item with id: " + scriptData.ItemId);
         }
@@ -24,9 +24,9 @@ public class ChangePositionUnityScript : IUnityScript {
         // second, is that location id is take from presentation, and is not guaranteed to be the case
         // the problem is that position from scriptData is in local space, and targetAvatar position that we trying to solve is in world space
         // this is just for now
-        avatarLocation = Object.FindObjectsOfType<Location>().FirstOrDefault(location => location.Id == avatar.state.LocationId);
+        avatarLocation = Object.FindObjectsOfType<Location>().FirstOrDefault(location => location.Id == avatar.State.LocationId);
         if (avatarLocation == null) {
-            throw new Exception("can't find script's target location: " + avatar.state.LocationId);
+            throw new Exception("can't find script's target location: " + avatar.State.LocationId);
         }
         
         // what to do with "scriptData.FromPosition"? maybe state validation.. or exclude it whatsoever

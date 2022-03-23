@@ -74,7 +74,7 @@ public class PlayTest : MonoBehaviour, IGameListener {
             var currentItems = FindObjectsOfType<AvatarItem>();
             GUILayout.BeginVertical();
             foreach (var item in currentItems) {
-                GUILayout.Label($"+id={item.state.ItemId} location={item.state.LocationId}");
+                GUILayout.Label($"+id={item.State.ItemId} location={item.State.LocationId}");
             }
             GUILayout.EndVertical();
         }
