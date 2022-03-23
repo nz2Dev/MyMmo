@@ -5,6 +5,7 @@ using ExitGames.Client.Photon;
 using MyMmo.Client;
 using MyMmo.Client.Params;
 using MyMmo.Commons.Scripts;
+using MyMmo.Commons.Snapshots;
 using UnityEngine;
 
 public class PlayTest : MonoBehaviour, IGameListener {
@@ -123,35 +124,18 @@ public class PlayTest : MonoBehaviour, IGameListener {
         isPlayState = true;
     }
 
-    public void OnItemSubscribed(Item item) {
-        Debug.Log($"OnItemSubscribed {item.Id}");
-        var target = FindObjectsOfType<AvatarItem>().FirstOrDefault(i => i.source.Id == item.Id);
-        if (target != null) {
-            Debug.LogWarning("Current representation might be not with sync with item: " + item.Id);
-            return;
-        }
-
-        var targetLocation = FindObjectsOfType<Location>().FirstOrDefault(location => location.Id == item.LocationId);
+    public void OnLocationEntered(LocationSnapshotData locationSnapshotData) {
+        var targetLocation = FindObjectsOfType<Location>().FirstOrDefault(location => location.Id == locationSnapshotData.LocationId);
         if (targetLocation == null) {
-            Debug.LogWarning("Target location not found, location id: " + item.LocationId);
-            return;
+            throw new Exception("Location not found: " + locationSnapshotData.LocationId);
         }
-        
-        targetLocation.SpawnAvatar(playerPrefab, item);
+        foreach (var itemSnapshotData in locationSnapshotData.ItemsSnapshotData) {
+            targetLocation.ReplaceAvatar(playerPrefab, itemSnapshotData);
+        }
     }
 
-    public void OnItemUnsubscribed(Item item) {
-        Debug.Log($"OnItemUnsubscribed {item}");
-    }
-
-    public void OnItemDestroyed(Item item) {
-        Debug.Log($"OnItemDestroyed {item.Id}");
-        var target = FindObjectsOfType<AvatarItem>().First(i => i.source.Id == item.Id);
-        Destroy(target.gameObject); 
-    }
-
-    public void OnItemLocationChanged(Item item) {
-        Debug.Log($"OnItemLocationChanged {item.Id}");
+    public void OnLocationExit(int locationId) {
+        // for disposing unused resources, will have to implement some mechanism for that 
     }
 
     public void OnLog(DebugLevel debugLevel, string message) {

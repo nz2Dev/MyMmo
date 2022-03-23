@@ -1,15 +1,18 @@
-using System;
-using MyMmo.Client;
+using MyMmo.Commons.Snapshots;
 using UnityEngine;
 
 public class AvatarItem : MonoBehaviour {
 
-    public Item source;
+    public ItemSnapshotData state;
 
     private Rigidbody capsuleRigidbody;
     
     private void Awake() {
         capsuleRigidbody = GetComponentInChildren<Rigidbody>();
+    }
+
+    public void SetState(ItemSnapshotData snapshotData) {
+        state = snapshotData;
     }
 
     public void MoveTo(Vector3 position) {

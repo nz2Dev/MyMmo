@@ -16,7 +16,7 @@ public class ChangeLocationUnityScript : IUnityScript {
     public ChangeLocationUnityScript(ChangeLocationScriptData scriptData) {
         this.scriptData = scriptData;
         
-        targetAvatar = Object.FindObjectsOfType<AvatarItem>().FirstOrDefault(avatar => avatar.source.Id == scriptData.ItemId);
+        targetAvatar = Object.FindObjectsOfType<AvatarItem>().FirstOrDefault(avatar => avatar.state.ItemId == scriptData.ItemId);
         if (targetAvatar == null) {
             throw new Exception("can't find script target item with id: " + scriptData.ItemId);
         }
@@ -34,6 +34,10 @@ public class ChangeLocationUnityScript : IUnityScript {
         var arrived = (targetLocation.transform.position - targetAvatar.transform.position).magnitude < 0.5f;
         if (arrived) {
             targetAvatar.transform.position = targetLocation.transform.position;
+            
+            // todo Important! we could centralize state management, and use not Common.ItemSnapshotData
+            // But client implementation of wrapper over that data, with all necessary api for state reset, move forward/backward etc. 
+            targetAvatar.state.LocationId = scriptData.ToLocation;
         }
 
         var needMoreUpdate = !arrived; 
