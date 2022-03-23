@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using ExitGames.Client.Photon;
 using MyMmo.Client;
@@ -21,27 +20,32 @@ public class PlayTest : MonoBehaviour, IGameListener {
     private bool isEnterState;
     private bool isPlayState;
     private bool isManualSetup;
-    private bool isLogGUIEnabled;
     
-    private readonly List<string> logs = new List<string>();
-
     private void Awake() {
         Instance = this;
         Application.runInBackground = true;
         Application.targetFrameRate = 60;
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Start() {
+#if UNITY_EDITOR
         isManualSetup = true;
-        isLogGUIEnabled = false;
+#else
+        isManualSetup = false;
+#endif
         game = new Game(this);
-        game.Initialize(new PlayTestPeer(game, ConnectionProtocol.Tcp));
-        game.Connect("localhost:4530");
+
+        if (isManualSetup) {
+            game.Initialize(new PlayTestPeer(game, ConnectionProtocol.Tcp));
+            game.Connect("localhost:4530");
+        } else {
+            isConnectState = true;
+        }
     }
 
     private string serverAddress;
     private string enteredUserName;
-    private Vector2 scrollPosition = Vector2.zero;
 
     private void OnGUI() {
         if (isConnectState) {
@@ -77,18 +81,6 @@ public class PlayTest : MonoBehaviour, IGameListener {
                 GUILayout.Label($"+id={item.State.ItemId} location={item.State.LocationId}");
             }
             GUILayout.EndVertical();
-        }
-
-        if (isLogGUIEnabled) {
-            GUILayout.Label("----- logs ------");
-            scrollPosition = GUILayout.BeginScrollView(scrollPosition);
-            GUILayout.BeginVertical();
-            foreach (var logEntry in logs) {
-                GUILayout.Label(logEntry);
-            }
-
-            GUILayout.EndVertical();
-            GUILayout.EndScrollView();
         }
     }
 
@@ -143,8 +135,7 @@ public class PlayTest : MonoBehaviour, IGameListener {
     }
 
     public void OnLog(DebugLevel debugLevel, string message) {
-        logs.Add($"{debugLevel}: {message}");
-        Debug.Log($"{debugLevel}: {message}");
+        Debug.Log($"GameListenerLog {debugLevel}: {message}");
     }
 
     public void OnRegionUpdate(int locationId, BaseScriptData[] scripts) {
