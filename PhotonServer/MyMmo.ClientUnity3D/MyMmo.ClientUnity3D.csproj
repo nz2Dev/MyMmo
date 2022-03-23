@@ -47,8 +47,8 @@
     <Compile Include="..\MyMmo.ClientDotNet\Events\LocationExitEvent.cs">
       <Link>Events\LocationExitEvent.cs</Link>
     </Compile>
-    <Compile Include="..\MyMmo.ClientDotNet\Events\RegionUpdateEvent.cs">
-      <Link>Events\RegionUpdateEvent.cs</Link>
+    <Compile Include="..\MyMmo.ClientDotNet\Events\LocationUpdateEvent.cs">
+      <Link>Events\LocationUpdateEvent.cs</Link>
     </Compile>
     <Compile Include="..\MyMmo.ClientDotNet\Game.cs">
       <Link>Game.cs</Link>

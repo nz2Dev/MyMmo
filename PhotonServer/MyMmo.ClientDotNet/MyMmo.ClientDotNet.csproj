@@ -58,7 +58,7 @@
   <ItemGroup>
     <Compile Include="Events\LocationEnterEvent.cs" />
     <Compile Include="Events\LocationExitEvent.cs" />
-    <Compile Include="Events\RegionUpdateEvent.cs" />
+    <Compile Include="Events\LocationUpdateEvent.cs" />
     <Compile Include="IGameListener.cs" />
     <Compile Include="Params\ChangeLocationParams.cs" />
     <Compile Include="Params\CreateWorldParams.cs" />

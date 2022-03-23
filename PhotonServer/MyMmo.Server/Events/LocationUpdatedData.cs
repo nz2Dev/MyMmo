@@ -2,7 +2,7 @@ using MyMmo.Commons;
 using Photon.SocketServer.Rpc;
 
 namespace MyMmo.Server.Events {
-    public class RegionUpdatedData {
+    public class LocationUpdatedData {
 
         [DataMember(Code = (byte) ParameterCode.SerializedScripts, IsOptional = false)]
         public byte[] Scripts { get; }
@@ -10,7 +10,7 @@ namespace MyMmo.Server.Events {
         [DataMember(Code = (byte) ParameterCode.LocationId, IsOptional = false)]
         public int LocationId { get; }
 
-        public RegionUpdatedData(byte[] scripts, int locationId) {
+        public LocationUpdatedData(byte[] scripts, int locationId) {
             Scripts = scripts;
             LocationId = locationId;
         }

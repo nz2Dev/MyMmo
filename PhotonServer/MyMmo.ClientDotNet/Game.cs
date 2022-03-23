@@ -123,7 +123,7 @@ namespace MyMmo.Client {
 
                 case EventCode.RegionUpdated: {
                     var regionUpdateEvent =
-                        EventDataConverter.Convert<RegionUpdateEvent>(eventData.Parameters.paramDict);
+                        EventDataConverter.Convert<LocationUpdateEvent>(eventData.Parameters.paramDict);
                     var scriptsClip = ScriptsDataProtocol.Deserialize(regionUpdateEvent.ScriptsBytes);
                     listener.OnRegionUpdate(regionUpdateEvent.LocationId, scriptsClip.ScriptsData);
                     break;

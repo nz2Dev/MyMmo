@@ -2,7 +2,7 @@ using MyMmo.Commons;
 using MyMmo.Playground;
 
 namespace MyMmo.Client.Events {
-    public class RegionUpdateEvent {
+    public class LocationUpdateEvent {
 
         [PropertyKey(Key = (byte) ParameterCode.SerializedScripts, IsOptional = false)]
         public byte[] ScriptsBytes { get; set; }

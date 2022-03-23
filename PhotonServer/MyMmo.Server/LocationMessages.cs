@@ -1,16 +1,6 @@
-using System;
 using Photon.SocketServer;
 
 namespace MyMmo.Server {
-    public class RequestLocationSnapshotMessage {
-
-        public RequestLocationSnapshotMessage(Action<LocationSnapshot> callback) {
-            Callback = callback;
-        }
-
-        public Action<LocationSnapshot> Callback { get; }
-
-    }
     
     public class LocationEventMessage {
 

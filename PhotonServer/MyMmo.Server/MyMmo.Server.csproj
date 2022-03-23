@@ -236,11 +236,10 @@
     <Compile Include="Events\ItemDestroyData.cs" />
     <Compile Include="Events\LocationEnterData.cs" />
     <Compile Include="Events\LocationExitData.cs" />
-    <Compile Include="Events\RegionUpdatedData.cs" />
+    <Compile Include="Events\LocationUpdatedData.cs" />
     <Compile Include="FiberUtils.cs" />
     <Compile Include="InterestArea.cs" />
     <Compile Include="IScript.cs" />
-    <Compile Include="IScriptData.cs" />
     <Compile Include="IScriptProducer.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="ItemAlreadyExist.cs" />

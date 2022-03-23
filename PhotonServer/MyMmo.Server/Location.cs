@@ -93,7 +93,7 @@ namespace MyMmo.Server {
             // and send all the script data to everyone interested in them
             var scriptsData = scripts.Select(script => script.ToScriptData()).ToArray();
             var scriptsClip = ScriptsDataProtocol.Serialize(new ScriptsDataClip {ScriptsData = scriptsData});
-            var regionUpdateData = new RegionUpdatedData(scriptsClip, id);
+            var regionUpdateData = new LocationUpdatedData(scriptsClip, id);
             var regionUpdateEvent = new EventData((byte) EventCode.RegionUpdated, regionUpdateData);
             locationEventChannel.Publish(new LocationEventMessage(regionUpdateEvent, new SendParameters()));
         }
