@@ -30,7 +30,7 @@ public class ChangePositionUnityScript : IUnityScript {
         }
         
         // what to do with "scriptData.FromPosition"? maybe state validation.. or exclude it whatsoever
-        targetPosition = scriptData.ToPosition.ToUnityVector3();
+        targetPosition = avatarLocation.transform.position + scriptData.ToPosition.ToUnityVector3();
         startPosition = avatar.transform.position;
     }
 
