@@ -1,8 +1,11 @@
 using System.IO;
 using ProtoBuf;
+using ProtoBuf.Meta;
 
 namespace MyMmo.Commons.Scripts {
     public static class ScriptsDataProtocol {
+
+        public static TypeModel DeserializeTypeModel = RuntimeTypeModel.Default;
 
         public static byte[] Serialize(ScriptsDataClip scriptsDataClip) {
             using (var stream = new MemoryStream()) {
@@ -13,7 +16,7 @@ namespace MyMmo.Commons.Scripts {
         
         public static ScriptsDataClip Deserialize(byte[] data) {
             using (var stream = new MemoryStream(data)) {
-                return Serializer.Deserialize<ScriptsDataClip>(stream);
+                return (ScriptsDataClip) DeserializeTypeModel.Deserialize(stream, null, typeof(ScriptsDataClip));
             }
         }
 
