@@ -1,8 +1,8 @@
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
-[Bb]uild/
-[Bb]uilds/
+*[Bb]uild/
+*[Bb]uilds/
 Assets/AssetStoreTools*
 
 # Visual Studio cache directory
@@ -42,6 +42,5 @@ sysinfo.txt
 Assets/Packages/
 Logs/
 
-#intermediate build folder, used to route build files from MyMmo.Shared proj.
-intermediate/
-WebGL Builds/
+# Unity Play Connect intermediate files
+connectwebgl.zip
