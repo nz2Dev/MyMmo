@@ -14,10 +14,10 @@ namespace MyMmo.Client {
         void OnLocationEntered(LocationSnapshotData locationSnapshotData);
 
         void OnLocationExit(int locationId);
+
+        void OnLocationUpdate(int locationId, ScriptsClipData scriptsClipData);
         
         void OnLog(DebugLevel debugLevel, string message);
-        
-        void OnRegionUpdate(int locationId, ScriptsClipData scriptsClipData);
 
     }
 }

@@ -195,13 +195,13 @@ namespace MyMmo.ConsolePlayTest {
             PrintLog("On location exit, we won't receive its update for now, and will definetly recreate it if it will enter again");
         }
 
-        void IGameListener.OnLog(DebugLevel debugLevel, string message) {
-            PrintLog($"Game Log: {message}");
-        }
-
-        public void OnRegionUpdate(int locationId, ScriptsClipData scriptsClipData) {
+        public void OnLocationUpdate(int locationId, ScriptsClipData scriptsClipData) {
             PrintLog($"region {locationId} updates with scripts");
             ConsoleScriptClipPlayer.Play(scriptsClipData, itemCache);
+        }
+
+        void IGameListener.OnLog(DebugLevel debugLevel, string message) {
+            PrintLog($"Game Log: {message}");
         }
 
     }

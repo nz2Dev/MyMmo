@@ -15,6 +15,7 @@ public class PlayTest : MonoBehaviour, IGameListener {
     public GameObject playerPrefab;
     
     private Game game;
+    private UnityScriptsClipPlayer scriptsPlayer;
 
     private bool isConnectState;
     private bool isEnterState;
@@ -26,6 +27,7 @@ public class PlayTest : MonoBehaviour, IGameListener {
         Application.runInBackground = true;
         Application.targetFrameRate = 60;
         DontDestroyOnLoad(gameObject);
+        scriptsPlayer = GetComponent<UnityScriptsClipPlayer>();
     }
 
     private void Start() {
@@ -146,19 +148,13 @@ public class PlayTest : MonoBehaviour, IGameListener {
         // for disposing unused resources, will have to implement some mechanism for that 
     }
 
-    public void OnLog(DebugLevel debugLevel, string message) {
-        Debug.Log($"GameListenerLog {debugLevel}: {message}");
+    public void OnLocationUpdate(int locationId, ScriptsClipData clipData) {
+        Debug.Log($"on location update: {locationId} with scripts[{clipData.ScriptsData.Length}] [{clipData.ScriptsData.Select(data => data.ItemScriptData).AggregateToString()}]");
+        scriptsPlayer.PlayClip(locationId, clipData);
     }
 
-    public void OnRegionUpdate(int locationId, BaseScriptData[] scripts) {
-        var targetLocation = FindObjectsOfType<Location>().FirstOrDefault(location => location.Id == locationId);
-        if (targetLocation == null) {
-            Debug.LogError("location: " + locationId + " not found for updateScript execution");
-            return;
-        }
-        
-        Debug.Log($"on location update: {locationId} with scripts[{scripts.Length}] [{scripts.AggregateToString()}]");
-        targetLocation.ExecuteScripts(scripts);
+    public void OnLog(DebugLevel debugLevel, string message) {
+        Debug.Log($"GameListenerLog {debugLevel}: {message}");
     }
 
 }

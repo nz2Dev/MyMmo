@@ -28,25 +28,6 @@ public class Location : MonoBehaviour {
         player.GetComponent<AvatarItem>().SetState(itemSnapshotData);
     }
 
-    public void ExecuteScripts(BaseScriptData[] scriptsData) {
-        IEnumerator nextProcess = null;
-        foreach (var script in scriptsData.Reverse()) {
-            nextProcess = BuildCoroutine(UnityScriptFactory.Create(script), nextProcess);
-        }
-
-        StartCoroutine(nextProcess);
-    }
-
-    private IEnumerator BuildCoroutine(IUnityScript unityScript, IEnumerator continuation) {
-        var needUpdate = true;
-        while (needUpdate) {
-            needUpdate = unityScript.UpdateUnityState();
-            yield return new WaitForEndOfFrame();
-        }
-
-        if (continuation != null) {
-            yield return StartCoroutine(continuation);
-        }
-    }
+    
 
 }
