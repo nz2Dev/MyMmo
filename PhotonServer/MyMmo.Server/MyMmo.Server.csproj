@@ -291,8 +291,10 @@
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets. -->
   <Target Name="BeforeBuild">
+    <Exec Command="start /d &quot;C:/Photon/Server/SDK/deploy/bin_Win64&quot; PhotonSocketServer /stop1 MyMmoServer"/>
   </Target>
   <Target Name="AfterBuild">
+    <Exec Command="start /d &quot;C:/Photon/Server/SDK/deploy/bin_Win64&quot; PhotonSocketServer /run MyMmoServer"/>
   </Target>
   <PropertyGroup>
     <PostBuildEvent>xcopy /Y /Q "$(TargetDir)*.*" "C:\Photon\Server\SDK\deploy\MyMmoServer\bin"</PostBuildEvent>
