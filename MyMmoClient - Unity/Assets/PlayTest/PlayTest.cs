@@ -30,6 +30,7 @@ public class PlayTest : MonoBehaviour, IGameListener {
 
     private void Start() {
         game = new Game(this);
+        isConnectState = true;
 
 #if UNITY_EDITOR
         isManualSetup = true;
@@ -39,7 +40,7 @@ public class PlayTest : MonoBehaviour, IGameListener {
             game.Connect("localhost:4530");
         }
 #elif UNITY_WEBGL
-        isManualSetup = true;
+        isManualSetup = false;
         if (isManualSetup) {
             enteredUserName = "unity_webgl_manual";
             game.Initialize(new PlayTestPeer(game, ConnectionProtocol.WebSocketSecure));
@@ -47,7 +48,6 @@ public class PlayTest : MonoBehaviour, IGameListener {
         }
 #else
         isManualSetup = false;
-        isConnectState = true;
 #endif
     }
 
@@ -61,6 +61,10 @@ public class PlayTest : MonoBehaviour, IGameListener {
             serverAddress = GUILayout.TextField(serverAddress, GUILayout.MinWidth(100));
             GUILayout.EndHorizontal();
             if (GUILayout.Button("Connect") && !string.IsNullOrEmpty(serverAddress)) {
+                if (serverAddress.Contains("ngrok.io") && !serverAddress.Contains("://")) {
+                    serverAddress = $"wss://{serverAddress}:443";
+                }
+                
                 var uri = new Uri(serverAddress);
                 if (uri.Scheme.Equals("ws")) {
                     game.Initialize(new PlayTestPeer(game, ConnectionProtocol.WebSocket));
