@@ -57,10 +57,12 @@ public class PlayTest : MonoBehaviour, IGameListener {
                 var uri = new Uri(serverAddress);
                 if (uri.Scheme.Equals("ws")) {
                     game.Initialize(new PlayTestPeer(game, ConnectionProtocol.WebSocket));
+                } else if (uri.Scheme.Equals("wss")) {
+                    game.Initialize(new PlayTestPeer(game, ConnectionProtocol.WebSocketSecure));
                 } else if (uri.Scheme.Equals("tcp")) {
                     game.Initialize(new PlayTestPeer(game, ConnectionProtocol.Tcp));
                 } else {
-                    OnLog(DebugLevel.INFO, "uri.Schema is empty, init as tcp");
+                    OnLog(DebugLevel.WARNING, "uri.Schema is empty, init as tcp");
                     game.Initialize(new PlayTestPeer(game, ConnectionProtocol.Tcp));
                 }
                 

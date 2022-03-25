@@ -40,14 +40,17 @@ namespace MyMmo.ConsolePlayTest {
         }
 
         private void TryConnectManually() {
-            //ConnectNgrokWebSocket(); // ngrok
-            //ConnectLocalhostWebSocket(); //localhost websocket
-            ConnectLocalhostTcp(); // localhost tcp
+            ConnectNgrokWebSocketSecure();
         }
 
-        private void ConnectNgrokWebSocket() {
-            game.Initialize(new PhotonPeer(game, ConnectionProtocol.WebSocket));
-            game.Connect("ws://0256-62-122-202-232.ngrok.io:80");
+        private void ConnectLocalWebSocketSecure() {
+            game.Initialize(new PhotonPeer(game, ConnectionProtocol.WebSocketSecure));
+            game.Connect("wss://mymmo.ping.com:9090");
+        }
+
+        private void ConnectNgrokWebSocketSecure() {
+            game.Initialize(new PhotonPeer(game, ConnectionProtocol.WebSocketSecure));
+            game.Connect("wss://c4d9-62-122-202-155.ngrok.io:443");
         }
 
         private void ConnectLocalhostWebSocket() {
