@@ -50,7 +50,7 @@ namespace MyMmo.ConsolePlayTest {
 
         private void ConnectNgrokWebSocketSecure() {
             game.Initialize(new PhotonPeer(game, ConnectionProtocol.WebSocketSecure));
-            game.Connect("wss://c4d9-62-122-202-155.ngrok.io:443");
+            game.Connect("wss://a2cd-62-122-202-155.ngrok.io:443");
         }
 
         private void ConnectLocalhostWebSocket() {

@@ -29,19 +29,26 @@ public class PlayTest : MonoBehaviour, IGameListener {
     }
 
     private void Start() {
-#if UNITY_EDITOR
-        isManualSetup = true;
-#else
-        isManualSetup = false;
-#endif
         game = new Game(this);
 
+#if UNITY_EDITOR
+        isManualSetup = true;
         if (isManualSetup) {
+            enteredUserName = "unity_editor_manual";
             game.Initialize(new PlayTestPeer(game, ConnectionProtocol.Tcp));
             game.Connect("localhost:4530");
-        } else {
-            isConnectState = true;
         }
+#elif UNITY_WEBGL
+        isManualSetup = true;
+        if (isManualSetup) {
+            enteredUserName = "unity_webgl_manual";
+            game.Initialize(new PlayTestPeer(game, ConnectionProtocol.WebSocketSecure));
+            game.Connect("wss://a2cd-62-122-202-155.ngrok.io:443");
+        }
+#else
+        isManualSetup = false;
+        isConnectState = true;
+#endif
     }
 
     private string serverAddress;
@@ -104,8 +111,7 @@ public class PlayTest : MonoBehaviour, IGameListener {
         Debug.Log("OnConnected");
         isConnectState = false;
         isEnterState = true;
-        if (isManualSetup) {
-            enteredUserName = "ping_unity_hardcoded";
+        if (isManualSetup && !string.IsNullOrEmpty(enteredUserName)) {
             CreateWorld();
         }
     }
