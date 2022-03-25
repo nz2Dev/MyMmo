@@ -1,7 +1,7 @@
 using ExitGames.Logging;
 using MyMmo.Commons;
 using MyMmo.Server.Operations;
-using MyMmo.Server.Producers;
+using MyMmo.Server.Writers;
 using Photon.SocketServer;
 using Photon.SocketServer.Rpc;
 
@@ -67,7 +67,7 @@ namespace MyMmo.Server {
 
             var spawnLocation = world.GetLocation(World.RootLocationId);
             var interestArea = new ClientInterestArea(peer, world, enterWorldOperation.UserName);
-            var spawnItemProducer = new SpawnClientAvatarProducer(enterWorldOperation.UserName, spawnLocation.Id, interestArea, peer);
+            var spawnItemProducer = new SpawnClientAvatarWriter(enterWorldOperation.UserName, spawnLocation.Id, interestArea, peer);
             if (!spawnItemProducer.IsValidAt(world)) {
                 interestArea.Dispose();
                 return MmoOperationsUtils.OperationError(

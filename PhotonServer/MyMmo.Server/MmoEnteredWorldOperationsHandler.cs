@@ -1,7 +1,7 @@
 using ExitGames.Logging;
 using MyMmo.Commons;
 using MyMmo.Server.Operations;
-using MyMmo.Server.Producers;
+using MyMmo.Server.Writers;
 using Photon.SocketServer;
 using Photon.SocketServer.Rpc;
 
@@ -49,7 +49,7 @@ namespace MyMmo.Server {
 
             var avatarItem = world.GetItem(avatarItemId);
             var avatarLocation = world.GetLocation(avatarItem.LocationId);
-            avatarLocation.RequestProducer(new ChangeLocationProducer(avatarItem.Id, operationChangeLocation.LocationId));
+            avatarLocation.RequestProducer(new ChangeLocationWriter(avatarItem.Id, operationChangeLocation.LocationId));
 
             return MmoOperationsUtils.OperationSuccess(operationRequest);
         }
@@ -62,7 +62,7 @@ namespace MyMmo.Server {
 
             var avatarItem = world.GetItem(avatarItemId);
             var avatarLocation = world.GetLocation(avatarItem.LocationId);
-            avatarLocation.RequestProducer(new MoveItemRandomlyProducer(avatarItem.Id));
+            avatarLocation.RequestProducer(new MoveItemRandomlyWriter(avatarItem.Id));
 
             return MmoOperationsUtils.OperationSuccess(operationRequest);
         }
@@ -72,7 +72,7 @@ namespace MyMmo.Server {
             
             var avatarItem = world.GetItem(avatarItemId);
             var avatarLocation = world.GetLocation(avatarItem.LocationId);
-            avatarLocation.RequestProducer(new DestroyItemProducer(avatarItem.Id));
+            avatarLocation.RequestProducer(new DestroyItemWriter(avatarItem.Id));
             interestArea.Dispose();
             
             ((Peer) peer).SetCurrentOperationHandler(null);

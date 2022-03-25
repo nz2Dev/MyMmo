@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ExitGames.Concurrency.Channels;
 using ExitGames.Concurrency.Fibers;
+using ExitGames.Logging;
 using MyMmo.Commons;
 using MyMmo.Commons.Scripts;
 using MyMmo.Server.Events;
@@ -11,7 +12,9 @@ using Photon.SocketServer;
 namespace MyMmo.Server {
     public class Location : IDisposable {
 
-        private const int UpdateInterval = 200;
+        private static readonly ILogger logger = LogManager.GetCurrentClassLogger();
+        
+        private const int UpdateInterval = 1000;
 
         private readonly object requestLock = new object();
 
@@ -19,7 +22,7 @@ namespace MyMmo.Server {
         private readonly int id;
 
         private readonly IFiber updateFiber = new PoolFiber();
-        private readonly List<IScriptProducer<IScript>> producers = new List<IScriptProducer<IScript>>();
+        private readonly HashSet<IScriptWriter> writers = new HashSet<IScriptWriter>();
         private bool scheduled;
         
         private readonly Channel<LocationEventMessage> locationEventChannel = 
@@ -45,40 +48,45 @@ namespace MyMmo.Server {
             return locationEventChannel.Subscribe(fiber, onLocationEventMessage);
         }
 
-        public void RequestProducer(IScriptProducer<IScript> scriptProducer) {
+        public void RequestProducer(IScriptWriter scriptWriter) {
             lock (requestLock) {
                 CheckScheduling();
-                producers.Add(scriptProducer);
+                if (writers.Contains(scriptWriter)) {
+                    logger.Warn($"checking of scriptWriter {scriptWriter} containment in location {id}'s writers list return true, previous writer will be overwritten");
+                }
+                
+                writers.Add(scriptWriter);
+                logger.ConditionalDebug($"Location {id} received new producer {scriptWriter}, total amount is [{writers.Count}]");
             }
         }
 
         private void CheckScheduling() {
-            if (scheduled == false) {
+            if (!scheduled) {
                 scheduled = true;
                 updateFiber.Schedule(Update, UpdateInterval);
             }
         }
 
         private void Update() {
-            var scripts = new List<IScript>();
+            logger.ConditionalDebug($"Location {id} start execution of Update");
+            
+            var clip = new ScriptsClip();
             lock (requestLock) {
-                scheduled = false;
-
-                // first phase is to generate script
-                foreach (var producer in producers) {
-                    scripts.Add(producer.ProduceImmediately(world));
+                // first phase is to write scripts
+                foreach (var writer in writers) {
+                    writer.Write(world, clip);
                 }
                 
-                producers.Clear();
+                scheduled = false;
+                writers.Clear();
             }
 
             // then to apply state from them, so server will be the first one
-            world.ExecuteStateScripts(scripts);
+            world.ExecuteStateScripts(clip);
             
             // and send all the script data to everyone interested in them
-            var scriptsData = scripts.Select(script => script.ToScriptData()).ToArray();
-            var scriptsClip = ScriptsDataProtocol.Serialize(new ScriptsDataClip {ScriptsData = scriptsData});
-            var regionUpdateData = new LocationUpdatedData(scriptsClip, id);
+            var scriptsClipBytes = ScriptsDataProtocol.Serialize(clip.ToData());
+            var regionUpdateData = new LocationUpdatedData(scriptsClipBytes, id);
             var regionUpdateEvent = new EventData((byte) EventCode.LocationUpdated, regionUpdateData);
             locationEventChannel.Publish(new LocationEventMessage(regionUpdateEvent, new SendParameters()));
         }
@@ -86,6 +94,5 @@ namespace MyMmo.Server {
         public void Dispose() {
             updateFiber.Dispose();
         }
-
     }
 }

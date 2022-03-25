@@ -239,7 +239,8 @@
     <Compile Include="FiberUtils.cs" />
     <Compile Include="InterestArea.cs" />
     <Compile Include="IScript.cs" />
-    <Compile Include="IScriptProducer.cs" />
+    <Compile Include="ScriptsClip.cs" />
+    <Compile Include="IScriptWriter.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="ItemAlreadyExist.cs" />
     <Compile Include="ItemMessages.cs" />
@@ -254,10 +255,10 @@
     <Compile Include="Operations\ChangeLocationOperation.cs" />
     <Compile Include="Operations\EnterWorldResponseParams.cs" />
     <Compile Include="Operations\MoveAvatarRandomlyOperation.cs" />
-    <Compile Include="Producers\ChangeLocationProducer.cs" />
-    <Compile Include="Producers\DestroyItemProducer.cs" />
-    <Compile Include="Producers\MoveItemRandomlyProducer.cs" />
-    <Compile Include="Producers\SpawnClientAvatarProducer.cs" />
+    <Compile Include="Writers\ChangeLocationWriter.cs" />
+    <Compile Include="Writers\DestroyItemWriter.cs" />
+    <Compile Include="Writers\MoveItemRandomlyWriter.cs" />
+    <Compile Include="Writers\SpawnClientAvatarWriter.cs" />
     <Compile Include="Scripts\ChangeLocationScript.cs" />
     <Compile Include="Scripts\DestroyItemScript.cs" />
     <Compile Include="Scripts\MappingUtils.cs" />

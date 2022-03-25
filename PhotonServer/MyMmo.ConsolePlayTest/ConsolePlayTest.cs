@@ -7,7 +7,6 @@ using MyMmo.Client;
 using MyMmo.Client.Params;
 using MyMmo.Commons.Scripts;
 using MyMmo.Commons.Snapshots;
-using MyMmo.ConsolePlayTest.Scripts;
 
 namespace MyMmo.ConsolePlayTest {
     public class ConsolePlayTest : IGameListener {
@@ -18,7 +17,7 @@ namespace MyMmo.ConsolePlayTest {
         private bool connected;
         private const string WorldName = "UnityWorld";
 
-        private readonly Dictionary<string, PlayTestItem> itemCache = new Dictionary<string, PlayTestItem>();
+        private readonly Dictionary<string, ConsoleItem> itemCache = new Dictionary<string, ConsoleItem>();
 
         public static void Main(string[] args) {
             var playTest = new ConsolePlayTest();
@@ -40,7 +39,7 @@ namespace MyMmo.ConsolePlayTest {
         }
 
         private void TryConnectManually() {
-            ConnectNgrokWebSocketSecure();
+            ConnectLocalhostTcp();
         }
 
         private void ConnectLocalWebSocketSecure() {
@@ -79,6 +78,7 @@ namespace MyMmo.ConsolePlayTest {
                 Console.WriteLine("-e [nickname] create default world and enter it with nickname specified");
                 Console.WriteLine("-m [locationId] move avatar to location specified");
                 Console.WriteLine("-p change item position randomly in the same location");
+                Console.WriteLine("-l toggle logs on or off");
                 Console.WriteLine("Enter command:");
                 var input = Console.ReadLine();
                 if (string.IsNullOrEmpty(input)) {
@@ -105,12 +105,19 @@ namespace MyMmo.ConsolePlayTest {
                         game.Connect(address);
                         break;
                     }
+                    
                     case "-e": {
                         if (!connected) {
                             continue;
                         }
                         nickname = inputArg[1];
                         game.CreateWorld(new CreateWorldParams {WorldName = WorldName});
+                        break;
+                    }
+
+                    case "-l": {
+                        isLogEnabled = !isLogEnabled;
+                        Console.WriteLine("Logs is " + (isLogEnabled ? "enabled" : "disabled"));
                         break;
                     }
 
@@ -148,8 +155,12 @@ namespace MyMmo.ConsolePlayTest {
             Console.WriteLine("-----------");
         }
 
+        private static bool isLogEnabled = true;
+        
         public static void PrintLog(string message) {
-            Console.WriteLine(message + "  >> press any key to continue <<");
+            if (isLogEnabled) {
+                Console.WriteLine(message + "  >> press any key to continue <<");
+            }
         }
 
         public void OnConnected() {
@@ -174,7 +185,7 @@ namespace MyMmo.ConsolePlayTest {
             }
                     
             foreach (var itemSnapshotData in locationSnapshotData.ItemsSnapshotData) {
-                itemCache.Add(itemSnapshotData.ItemId, new PlayTestItem(
+                itemCache.Add(itemSnapshotData.ItemId, new ConsoleItem(
                     itemSnapshotData
                 ));
             }
@@ -188,12 +199,9 @@ namespace MyMmo.ConsolePlayTest {
             PrintLog($"Game Log: {message}");
         }
 
-        public void OnRegionUpdate(int locationId, BaseScriptData[] scriptsData) {
+        public void OnRegionUpdate(int locationId, ScriptsClipData scriptsClipData) {
             PrintLog($"region {locationId} updates with scripts");
-            var clientScripts = scriptsData.Select(data => ClientScriptsFactory.Create(data));
-            foreach (var clientScript in clientScripts) {
-                clientScript.ApplyClientState(itemCache);
-            }
+            ConsoleScriptClipPlayer.Play(scriptsClipData, itemCache);
         }
 
     }

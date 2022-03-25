@@ -4,15 +4,15 @@ using MyMmo.Commons.Scripts;
 
 namespace MyMmo.ConsolePlayTest.Scripts {
     
-    public class ChangeLocationConsoleUpdateScript : IConsoleUpdateScript {
+    public class ChangeLocationConsoleScriptApplier : IConsoleScriptApplier {
 
         private readonly ChangeLocationScriptData scriptData;
         
-        public ChangeLocationConsoleUpdateScript(ChangeLocationScriptData scriptData) {
+        public ChangeLocationConsoleScriptApplier(ChangeLocationScriptData scriptData) {
             this.scriptData = scriptData;
         }
 
-        public void ApplyClientState(Dictionary<string, PlayTestItem> itemCache) {
+        public void ApplyClientState(Dictionary<string, ConsoleItem> itemCache) {
             if (!itemCache.TryGetValue(scriptData.ItemId, out var item)) {
                 throw new Exception("client item not found: " + scriptData.ItemId);
             }

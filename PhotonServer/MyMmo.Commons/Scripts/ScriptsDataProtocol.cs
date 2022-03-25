@@ -7,16 +7,16 @@ namespace MyMmo.Commons.Scripts {
 
         public static TypeModel DeserializeTypeModel = RuntimeTypeModel.Default;
 
-        public static byte[] Serialize(ScriptsDataClip scriptsDataClip) {
+        public static byte[] Serialize(ScriptsClipData scriptsClipData) {
             using (var stream = new MemoryStream()) {
-                Serializer.Serialize(stream, scriptsDataClip);
+                Serializer.Serialize(stream, scriptsClipData);
                 return stream.ToArray();
             }
         }
         
-        public static ScriptsDataClip Deserialize(byte[] data) {
+        public static ScriptsClipData Deserialize(byte[] data) {
             using (var stream = new MemoryStream(data)) {
-                return (ScriptsDataClip) DeserializeTypeModel.Deserialize(stream, null, typeof(ScriptsDataClip));
+                return (ScriptsClipData) DeserializeTypeModel.Deserialize(stream, null, typeof(ScriptsClipData));
             }
         }
 

@@ -2,17 +2,17 @@ using System;
 using MyMmo.Commons.Scripts;
 
 namespace MyMmo.ConsolePlayTest.Scripts {
-    public static class ClientScriptsFactory {
+    public static class ConsoleScriptApplierFactory {
         
-        public static IConsoleUpdateScript Create(BaseScriptData baseScriptData) {
+        public static IConsoleScriptApplier Create(BaseScriptData baseScriptData) {
             if (baseScriptData is ChangeLocationScriptData changeLocationScriptData) {
-                return new ChangeLocationConsoleUpdateScript(changeLocationScriptData);
+                return new ChangeLocationConsoleScriptApplier(changeLocationScriptData);
             } else if (baseScriptData is ChangePositionScriptData changePositionScriptData) {
-                return new ChangePositionConsoleUpdateScript(changePositionScriptData);
+                return new ChangePositionConsoleScriptApplier(changePositionScriptData);
             } else if (baseScriptData is SpawnItemScriptData spawnItemScriptData) {
-                return new SpawnItemConsoleUpdateScript(spawnItemScriptData);
+                return new SpawnItemConsoleScriptApplier(spawnItemScriptData);
             } else if (baseScriptData is DestroyItemScriptData destroyItemScriptData) {
-                return new DestroyItemConsoleUpdateScript(destroyItemScriptData);
+                return new DestroyItemConsoleScriptApplier(destroyItemScriptData);
             } else {
                 throw new Exception("No factory found for scriptData: " + baseScriptData);
             }

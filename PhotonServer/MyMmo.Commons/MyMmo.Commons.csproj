@@ -52,7 +52,8 @@
     <Compile Include="Scripts\ChangeLocationScriptData.cs" />
     <Compile Include="Scripts\ChangePositionScriptData.cs" />
     <Compile Include="Scripts\DestroyItemScriptData.cs" />
-    <Compile Include="Scripts\ScriptsDataClip.cs" />
+    <Compile Include="Scripts\ItemScriptsData.cs" />
+    <Compile Include="Scripts\ScriptsClipData.cs" />
     <Compile Include="Scripts\ScriptsDataProtocol.cs" />
     <Compile Include="Scripts\SpawnItemScriptData.cs" />
     <Compile Include="Snapshots\ItemSnapshotData.cs" />

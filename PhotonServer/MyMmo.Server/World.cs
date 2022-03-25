@@ -58,11 +58,9 @@ namespace MyMmo.Server {
             }
         }
 
-        public void ExecuteStateScripts(IEnumerable<IScript> scripts) {
+        public void ExecuteStateScripts(ScriptsClip scriptsClip) {
             lock (syncRoot) {
-                foreach (var script in scripts) {
-                    script.ApplyState(this);
-                }
+                scriptsClip.ApplyState(this);
             }
         }
 

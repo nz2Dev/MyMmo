@@ -3,10 +3,10 @@ using ProtoBuf;
 namespace MyMmo.Commons.Scripts {
     
     [ProtoContract]
-    public class ScriptsDataClip {
+    public class ScriptsClipData {
 
         [ProtoMember(1)]
-        public BaseScriptData[] ScriptsData { get; set; }
+        public ItemScriptsData[] ScriptsData { get; set; }
 
     }
 }

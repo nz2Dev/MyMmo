@@ -1,17 +1,17 @@
 using MyMmo.Server.Scripts;
 
-namespace MyMmo.Server.Producers {
-    public class ChangeLocationProducer : IScriptProducer<ChangeLocationScript> {
+namespace MyMmo.Server.Writers {
+    public class ChangeLocationWriter : IScriptWriter {
 
         private string itemId;
         private int newLocationId;
 
-        public ChangeLocationProducer(string itemId, int newLocationId) {
+        public ChangeLocationWriter(string itemId, int newLocationId) {
             this.itemId = itemId;
             this.newLocationId = newLocationId;
         }
 
-        public ChangeLocationScript ProduceImmediately(World world) {
+        public IScript ProduceImmediately(World world) {
             var item = world.GetItem(itemId);
             return new ChangeLocationScript(
                 item.Id,
@@ -20,5 +20,8 @@ namespace MyMmo.Server.Producers {
             );
         }
 
+        public void Write(World world, ScriptsClip clip) {
+            clip.SetItemScript(itemId, ProduceImmediately(world));
+        }
     }
 }

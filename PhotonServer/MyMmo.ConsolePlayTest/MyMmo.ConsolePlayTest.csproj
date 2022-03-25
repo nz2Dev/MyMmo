@@ -42,14 +42,15 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="ConsolePlayTest.cs" />
-        <Compile Include="IConsoleUpdateScript.cs" />
+        <Compile Include="ConsoleScriptClipPlayer.cs" />
+        <Compile Include="IConsoleScriptApplier.cs" />
         <Compile Include="ConsoleItem.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="Scripts\ChangeLocationConsoleUpdateScript.cs" />
-        <Compile Include="Scripts\ChangePositionConsoleUpdateScript.cs" />
-        <Compile Include="Scripts\ConsoleUpdateScriptsFactory.cs" />
-        <Compile Include="Scripts\DestroyItemConsoleUpdateScript.cs" />
-        <Compile Include="Scripts\SpawnItemConsoleUpdateScript.cs" />
+        <Compile Include="Scripts\ChangeLocationConsoleScriptApplier.cs" />
+        <Compile Include="Scripts\ChangePositionConsoleScriptApplier.cs" />
+        <Compile Include="Scripts\ConsoleScriptApplierFactory.cs" />
+        <Compile Include="Scripts\DestroyItemConsoleScriptApplier.cs" />
+        <Compile Include="Scripts\SpawnItemConsoleScriptApplier.cs" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\MyMmo.ClientDotNet\MyMmo.ClientDotNet.csproj">

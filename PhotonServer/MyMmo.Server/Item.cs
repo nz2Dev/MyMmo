@@ -11,6 +11,7 @@ namespace MyMmo.Server {
 
         private readonly ILogger logger = LogManager.GetCurrentClassLogger();
 
+        // todo change itemId type to int everywhere, no needs for string
         private readonly string id;
         private readonly PeerBase owner;
 

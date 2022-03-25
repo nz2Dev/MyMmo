@@ -1,15 +1,15 @@
 using MyMmo.Server.Scripts;
 
-namespace MyMmo.Server.Producers {
-    public class MoveItemRandomlyProducer : IScriptProducer<ChangePositionScript> {
+namespace MyMmo.Server.Writers {
+    public class MoveItemRandomlyWriter : IScriptWriter {
 
         private readonly string sourceItemId;
 
-        public MoveItemRandomlyProducer(string sourceItemId) {
+        public MoveItemRandomlyWriter(string sourceItemId) {
             this.sourceItemId = sourceItemId;
         }
 
-        public ChangePositionScript ProduceImmediately(World world) {
+        public IScript ProduceImmediately(World world) {
             var sourceItem = world.GetItem(sourceItemId);
             var locationArea = world.GetLocationArea(sourceItem.LocationId);
             var newPosition = locationArea.GetRandomPositionWithinBounds();
@@ -19,6 +19,10 @@ namespace MyMmo.Server.Producers {
                 fromPosition: sourceItem.PositionInLocation,
                 toPosition: newPosition
             );
+        }
+
+        public void Write(World world, ScriptsClip clip) {
+            clip.SetItemScript(sourceItemId, ProduceImmediately(world));
         }
 
     }

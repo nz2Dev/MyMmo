@@ -17,7 +17,7 @@ namespace MyMmo.Client {
         
         void OnLog(DebugLevel debugLevel, string message);
         
-        void OnRegionUpdate(int locationId, BaseScriptData[] scriptsData);
+        void OnRegionUpdate(int locationId, ScriptsClipData scriptsClipData);
 
     }
 }
