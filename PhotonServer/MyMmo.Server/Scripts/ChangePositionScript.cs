@@ -1,30 +1,30 @@
-using System.Numerics;
 using MyMmo.Commons.Scripts;
+using MyMmo.Server.Math;
 
 namespace MyMmo.Server.Scripts {
     public class ChangePositionScript : IScript {
 
-        private string itemId;
-        private Vector2 fromPosition;
-        private Vector2 toPosition;
+        public string ItemId { get; set; }
+        public Line TrajectoryLine { get; set; }
+        public float Duration { get; set; }
 
-        public ChangePositionScript(string itemId, Vector2 fromPosition, Vector2 toPosition) {
-            this.itemId = itemId;
-            this.fromPosition = fromPosition;
-            this.toPosition = toPosition;
+        public ChangePositionScript(string itemId, Line trajectoryLine, float duration) {
+            ItemId = itemId;
+            TrajectoryLine = trajectoryLine;
+            Duration = duration;
         }
 
         public BaseScriptData ToScriptData() {
             return new ChangePositionScriptData {
-                FromPosition = fromPosition.ToDataVector2(),
-                ToPosition = toPosition.ToDataVector2(),
-                ItemId = itemId
+                FromPosition = TrajectoryLine.pointA.ToDataVector2(),
+                ToPosition = TrajectoryLine.pointB.ToDataVector2(),
+                ItemId = ItemId
             };
         }
 
         public void ApplyState(World world) {
-            var item = world.GetItem(itemId);
-            item.ChangePositionInLocation(toPosition);
+            var item = world.GetItem(ItemId);
+            item.ChangePositionInLocation(TrajectoryLine.pointB);
         }
 
     }

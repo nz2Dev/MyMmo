@@ -232,15 +232,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientInterestArea.cs" />
-    <Compile Include="Diagnostic\MessagesCounters.cs" />
     <Compile Include="Events\LocationEnterData.cs" />
     <Compile Include="Events\LocationExitData.cs" />
     <Compile Include="Events\LocationUpdatedData.cs" />
     <Compile Include="FiberUtils.cs" />
     <Compile Include="InterestArea.cs" />
     <Compile Include="IScript.cs" />
-    <Compile Include="ScriptsClip.cs" />
     <Compile Include="IScriptWriter.cs" />
+    <Compile Include="LocationArea.cs" />
+    <Compile Include="Math\Line.cs" />
+    <Compile Include="Math\Navigation.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="ItemAlreadyExist.cs" />
     <Compile Include="ItemMessages.cs" />
@@ -248,13 +249,13 @@
     <Compile Include="ItemNotFound.cs" />
     <Compile Include="ItemSnapshot.cs" />
     <Compile Include="Location.cs" />
-    <Compile Include="LocationArea.cs" />
     <Compile Include="LocationMessages.cs" />
     <Compile Include="LocationSnapshot.cs" />
     <Compile Include="MmoEnteredWorldOperationsHandler.cs" />
     <Compile Include="Operations\ChangeLocationOperation.cs" />
     <Compile Include="Operations\EnterWorldResponseParams.cs" />
     <Compile Include="Operations\MoveAvatarRandomlyOperation.cs" />
+    <Compile Include="ScriptsClip.cs" />
     <Compile Include="Writers\ChangeLocationWriter.cs" />
     <Compile Include="Writers\DestroyItemWriter.cs" />
     <Compile Include="Writers\MoveItemRandomlyWriter.cs" />
@@ -274,6 +275,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="World.cs" />
     <Compile Include="WorldCache.cs" />
+    <Compile Include="Writers\WritersUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="log4net.config">
@@ -287,14 +289,18 @@
       <Name>MyMmo.Commons</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Photon" />
+    <Folder Include="Simulation" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets. -->
   <Target Name="BeforeBuild">
-    <Exec Command="start /d &quot;C:/Photon/Server/SDK/deploy/bin_Win64&quot; PhotonSocketServer /stop1 MyMmoServer"/>
+    <Exec Command="start /d &quot;C:/Photon/Server/SDK/deploy/bin_Win64&quot; PhotonSocketServer /stop1 MyMmoServer" />
   </Target>
   <Target Name="AfterBuild">
-    <Exec Command="start /d &quot;C:/Photon/Server/SDK/deploy/bin_Win64&quot; PhotonSocketServer /run MyMmoServer"/>
+    <Exec Command="start /d &quot;C:/Photon/Server/SDK/deploy/bin_Win64&quot; PhotonSocketServer /run MyMmoServer" />
   </Target>
   <PropertyGroup>
     <PostBuildEvent>xcopy /Y /Q "$(TargetDir)*.*" "C:\Photon\Server\SDK\deploy\MyMmoServer\bin"</PostBuildEvent>

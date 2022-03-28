@@ -11,6 +11,22 @@ namespace MyMmo.Server {
             scripts[itemId] = script;
         }
 
+        // api changes draft
+        
+        public void SetItemScriptIntent(string itemId, IScript script) {
+            scripts[itemId] = script;
+        }
+
+        public IScript GetItemLastScriptIntent(string itemId) {
+            return scripts[itemId];
+        }
+        
+        public IEnumerable<IScript> LastIntents() {
+            return scripts.Values;
+        }
+        
+        // end draft
+
         public void ApplyState(World world) {
             foreach (var script in scripts.Values) {
                 script.ApplyState(world);

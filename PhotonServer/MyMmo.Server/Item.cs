@@ -7,41 +7,37 @@ using ExitGames.Logging;
 using Photon.SocketServer;
 
 namespace MyMmo.Server {
+    // todo change itemId type to int everywhere, no needs for string
     public class Item : IDisposable {
 
         private readonly ILogger logger = LogManager.GetCurrentClassLogger();
-
-        // todo change itemId type to int everywhere, no needs for string
-        private readonly string id;
-        private readonly PeerBase owner;
-
         private readonly Channel<ItemLocationChangedMessage> locationChangedChannel = new Channel<ItemLocationChangedMessage>();
         private readonly Channel<ItemDisposedMessage> disposeChannel = new Channel<ItemDisposedMessage>();
 
-        private int locationId = -1;
-        private bool disposed;
-        private bool destroyed;
-
-        private Vector2 positionInLocation;
-
         public Item(string id, PeerBase owner) {
-            this.id = id;
-            this.owner = owner;
+            Owner = owner;
+            Id = id;
         }
 
         ~Item() {
             Dispose(false);
         }
 
-        public string Id => id;
-        public int LocationId => locationId;
-        public bool Disposed => disposed;
-        public bool Destroyed => destroyed;
-        public PeerBase Owner => owner;
-        public Vector2 PositionInLocation => positionInLocation;
+        // base properties
+        public string Id { get; }
+        public PeerBase Owner { get; }
+        public int LocationId { get; private set; } = -1;
+        
+        // to be classified...
+        public bool Disposed { get; private set; }
+        public bool Destroyed { get; private set; }
+
+        // state properties, component specific
+        public Vector2 PositionInLocation { get; private set; }
+        public float MovementSpeedUnitsPerSecond { get; private set; }
 
         public void Spawn(int spawnLocationId) {
-            if (locationId != -1) {
+            if (LocationId != -1) {
                 throw new Exception("Spawning item with non default location id");
             }
             
@@ -53,7 +49,7 @@ namespace MyMmo.Server {
                 throw new Exception("newLocationId can't be negative integer");
             }
             
-            locationId = newLocationId;
+            LocationId = newLocationId;
             locationChangedChannel.Publish(new ItemLocationChangedMessage(newLocationId));
         }
 
@@ -62,20 +58,20 @@ namespace MyMmo.Server {
         }
         
         public void ChangePositionInLocation(Vector2 vector2) {
-            positionInLocation = vector2;
+            PositionInLocation = vector2;
         }
 
         // todo implement destruction state script
         public void Destroy() {
-            destroyed = true;
+            Destroyed = true;
         }
 
         public ItemSnapshot GenerateItemSnapshot() {
-            return new ItemSnapshot(id, locationId, positionInLocation);
+            return new ItemSnapshot(Id, LocationId, PositionInLocation);
         }
 
         public void Dispose() {
-            logger.Info($"item {id} is going to dispose");
+            logger.Info($"item {Id} is going to dispose");
             Dispose(true);
             GC.SuppressFinalize(this);
         }
@@ -87,7 +83,7 @@ namespace MyMmo.Server {
         [SuppressMessage("ReSharper", "InvertIf")]
         private void Dispose(bool disposing) {
             if (disposing) {
-                disposed = true;
+                Disposed = true;
                 disposeChannel.Publish(new ItemDisposedMessage(this));
             }
         }
