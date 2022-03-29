@@ -231,51 +231,51 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientInterestArea.cs" />
-    <Compile Include="Events\LocationEnterData.cs" />
-    <Compile Include="Events\LocationExitData.cs" />
-    <Compile Include="Events\LocationUpdatedData.cs" />
+    <Compile Include="App\Events\LocationEnterData.cs" />
+    <Compile Include="App\Events\LocationExitData.cs" />
+    <Compile Include="App\Events\LocationUpdatedData.cs" />
+    <Compile Include="App\MmoApplication.cs" />
+    <Compile Include="App\MmoEnteredWorldOperationsHandler.cs" />
+    <Compile Include="App\MmoInitialOperationsHandler.cs" />
+    <Compile Include="App\MmoOperationsUtils.cs" />
+    <Compile Include="App\MmoPeer.cs" />
+    <Compile Include="App\Operations\ChangeLocationOperation.cs" />
+    <Compile Include="App\Operations\CreateWorldOperation.cs" />
+    <Compile Include="App\Operations\EnterWorldOperation.cs" />
+    <Compile Include="App\Operations\EnterWorldResponseParams.cs" />
+    <Compile Include="App\Operations\MoveAvatarRandomlyOperation.cs" />
+    <Compile Include="Game\ClientInterestArea.cs" />
+    <Compile Include="Game\InterestArea.cs" />
+    <Compile Include="Game\IScript.cs" />
+    <Compile Include="Game\IScriptWriter.cs" />
+    <Compile Include="Game\Item.cs" />
+    <Compile Include="Game\ItemAlreadyExist.cs" />
+    <Compile Include="Game\ItemCache.cs" />
+    <Compile Include="Game\ItemMessages.cs" />
+    <Compile Include="Game\ItemNotFound.cs" />
+    <Compile Include="Game\ItemSnapshot.cs" />
+    <Compile Include="Game\Location.cs" />
+    <Compile Include="Game\LocationMessages.cs" />
+    <Compile Include="Game\MapRegion.cs" />
+    <Compile Include="Game\LocationSnapshot.cs" />
+    <Compile Include="Game\Navigation.cs" />
+    <Compile Include="Game\LocationScriptsClip.cs" />
+    <Compile Include="Game\Scripts\ChangeLocationScript.cs" />
+    <Compile Include="Game\Scripts\ChangePositionScript.cs" />
+    <Compile Include="Game\Scripts\DestroyItemScript.cs" />
+    <Compile Include="Game\Scripts\SpawnItemScript.cs" />
+    <Compile Include="Game\World.cs" />
+    <Compile Include="Game\WorldCache.cs" />
+    <Compile Include="Game\Writers\ChangeLocationWriter.cs" />
+    <Compile Include="Game\Writers\DestroyItemWriter.cs" />
+    <Compile Include="Game\Writers\MoveItemRandomlyWriter.cs" />
+    <Compile Include="Game\Writers\SpawnClientAvatarWriter.cs" />
+    <Compile Include="Game\Writers\WritersUtils.cs" />
     <Compile Include="FiberUtils.cs" />
-    <Compile Include="InterestArea.cs" />
-    <Compile Include="IScript.cs" />
-    <Compile Include="IScriptWriter.cs" />
-    <Compile Include="LocationArea.cs" />
-    <Compile Include="Math\Line.cs" />
-    <Compile Include="Math\Navigation.cs" />
-    <Compile Include="Item.cs" />
-    <Compile Include="ItemAlreadyExist.cs" />
-    <Compile Include="ItemMessages.cs" />
-    <Compile Include="ItemCache.cs" />
-    <Compile Include="ItemNotFound.cs" />
-    <Compile Include="ItemSnapshot.cs" />
-    <Compile Include="Location.cs" />
-    <Compile Include="LocationMessages.cs" />
-    <Compile Include="LocationSnapshot.cs" />
-    <Compile Include="MmoEnteredWorldOperationsHandler.cs" />
-    <Compile Include="Operations\ChangeLocationOperation.cs" />
-    <Compile Include="Operations\EnterWorldResponseParams.cs" />
-    <Compile Include="Operations\MoveAvatarRandomlyOperation.cs" />
-    <Compile Include="ScriptsClip.cs" />
-    <Compile Include="Writers\ChangeLocationWriter.cs" />
-    <Compile Include="Writers\DestroyItemWriter.cs" />
-    <Compile Include="Writers\MoveItemRandomlyWriter.cs" />
-    <Compile Include="Writers\SpawnClientAvatarWriter.cs" />
-    <Compile Include="Scripts\ChangeLocationScript.cs" />
-    <Compile Include="Scripts\DestroyItemScript.cs" />
-    <Compile Include="Scripts\MappingUtils.cs" />
-    <Compile Include="Scripts\ChangePositionScript.cs" />
-    <Compile Include="MmoApplication.cs" />
-    <Compile Include="MmoInitialOperationsHandler.cs" />
-    <Compile Include="MmoOperationsUtils.cs" />
-    <Compile Include="MmoPeer.cs" />
-    <Compile Include="Operations\CreateWorldOperation.cs" />
-    <Compile Include="Operations\EnterWorldOperation.cs" />
+    <Compile Include="Primitives\Line.cs" />
+    <Compile Include="Primitives\MappingUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scripts\SpawnItemScript.cs" />
     <Compile Include="Settings.cs" />
-    <Compile Include="World.cs" />
-    <Compile Include="WorldCache.cs" />
-    <Compile Include="Writers\WritersUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="log4net.config">
@@ -288,10 +288,6 @@
       <Project>{06bb62b2-9fe5-4eb6-a5a0-9c36120e50e3}</Project>
       <Name>MyMmo.Commons</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Photon" />
-    <Folder Include="Simulation" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
