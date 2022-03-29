@@ -2,7 +2,7 @@ using MyMmo.Commons;
 using Photon.SocketServer;
 using Photon.SocketServer.Rpc;
 
-namespace MyMmo.Server.App {
+namespace MyMmo.Server {
     public class MmoOperationsUtils {
 
         public static OperationResponse OperationWrongState(OperationRequest operationRequest) {

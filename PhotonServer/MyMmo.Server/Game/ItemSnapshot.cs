@@ -1,6 +1,6 @@
 using System.Numerics;
 using MyMmo.Commons.Snapshots;
-using MyMmo.Server.Primitives;
+using MyMmo.Server.Game.Primitives;
 
 namespace MyMmo.Server.Game {
     public class ItemSnapshot {

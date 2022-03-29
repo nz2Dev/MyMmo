@@ -2,7 +2,7 @@ using MyMmo.Commons;
 using Photon.SocketServer;
 using Photon.SocketServer.Rpc;
 
-namespace MyMmo.Server.App.Operations {
+namespace MyMmo.Server.Operations {
     public class CreateWorldOperation : Operation {
 
         public CreateWorldOperation(IRpcProtocol protocol, OperationRequest request)

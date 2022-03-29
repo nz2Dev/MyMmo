@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using MyMmo.Server.Primitives;
+using MyMmo.Server.Game.Primitives;
 
 namespace MyMmo.Server.Game {
     public static class Navigation {

@@ -5,7 +5,7 @@ using ExitGames.Concurrency.Fibers;
 using ExitGames.Logging;
 using MyMmo.Commons;
 using MyMmo.Commons.Scripts;
-using MyMmo.Server.App.Events;
+using MyMmo.Server.Events;
 using Photon.SocketServer;
 
 namespace MyMmo.Server.Game {

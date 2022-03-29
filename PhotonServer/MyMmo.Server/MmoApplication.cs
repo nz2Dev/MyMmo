@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Photon.SocketServer;
 using LogManager = ExitGames.Logging.LogManager;
 
-namespace MyMmo.Server.App {
+namespace MyMmo.Server {
     public class MmoApplication : ApplicationBase {
 
         public MmoApplication() : base(new ConfigurationManager()) {

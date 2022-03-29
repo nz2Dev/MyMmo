@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using MyMmo.Commons;
-using MyMmo.Server.App.Events;
+using MyMmo.Server.Events;
 using Photon.SocketServer;
 
 namespace MyMmo.Server.Game {

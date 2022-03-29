@@ -3,7 +3,7 @@ using MyMmo.Commons.Snapshots;
 using MyMmo.Server.Game;
 using Photon.SocketServer.Rpc;
 
-namespace MyMmo.Server.App.Events {
+namespace MyMmo.Server.Events {
     
     /*todo remove DataContract inheritance for all events objects*/
     public class LocationEnterData {

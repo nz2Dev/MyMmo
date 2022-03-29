@@ -1,7 +1,7 @@
 using System.Numerics;
 using MyMmo.Commons.Scripts;
 using MyMmo.Commons.Snapshots;
-using MyMmo.Server.Primitives;
+using MyMmo.Server.Game.Primitives;
 using Photon.SocketServer;
 
 namespace MyMmo.Server.Game.Scripts {

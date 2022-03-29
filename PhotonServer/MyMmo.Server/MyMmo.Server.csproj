@@ -231,19 +231,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App\Events\LocationEnterData.cs" />
-    <Compile Include="App\Events\LocationExitData.cs" />
-    <Compile Include="App\Events\LocationUpdatedData.cs" />
-    <Compile Include="App\MmoApplication.cs" />
-    <Compile Include="App\MmoEnteredWorldOperationsHandler.cs" />
-    <Compile Include="App\MmoInitialOperationsHandler.cs" />
-    <Compile Include="App\MmoOperationsUtils.cs" />
-    <Compile Include="App\MmoPeer.cs" />
-    <Compile Include="App\Operations\ChangeLocationOperation.cs" />
-    <Compile Include="App\Operations\CreateWorldOperation.cs" />
-    <Compile Include="App\Operations\EnterWorldOperation.cs" />
-    <Compile Include="App\Operations\EnterWorldResponseParams.cs" />
-    <Compile Include="App\Operations\MoveAvatarRandomlyOperation.cs" />
+    <Compile Include="Events\LocationEnterData.cs" />
+    <Compile Include="Events\LocationExitData.cs" />
+    <Compile Include="Events\LocationUpdatedData.cs" />
     <Compile Include="Game\ClientInterestArea.cs" />
     <Compile Include="Game\InterestArea.cs" />
     <Compile Include="Game\IScript.cs" />
@@ -256,10 +246,12 @@
     <Compile Include="Game\ItemSnapshot.cs" />
     <Compile Include="Game\Location.cs" />
     <Compile Include="Game\LocationMessages.cs" />
+    <Compile Include="Game\ConverterExtensions.cs" />
     <Compile Include="Game\MapRegion.cs" />
     <Compile Include="Game\LocationSnapshot.cs" />
     <Compile Include="Game\Navigation.cs" />
     <Compile Include="Game\LocationScriptsClip.cs" />
+    <Compile Include="Game\Primitives\Line.cs" />
     <Compile Include="Game\Scripts\ChangeLocationScript.cs" />
     <Compile Include="Game\Scripts\ChangePositionScript.cs" />
     <Compile Include="Game\Scripts\DestroyItemScript.cs" />
@@ -272,8 +264,16 @@
     <Compile Include="Game\Writers\SpawnClientAvatarWriter.cs" />
     <Compile Include="Game\Writers\WritersUtils.cs" />
     <Compile Include="FiberUtils.cs" />
-    <Compile Include="Primitives\Line.cs" />
-    <Compile Include="Primitives\MappingUtils.cs" />
+    <Compile Include="MmoApplication.cs" />
+    <Compile Include="MmoEnteredWorldOperationsHandler.cs" />
+    <Compile Include="MmoInitialOperationsHandler.cs" />
+    <Compile Include="MmoOperationsUtils.cs" />
+    <Compile Include="MmoPeer.cs" />
+    <Compile Include="Operations\ChangeLocationOperation.cs" />
+    <Compile Include="Operations\CreateWorldOperation.cs" />
+    <Compile Include="Operations\EnterWorldOperation.cs" />
+    <Compile Include="Operations\EnterWorldResponseParams.cs" />
+    <Compile Include="Operations\MoveAvatarRandomlyOperation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
   </ItemGroup>

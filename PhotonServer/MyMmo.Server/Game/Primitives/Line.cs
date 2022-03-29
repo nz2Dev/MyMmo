@@ -1,7 +1,7 @@
 using System;
 using System.Numerics;
 
-namespace MyMmo.Server.Primitives {
+namespace MyMmo.Server.Game.Primitives {
     public struct Line {
 
         public Vector2 pointA;

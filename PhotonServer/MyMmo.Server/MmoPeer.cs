@@ -1,7 +1,7 @@
 using Photon.SocketServer;
 using Photon.SocketServer.Rpc;
 
-namespace MyMmo.Server.App {
+namespace MyMmo.Server {
     
     public class MmoPeer : Peer {
 

@@ -1,12 +1,12 @@
 using ExitGames.Logging;
 using MyMmo.Commons;
-using MyMmo.Server.App.Operations;
 using MyMmo.Server.Game;
 using MyMmo.Server.Game.Writers;
+using MyMmo.Server.Operations;
 using Photon.SocketServer;
 using Photon.SocketServer.Rpc;
 
-namespace MyMmo.Server.App {
+namespace MyMmo.Server {
     public class MmoEnteredWorldOperationsHandler : IOperationHandler {
 
         private readonly ILogger logger = LogManager.GetCurrentClassLogger();

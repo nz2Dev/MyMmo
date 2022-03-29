@@ -1,6 +1,6 @@
 using System.Numerics;
 using MyMmo.Commons.Scripts;
-using MyMmo.Server.Primitives;
+using MyMmo.Server.Game.Primitives;
 
 namespace MyMmo.Server.Game.Scripts {
     public class ChangePositionScript : IScript {
