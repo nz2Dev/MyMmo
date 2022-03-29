@@ -13,8 +13,13 @@ namespace MyMmo.Server.Game.Writers {
             return new DestroyItemScript(itemId);
         }
 
-        public void Write(World world, LocationScriptsClip clip) {
-            clip.SetItemScript(itemId, ProduceImmediately(world));
+        public void WriteUpdate(World world, LocationScriptsClip clip, float deltaTimeSec) {
+            if (clip.TryGetLastItemScriptOf<DestroyItemScript>(itemId, out var lastScript)) {
+                if (lastScript.ItemId == itemId) {
+                    return;
+                }
+            }
+            clip.AddItemScript(itemId, ProduceImmediately(world));
         }
 
     }

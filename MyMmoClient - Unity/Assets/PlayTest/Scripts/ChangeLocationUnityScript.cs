@@ -27,7 +27,7 @@ public class ChangeLocationUnityScript : IUnityScript {
         }
     }
     
-    public bool UpdateUnityState() {
+    public bool UpdateUnityState(float timeSinceScriptStart) {
         targetAvatar.transform.position =
             Vector3.Lerp(targetAvatar.transform.position, targetLocation.transform.position, Time.deltaTime * 1);
         

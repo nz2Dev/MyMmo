@@ -1,3 +1,4 @@
+using System;
 using MyMmo.Server.Game.Scripts;
 
 namespace MyMmo.Server.Game.Writers {
@@ -20,8 +21,8 @@ namespace MyMmo.Server.Game.Writers {
             );
         }
 
-        public void Write(World world, LocationScriptsClip clip) {
-            clip.SetItemScript(itemId, ProduceImmediately(world));
+        public void WriteUpdate(World world, LocationScriptsClip clip, float deltaTimeSec) {
+            throw new NotImplementedException();
         }
     }
 }

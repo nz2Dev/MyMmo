@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class UnityScriptsClipPlayer : MonoBehaviour {
 
-    public void PlayClip(int locationId, ScriptsClipData data) {
-        foreach (var itemScriptsData in data.ScriptsData) {
-            StartScripts(new[] {itemScriptsData.ItemScriptData});
+    public void PlayClip(int locationId, ScriptsClipData clip) {
+        foreach (var itemData in clip.ItemDataArray) {
+            StartScripts(itemData.ScriptDataArray);
         }
     }
 
@@ -22,8 +22,10 @@ public class UnityScriptsClipPlayer : MonoBehaviour {
 
     private IEnumerator BuildCoroutine(IUnityScript unityScript, IEnumerator continuation) {
         var needUpdate = true;
+        var timePassed = 0f;
         while (needUpdate) {
-            needUpdate = unityScript.UpdateUnityState();
+            timePassed += Time.deltaTime;
+            needUpdate = unityScript.UpdateUnityState(timePassed);
             yield return new WaitForEndOfFrame();
         }
 

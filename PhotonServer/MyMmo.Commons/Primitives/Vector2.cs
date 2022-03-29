@@ -10,5 +10,9 @@ namespace MyMmo.Commons.Primitives {
         [ProtoMember(2)]
         public float Y { get; set; }
 
+        public override string ToString() {
+            return GetType().Name + " { X = " + X + " Y = " + Y + " }";
+        }
+
     }
 }

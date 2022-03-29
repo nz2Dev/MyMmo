@@ -9,7 +9,7 @@ namespace MyMmo.Commons.Scripts {
         public string ItemId { get; set; }
 
         [ProtoMember(2)]
-        public BaseScriptData ItemScriptData { get; set; }
+        public BaseScriptData[] ScriptDataArray { get; set; }
 
     }
 }

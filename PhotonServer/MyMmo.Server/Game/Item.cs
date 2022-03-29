@@ -34,7 +34,7 @@ namespace MyMmo.Server.Game {
 
         // state properties, component specific
         public Vector2 PositionInLocation { get; private set; }
-        public float MovementSpeedUnitsPerSecond { get; private set; }
+        public float MovementSpeedUnitsPerSecond { get; private set; } = 2f;
 
         public void Spawn(int spawnLocationId) {
             if (LocationId != -1) {

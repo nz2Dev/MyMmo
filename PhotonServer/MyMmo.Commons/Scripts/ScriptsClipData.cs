@@ -6,7 +6,7 @@ namespace MyMmo.Commons.Scripts {
     public class ScriptsClipData {
 
         [ProtoMember(1)]
-        public ItemScriptsData[] ScriptsData { get; set; } = new ItemScriptsData[0];
+        public ItemScriptsData[] ItemDataArray { get; set; } = new ItemScriptsData[0];
 
     }
 }

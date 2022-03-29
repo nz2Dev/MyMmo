@@ -69,11 +69,13 @@ namespace MyMmo.Server.Game {
         private void Update() {
             logger.ConditionalDebug($"Location {id} start execution of Update");
             
+            // first phase is to write scripts
             var clip = new LocationScriptsClip();
             lock (requestLock) {
-                // first phase is to write scripts
-                foreach (var writer in writers) {
-                    writer.Write(world, clip);
+                for (int i = 0; i < 5; i++) {
+                    foreach (var writer in writers) {
+                        writer.WriteUpdate(world, clip, 0.5f);
+                    }    
                 }
                 
                 scheduled = false;

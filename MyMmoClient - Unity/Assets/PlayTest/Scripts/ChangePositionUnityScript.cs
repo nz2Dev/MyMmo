@@ -28,21 +28,26 @@ public class ChangePositionUnityScript : IUnityScript {
         if (avatarLocation == null) {
             throw new Exception("can't find script's target location: " + avatar.State.LocationId);
         }
-        
-        // what to do with "scriptData.FromPosition"? maybe state validation.. or exclude it whatsoever
-        targetPosition = avatarLocation.transform.position + scriptData.ToPosition.ToUnityVector3();
-        startPosition = avatar.transform.position;
     }
 
-    public bool UpdateUnityState() {
-        avatar.transform.position =
-            Vector3.Lerp(avatar.transform.position, targetPosition, Time.deltaTime * 1);
-        
-        var arrived = (targetPosition - avatar.transform.position).magnitude < 0.1f;
-        if (arrived) {
-            avatar.transform.position = targetPosition;
+    public bool UpdateUnityState(float timeSinceScriptStart) {
+        // what to do with "scriptData.FromPosition"? maybe state validation.. or exclude it whatsoever
+        var locationCenter = avatarLocation.transform.position;
+        if (startPosition == default) {
+//            startPosition = locationCenter + scriptData.FromPosition.ToUnityVector3();    
+            startPosition = avatar.transform.position;
         }
+        targetPosition = locationCenter + scriptData.ToPosition.ToUnityVector3();
 
+        var progress = timeSinceScriptStart / scriptData.Duration;
+        avatar.transform.position = Vector3.Lerp(startPosition, targetPosition, progress);
+        Debug.Log($"Change Position progress {progress} From {scriptData.FromPosition} -> ... {avatar.transform.position} ... -> {scriptData.ToPosition}");
+        
+        var arrived = progress > 0.95f;
+        if (arrived) {
+            startPosition = default;
+        }
+        
         var needMoreUpdate = !arrived; 
         return needMoreUpdate;
     }

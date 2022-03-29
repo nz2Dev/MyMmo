@@ -149,7 +149,7 @@ public class PlayTest : MonoBehaviour, IGameListener {
     }
 
     public void OnLocationUpdate(int locationId, ScriptsClipData clipData) {
-        Debug.Log($"on location update: {locationId} with scripts[{clipData.ScriptsData.Length}] [{clipData.ScriptsData.Select(data => data.ItemScriptData).AggregateToString()}]");
+        Debug.Log($"on location update: {locationId} with items[{clipData.ItemDataArray.Length}] [{clipData.ItemDataArray.Select(data => $"item {data.ItemId} scripts[" + data.ScriptDataArray.AggregateToString() + "]").AggregateToString()}]");
         scriptsPlayer.PlayClip(locationId, clipData);
     }
 

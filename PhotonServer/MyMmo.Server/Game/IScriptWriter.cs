@@ -3,7 +3,7 @@ namespace MyMmo.Server.Game {
         
         IScript ProduceImmediately(World world);
         
-        void Write(World world, LocationScriptsClip clip);
+        void WriteUpdate(World world, LocationScriptsClip clip, float deltaTimeSec);
 
     }
 }

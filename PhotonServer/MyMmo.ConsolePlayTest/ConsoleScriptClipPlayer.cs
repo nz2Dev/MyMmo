@@ -6,9 +6,11 @@ namespace MyMmo.ConsolePlayTest {
     public class ConsoleScriptClipPlayer {
         
         public static void Play(ScriptsClipData clipData, Dictionary<string, ConsoleItem> state) {
-            foreach (var itemScriptsData in clipData.ScriptsData) {
-                var applier = ConsoleScriptApplierFactory.Create(itemScriptsData.ItemScriptData);
-                applier.ApplyClientState(state);
+            foreach (var itemScriptsData in clipData.ItemDataArray) {
+                foreach (var scriptData in itemScriptsData.ScriptDataArray) {
+                    var applier = ConsoleScriptApplierFactory.Create(scriptData);
+                    applier.ApplyClientState(state);    
+                }
             }
         }
 

@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Numerics;
 using MyMmo.Server.Game.Scripts;
 using MyMmo.Server.Primitives;
@@ -20,60 +19,52 @@ namespace MyMmo.Server.Game.Writers {
             return new ChangePositionScript(
                 sourceItemId,
                 duration: -1f,
-                trajectoryLine: new Line {
+                trajectory: new Line {
                     pointA = sourceItem.PositionInLocation,
                     pointB = newPosition
-                }
+                },
+                destination: newPosition,
+                finishing: true
             );
         }
 
-        public void Write(World world, LocationScriptsClip clip) {
-            clip.SetItemScript(sourceItemId, ProduceImmediately(world));
-        }
-
-        public void WriteIntent(World world, LocationScriptsClip clip, float timeSpanSec) {
+        public void WriteUpdate(World world, LocationScriptsClip clip, float deltaTimeSec) {
             var sourceItem = world.GetItem(sourceItemId);
-            var locationArea = world.GetMapRegion(sourceItem.LocationId);
-            var targetPosition = locationArea.GetRandomPositionWithinBounds();
             
-            var wantedMovementVector = targetPosition - sourceItem.PositionInLocation;
-            var neededMovementDuration = wantedMovementVector.Length() * sourceItem.MovementSpeedUnitsPerSecond;
-            var availableMovementDuration = System.Math.Min(neededMovementDuration, timeSpanSec);
-            var movementVector = Vector2.Normalize(wantedMovementVector) * availableMovementDuration;
-            
-            clip.SetItemScriptIntent(sourceItemId, new ChangePositionScript(
-                itemId: sourceItemId,
-                duration: availableMovementDuration,
-                trajectoryLine: new Line {
-                    pointA = sourceItem.PositionInLocation,
-                    pointB = sourceItem.PositionInLocation + movementVector
+            Vector2 targetPosition;
+            Vector2 lastPosition;
+            if (clip.TryGetLastItemScriptOf<ChangePositionScript>(sourceItemId, out var lastScript)) {
+                if (lastScript.Finishing) {
+                    return;
+                }
+                targetPosition = lastScript.Destination;
+                lastPosition = lastScript.Trajectory.pointB;
+            } else {
+                var locationMapRegion = world.GetMapRegion(sourceItem.LocationId);
+                targetPosition = locationMapRegion.GetRandomPositionWithinBounds();
+                lastPosition = sourceItem.PositionInLocation;
+            }
+
+            var moveVector = targetPosition - lastPosition;
+            var maxUnitsDelta = sourceItem.MovementSpeedUnitsPerSecond * deltaTimeSec;
+
+            var finishing = true;
+            var resultMoveVector = moveVector;
+            if (moveVector.Length() > maxUnitsDelta) {
+                resultMoveVector = maxUnitsDelta * Vector2.Normalize(moveVector);
+                finishing = false;
+            }
+
+            clip.AddItemScript(sourceItemId, new ChangePositionScript(
+                sourceItemId,
+                duration: deltaTimeSec,
+                destination: targetPosition,
+                finishing: finishing,
+                trajectory: new Line {
+                    pointA = lastPosition,
+                    pointB = lastPosition + resultMoveVector
                 }
             ));
         }
-
-        public void ProcessLastIntents(World world, LocationScriptsClip clip) {
-            var ourLastScriptIntent = (ChangePositionScript) clip.GetItemLastScriptIntent(sourceItemId);
-            // we try to find other intents that might affect our intent behaviour
-            var otherChangePositionIntents = clip.LastIntents().OfType<ChangePositionScript>().Except(ourLastScriptIntent.ToEnumerable());
-
-            var obstaclesAgents = otherChangePositionIntents.Select(script => new ChangePositionScriptAgent(script));
-            if (Navigation.TryAvoid(obstaclesAgents, new ChangePositionScriptAgent(ourLastScriptIntent), out var newTrajectory)) {
-                // when we found one, we change our intent
-                ourLastScriptIntent.TrajectoryLine = newTrajectory;
-            }
-        }
-    }
-    
-    public class ChangePositionScriptAgent : Navigation.IAgent {
-
-        private readonly ChangePositionScript script;
-
-        public ChangePositionScriptAgent(ChangePositionScript script) {
-            this.script = script;
-        }
-
-        public Line Trajectory => script.TrajectoryLine;
-        public float Radius => 1;
-            
     }
 }

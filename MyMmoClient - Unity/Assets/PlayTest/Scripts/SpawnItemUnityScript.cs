@@ -19,7 +19,7 @@ public class SpawnItemUnityScript : IUnityScript {
         }
     }
 
-    public bool UpdateUnityState() {
+    public bool UpdateUnityState(float timeSinceScriptStart) {
         targetLocation.SpawnAvatar(PlayTest.Instance.playerPrefab, scriptData.ItemSnapshotData);
         return false;
     }

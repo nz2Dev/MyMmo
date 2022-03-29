@@ -26,8 +26,13 @@ namespace MyMmo.Server.Game.Writers {
             return new SpawnItemScript(itemId, locationId, spawnPosition, owner, interestArea);
         }
 
-        public void Write(World world, LocationScriptsClip clip) {
-            clip.SetItemScript(itemId, ProduceImmediately(world));
+        public void WriteUpdate(World world, LocationScriptsClip clip, float deltaTimeSec) {
+            if (clip.TryGetLastItemScriptOf<SpawnItemScript>(itemId, out var lastScript)) {
+                if (lastScript.Owner == owner) {
+                    return;
+                }
+            }
+            clip.AddItemScript(itemId, ProduceImmediately(world));
         }
 
     }

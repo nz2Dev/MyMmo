@@ -11,7 +11,7 @@ public class DestroyItemUnityScript : IUnityScript {
         this.scriptData = scriptData;
     }
     
-    public bool UpdateUnityState() {
+    public bool UpdateUnityState(float timeSinceScriptStart) {
         var targetItem = Object.FindObjectsOfType<AvatarItem>().FirstOrDefault(item => item.State.ItemId == scriptData.ItemId);
         if (targetItem == null) {
             throw new Exception($"target item {scriptData.ItemId} not found");
