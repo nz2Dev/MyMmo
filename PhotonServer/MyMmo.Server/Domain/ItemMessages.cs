@@ -1,4 +1,4 @@
-namespace MyMmo.Server.Game {
+namespace MyMmo.Server.Domain {
     
     public class ItemLocationChangedMessage {
 

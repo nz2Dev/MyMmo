@@ -1,6 +1,7 @@
 using MyMmo.Processing;
+using MyMmo.Server.Domain;
 
-namespace MyMmo.Server.Game.Updates {
+namespace MyMmo.Server.Updates {
     public abstract class BaseServerUpdate : IUpdate {
 
         protected World world;

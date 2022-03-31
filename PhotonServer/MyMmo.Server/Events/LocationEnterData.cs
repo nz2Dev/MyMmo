@@ -1,6 +1,6 @@
 using MyMmo.Commons;
 using MyMmo.Commons.Snapshots;
-using MyMmo.Server.Game;
+using MyMmo.Server.Domain;
 using Photon.SocketServer.Rpc;
 
 namespace MyMmo.Server.Events {

@@ -2,7 +2,7 @@ using System.Numerics;
 using MyMmo.Commons.Snapshots;
 using MyMmo.Processing.Utils;
 
-namespace MyMmo.Server.Game {
+namespace MyMmo.Server.Domain {
     public class ItemSnapshot {
 
         public readonly string itemId;

@@ -6,14 +6,11 @@ using ExitGames.Concurrency.Fibers;
 using ExitGames.Logging;
 using MyMmo.Commons;
 using MyMmo.Commons.Scripts;
-using MyMmo.Processing;
-using MyMmo.Processing.Components;
-using MyMmo.Processing.Utils;
 using MyMmo.Server.Events;
-using MyMmo.Server.Game.Updates;
+using MyMmo.Server.Updates;
 using Photon.SocketServer;
 
-namespace MyMmo.Server.Game {
+namespace MyMmo.Server.Domain {
     public class Location : IDisposable {
 
         private static readonly ILogger logger = LogManager.GetCurrentClassLogger();

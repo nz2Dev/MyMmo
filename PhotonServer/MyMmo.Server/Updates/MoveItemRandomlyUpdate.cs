@@ -1,6 +1,6 @@
 using MyMmo.Processing;
 
-namespace MyMmo.Server.Game.Updates {
+namespace MyMmo.Server.Updates {
     public class MoveItemRandomlyUpdate : BaseServerUpdate {
 
         private readonly string sourceItemId;

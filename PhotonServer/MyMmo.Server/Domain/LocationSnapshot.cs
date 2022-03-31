@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MyMmo.Commons.Snapshots;
 
-namespace MyMmo.Server.Game {
+namespace MyMmo.Server.Domain {
     public class LocationSnapshot {
 
         public Location Source { get; }

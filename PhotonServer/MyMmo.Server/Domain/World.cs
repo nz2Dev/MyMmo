@@ -5,9 +5,9 @@ using MyMmo.Commons.Scripts;
 using MyMmo.Processing;
 using MyMmo.Processing.Components;
 using MyMmo.Processing.Utils;
-using MyMmo.Server.Game.Updates;
+using MyMmo.Server.Updates;
 
-namespace MyMmo.Server.Game {
+namespace MyMmo.Server.Domain {
     public class World /*todo Dispose*/ {
 
         private readonly object syncRoot = new object();

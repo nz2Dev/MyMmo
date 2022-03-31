@@ -1,8 +1,8 @@
 using ExitGames.Logging;
 using MyMmo.Commons;
-using MyMmo.Server.Game;
-using MyMmo.Server.Game.Updates;
+using MyMmo.Server.Domain;
 using MyMmo.Server.Operations;
+using MyMmo.Server.Updates;
 using Photon.SocketServer;
 using Photon.SocketServer.Rpc;
 

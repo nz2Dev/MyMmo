@@ -1,6 +1,6 @@
 using System;
 
-namespace MyMmo.Server.Game {
+namespace MyMmo.Server.Domain {
     public class ItemNotFound : Exception {
 
         public ItemNotFound(string itemId) :

@@ -1,8 +1,8 @@
 using ExitGames.Logging;
 using MyMmo.Commons;
-using MyMmo.Server.Game;
-using MyMmo.Server.Game.Updates;
+using MyMmo.Server.Domain;
 using MyMmo.Server.Operations;
+using MyMmo.Server.Updates;
 using Photon.SocketServer;
 using Photon.SocketServer.Rpc;
 
@@ -67,7 +67,7 @@ namespace MyMmo.Server {
         }
 
         public void OnDisconnect(PeerBase peer) {
-            logger.Info($"entered world operation handler of avatar {this.avatarItem} is going to disconnect");
+            logger.Info($"entered world operation handler of avatar {avatarItem} is going to disconnect");
             
             var avatarLocation = world.GetLocation(avatarItem.LocationId);
             avatarLocation.RequestUpdate(new DestroyItemUpdate(avatarItem.Id));

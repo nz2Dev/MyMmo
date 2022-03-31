@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using ExitGames.Threading;
 
-namespace MyMmo.Server.Game {
+namespace MyMmo.Server.Domain {
     public class WorldCache : IDisposable {
 
         public static readonly WorldCache Instance = new WorldCache();

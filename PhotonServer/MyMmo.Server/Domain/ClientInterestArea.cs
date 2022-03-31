@@ -2,7 +2,7 @@ using MyMmo.Commons;
 using MyMmo.Server.Events;
 using Photon.SocketServer;
 
-namespace MyMmo.Server.Game {
+namespace MyMmo.Server.Domain {
     public class ClientInterestArea : InterestArea {
 
         private readonly PeerBase peer;

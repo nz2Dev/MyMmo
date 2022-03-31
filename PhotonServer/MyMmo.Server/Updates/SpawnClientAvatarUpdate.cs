@@ -1,8 +1,9 @@
 using MyMmo.Processing;
 using MyMmo.Processing.Components;
 using MyMmo.Processing.Utils;
+using MyMmo.Server.Domain;
 
-namespace MyMmo.Server.Game.Updates {
+namespace MyMmo.Server.Updates {
     
     public class SpawnClientAvatarUpdate : BaseServerUpdate {
 

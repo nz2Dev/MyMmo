@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading;
 using ExitGames.Threading;
 
-namespace MyMmo.Server.Game {
+namespace MyMmo.Server.Domain {
     public class ItemCache {
         
         private readonly Dictionary<string, Item> items = new Dictionary<string, Item>();

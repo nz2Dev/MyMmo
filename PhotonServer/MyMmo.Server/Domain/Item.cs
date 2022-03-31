@@ -6,7 +6,7 @@ using ExitGames.Concurrency.Fibers;
 using ExitGames.Logging;
 using Photon.SocketServer;
 
-namespace MyMmo.Server.Game {
+namespace MyMmo.Server.Domain {
     // todo change itemId type to int everywhere, no needs for string
     public class Item : IDisposable {
 

@@ -4,7 +4,7 @@ using System.Linq;
 using ExitGames.Concurrency.Fibers;
 using ExitGames.Logging;
 
-namespace MyMmo.Server.Game {
+namespace MyMmo.Server.Domain {
     public class InterestArea : IDisposable {
 
         private readonly ILogger logger = LogManager.GetCurrentClassLogger();

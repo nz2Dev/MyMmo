@@ -1,7 +1,7 @@
 using System;
 using MyMmo.Processing;
 
-namespace MyMmo.Server.Game.Updates {
+namespace MyMmo.Server.Updates {
     public class ChangeLocationUpdate : BaseServerUpdate {
 
         private string itemId;
