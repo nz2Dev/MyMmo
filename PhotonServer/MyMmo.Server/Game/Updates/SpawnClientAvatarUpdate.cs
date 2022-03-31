@@ -29,15 +29,17 @@ namespace MyMmo.Server.Game.Updates {
             // probably this call to world.GetMapRegion() should be part of ECS, and has to be populated before starting simulation
             var position = world.GetMapRegion(locationId).GetRandomPositionWithinBounds();
             // setting position first, so entity factory with have this changes
-            // todo spawn update should have pure Server Item object reference, and its initial state data object separately
-            // todo and once it's spawned, item will update from that state object, so entity factory will not have extra step
+            // this item is never registered at this point, so changing it has no effect, so could be anything
             avatarItem.ChangePositionInLocation(position);
-            avatarItem.Spawn(locationId);
+            avatarItem.ChangeLocation(locationId);
 
             // scene changes, item entity factory with changes callbacks
-            scene.RecordSpawnImmediately(new Entity(avatarItem.Id, new Transform(position, avatarItem.LocationId, changes => {
+            scene.RecordSpawnImmediately(new Entity(avatarItem.Id, new Transform(avatarItem.PositionInLocation, avatarItem.LocationId, changes => {
                 avatarItem.ChangePositionInLocation(changes.ToPosition.ToComputeVector());
             })));
+            // for this call is important to be done in the right time and place,
+            // but does it has to be together with scene changes?
+            // entity is separated from items, so no state or logic of ECS is affected, but does the ChangesCallbacks 
             world.RegisterItem(avatarItem);
             
             spawned = true;
