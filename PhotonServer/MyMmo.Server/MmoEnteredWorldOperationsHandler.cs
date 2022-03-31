@@ -12,11 +12,11 @@ namespace MyMmo.Server {
         private readonly ILogger logger = LogManager.GetCurrentClassLogger();
 
         private readonly World world;
-        private readonly string avatarItemId;
+        private readonly Item avatarItem;
         private readonly InterestArea interestArea;
 
-        public MmoEnteredWorldOperationsHandler(string avatarItemId, InterestArea interestArea, World world) {
-            this.avatarItemId = avatarItemId;
+        public MmoEnteredWorldOperationsHandler(Item avatarItem, InterestArea interestArea, World world) {
+            this.avatarItem = avatarItem;
             this.interestArea = interestArea;
             this.world = world;
         }
@@ -47,8 +47,7 @@ namespace MyMmo.Server {
             if (!operationChangeLocation.IsValid) {
                 return MmoOperationsUtils.OperationWrongDataContract(operationRequest, operationChangeLocation);
             }
-
-            var avatarItem = world.GetItem(avatarItemId);
+            
             var avatarLocation = world.GetLocation(avatarItem.LocationId);
             avatarLocation.RequestUpdate(new ChangeLocationUpdate(avatarItem.Id, operationChangeLocation.LocationId));
 
@@ -60,8 +59,7 @@ namespace MyMmo.Server {
             if (!operationMove.IsValid) {
                 return MmoOperationsUtils.OperationWrongDataContract(operationRequest, operationMove);
             }
-
-            var avatarItem = world.GetItem(avatarItemId);
+            
             var avatarLocation = world.GetLocation(avatarItem.LocationId);
             avatarLocation.RequestUpdate(new MoveItemRandomlyUpdate(avatarItem.Id));
 
@@ -69,9 +67,8 @@ namespace MyMmo.Server {
         }
 
         public void OnDisconnect(PeerBase peer) {
-            logger.Info($"entered world operation handler of avatar {avatarItemId} is going to disconnect");
+            logger.Info($"entered world operation handler of avatar {this.avatarItem} is going to disconnect");
             
-            var avatarItem = world.GetItem(avatarItemId);
             var avatarLocation = world.GetLocation(avatarItem.LocationId);
             avatarLocation.RequestUpdate(new DestroyItemUpdate(avatarItem.Id));
             interestArea.Dispose();

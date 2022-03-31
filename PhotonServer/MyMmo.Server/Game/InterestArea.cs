@@ -13,8 +13,10 @@ namespace MyMmo.Server.Game {
         private readonly string id;
         private readonly World world;
 
-        private readonly HashSet<Location> enteredLocations = new HashSet<Location>();
         private readonly IFiber subscriptionManagementFiber;
+        private readonly HashSet<Location> enteredLocations = new HashSet<Location>();
+        private readonly Dictionary<Location, IDisposable> locationEventSubscriptions =
+            new Dictionary<Location, IDisposable>();
 
         private IDisposable followingSubscription;
         private Item followingItem;
@@ -59,21 +61,25 @@ namespace MyMmo.Server.Game {
             }
         }
 
-        public void WatchLocationManually(int locationId, Action<LocationSnapshot> onLocationEnteredCallback) {
+        public void WatchLocationManually(int locationId) {
             subscriptionManagementFiber.Enqueue(() => {
-                WatchLocation(locationId, onLocationEnteredCallback);
+                WatchLocation(locationId);
             });
         }
 
-        private void WatchLocation(int locationId, Action<LocationSnapshot> onLocationEnteredCallback = null) {
+        public void EnqueueInLocationChangingFiber(Action onAllActionsIsDone) {
+            subscriptionManagementFiber.Enqueue(onAllActionsIsDone);
+        }
+
+        private void WatchLocation(int locationId) {
             logger.Info($"interest area {id} starts watching surround locations of location {locationId} included");
             var locationsInFocus = world.GetSurroundedLocationsIncluded(locationId);
             var outOfFocusLocation = enteredLocations.Except(locationsInFocus).ToArray();
             UnsubscribeLocations(outOfFocusLocation);
-            SubscribeLocations(locationsInFocus, onLocationEnteredCallback);
+            SubscribeLocations(locationsInFocus);
         }
 
-        private void SubscribeLocations(IEnumerable<Location> locations, Action<LocationSnapshot> onLocationSnapshotCallback) {
+        private void SubscribeLocations(IEnumerable<Location> locations) {
             foreach (var location in locations) {
                 if (!enteredLocations.Contains(location)) {
                     enteredLocations.Add(location);
@@ -82,20 +88,36 @@ namespace MyMmo.Server.Game {
                     logger.Info($"interest area {id} enqueue location {location.Id} snapshot callback");
                     location.EnqueueLocationSnapshot(snapshot => {
                         logger.Info($"interest area {id}' location {snapshot.Source.Id} callback with snapshot");
-                        onLocationSnapshotCallback?.Invoke(snapshot);
                         OnLocationEnter(snapshot);
                     });
+                    
+                    logger.Info($"interest area {id} subscribes location {location.Id} events");
+                    locationEventSubscriptions.Add(location, location.SubscribeEvent(subscriptionManagementFiber, message => {
+                        logger.Info($"interest area {id}' location {location.Id} callback with event");
+                        OnLocationEvent(message);
+                    }));   
                 }
             }
         }
-        
+
         protected virtual void OnLocationEnter(LocationSnapshot snapshot) {
+        }
+
+        protected virtual void OnLocationEvent(LocationEventMessage message) {
         }
 
         private void UnsubscribeLocations(IEnumerable<Location> locations) {
             foreach (var location in locations) {
                 logger.Info($"interest area {id} is going to exit location {location.Id}");
                 enteredLocations.Remove(location);
+
+                // NOTE: if location fiber will publish event on InterestArea's fiber during this execution
+                // there is a chance that OnLocationEvent might be called with already exited location
+                // otherwise, we have to enqueue to location's update fiber, and from there call Dispose and then OnExit
+                if (locationEventSubscriptions.TryGetValue(location, out var subscription)) {
+                    locationEventSubscriptions.Remove(location);
+                    subscription?.Dispose();
+                }
 
                 logger.Info($"interest area {id}' location {location.Id} onLocationExit");
                 OnLocationExit(location);
@@ -113,6 +135,11 @@ namespace MyMmo.Server.Game {
 
         private void Dispose(bool dispose) {
             if (dispose) {
+                foreach (var disposable in locationEventSubscriptions.Values) {
+                    disposable.Dispose();
+                }
+                
+                locationEventSubscriptions.Clear();
                 enteredLocations.Clear();
                 subscriptionManagementFiber.Dispose();
                 followingSubscription?.Dispose();

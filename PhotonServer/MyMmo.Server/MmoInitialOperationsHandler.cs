@@ -66,31 +66,28 @@ namespace MyMmo.Server {
                 );
             }
 
+            var avatarItem = new Item(enterWorldOperation.UserName, peer);
             var spawnLocation = world.GetLocation(World.RootLocationId);
-            var interestArea = new ClientInterestArea(peer, world, enterWorldOperation.UserName);
-            var spawnItemProducer = new SpawnClientAvatarUpdate(enterWorldOperation.UserName, spawnLocation.Id, interestArea, peer);
-            if (!spawnItemProducer.IsValidAt(world)) {
-                interestArea.Dispose();
+            var spawnAvatarUpdate = new SpawnClientAvatarUpdate(avatarItem, spawnLocation.Id);
+            if (!spawnAvatarUpdate.IsValidAt(world)) {
                 return MmoOperationsUtils.OperationError(
                     operationRequest,
                     ReturnCode.AvatarRegistrationError,
                     $"Can't register Avatar, it's already exist, specified UserName: {enterWorldOperation.UserName}"
                 );
             }
-            
-            interestArea.WatchLocationManually(spawnLocation.Id, snapshot => {
-                // every entered location during one time manual management will callback with it's snapshot
-                if (snapshot.Source.Id == spawnLocation.Id) { 
-                    // we wait to make RequestSpawn until our target location callback,
-                    // because there is a chance that location will consume our spawn request before state construction
-                    spawnLocation.RequestUpdate(spawnItemProducer);        
-                }
+
+            var interestArea = new ClientInterestArea(peer, world, enterWorldOperation.UserName);
+            interestArea.FollowLocationOf(avatarItem);
+            interestArea.WatchLocationManually(spawnLocation.Id);
+            interestArea.EnqueueInLocationChangingFiber(() => {
+                spawnLocation.RequestUpdate(spawnAvatarUpdate);
             });
-            
-            var enteredWorldOperationHandler = new MmoEnteredWorldOperationsHandler(spawnItemProducer.itemId, interestArea, world);
+
+            var enteredWorldOperationHandler = new MmoEnteredWorldOperationsHandler(avatarItem, interestArea, world);
             ((Peer) peer).SetCurrentOperationHandler(enteredWorldOperationHandler);
             
-            var responseParams = new EnterWorldResponseParams {AvatarItemId = spawnItemProducer.itemId};
+            var responseParams = new EnterWorldResponseParams {AvatarItemId = avatarItem.Id};
             return MmoOperationsUtils.OperationSuccess(operationRequest, responseParams);
         }
 
