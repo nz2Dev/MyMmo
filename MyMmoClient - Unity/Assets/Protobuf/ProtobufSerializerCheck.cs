@@ -38,7 +38,7 @@ public class ProtobufSerializerCheck : MonoBehaviour
             Directory.CreateDirectory("Assets/Protobuf");
         }
         
-        File.Copy("MyProtoModel.dll", "Assets/Protobuf/MyProtoModel.dll");
+        File.Copy("MyProtoModel.dll", "Assets/Protobuf/MyProtoModel.dll", true);
         
         AssetDatabase.Refresh();
     }

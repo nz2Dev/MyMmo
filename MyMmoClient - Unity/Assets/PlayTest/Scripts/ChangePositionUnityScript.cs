@@ -39,7 +39,7 @@ public class ChangePositionUnityScript : IUnityScript {
         }
         targetPosition = locationCenter + scriptData.ToPosition.ToUnityVector3();
 
-        var progress = timeSinceScriptStart / scriptData.Duration;
+        var progress = timeSinceScriptStart / 0.5f;
         avatar.transform.position = Vector3.Lerp(startPosition, targetPosition, progress);
         Debug.Log($"Change Position progress {progress} From {scriptData.FromPosition} -> ... {avatar.transform.position} ... -> {scriptData.ToPosition}");
         
