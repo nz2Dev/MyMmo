@@ -27,6 +27,7 @@ namespace MyMmo.Processing.Components {
             if (Position != lastRecordedPosition) {
                 lastRecordedPosition = Position;
                 var changePositionScriptData = new ChangePositionScriptData {
+                    ItemId = id,
                     FromPosition = lastRecordedPosition.ToDataVector2(),
                     ToPosition = Position.ToDataVector2()
                 };

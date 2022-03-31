@@ -23,7 +23,13 @@ namespace MyMmo.Server.Game.Updates {
             return !world.ContainItem(itemId);
         }
 
+        private bool spawned;
+
         public override void Process(Scene scene) {
+            if (spawned) {
+                return;
+            }
+            
             // todo can be created form outside, and will solve problem with interest area referencing
             var item = new Item(itemId, owner);
             
@@ -43,6 +49,7 @@ namespace MyMmo.Server.Game.Updates {
             
             world.RegisterItem(item);
             interestArea.FollowLocationOf(item);
+            spawned = true;
         }
 
     }

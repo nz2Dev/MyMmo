@@ -73,6 +73,7 @@ namespace MyMmo.Server.Game {
             lock (requestLock) {
                 updates = updatesBuffer.ToList();
                 updatesBuffer.Clear();
+                scheduled = false;
             }
             
             var updatesClip = world.ExecuteSimulationAt(id, updates);
