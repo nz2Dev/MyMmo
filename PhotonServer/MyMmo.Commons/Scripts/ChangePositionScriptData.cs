@@ -13,12 +13,5 @@ namespace MyMmo.Commons.Scripts {
 
         [ProtoMember(3)]
         public string ItemId { get; set; }
-
-        [ProtoMember(4)]
-        public float Duration { get; set; }
-        
-        [ProtoMember(5)]
-        public Vector2 Destination { get; set; }
-
     }
 }

@@ -1,6 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MyMmo.Commons.Scripts;
+using MyMmo.Processing;
+using MyMmo.Processing.Components;
+using MyMmo.Processing.Utils;
+using MyMmo.Server.Game.Updates;
 
 namespace MyMmo.Server.Game {
     public class World /*todo Dispose*/ {
@@ -58,9 +63,20 @@ namespace MyMmo.Server.Game {
             }
         }
 
-        public void ExecuteStateScripts(LocationScriptsClip locationScriptsClip) {
+        public ScriptsClipData ExecuteSimulationAt(int locationId, List<BaseServerUpdate> updates) {
             lock (syncRoot) {
-                locationScriptsClip.ApplyState(this);
+                updates.ForEach(update => update.Attach(this));
+                
+                var entities = itemRegistry.GetItemsWithLocationId(locationId).Select(item => {
+                    var transform = new Transform(item.PositionInLocation, item.LocationId, changes => {
+                        item.ChangePositionInLocation(changes.ToPosition.ToComputeVector());
+                    });
+                    return new Entity(item.Id, transform);
+                });
+
+                var scene = new Scene(entities, updates.Cast<IUpdate>().ToList());
+                var clip = scene.Simulate();    
+                return clip;
             }
         }
 

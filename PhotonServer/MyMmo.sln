@@ -19,6 +19,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMmo.Commons.Test", "MyMmo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMmo.Server.Test", "MyMmo.Server.Test\MyMmo.Server.Test.csproj", "{E654D62A-6668-491A-A5AA-435FF337363C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMmo.Processing", "MyMmo.Processing\MyMmo.Processing.csproj", "{B953B762-1119-43AC-823D-408319F14D21}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B90FA5FB-4DB9-43B3-8EB9-CEBB03058EA2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dev", "Dev", "{9174C1F4-2577-401E-B3AE-1CF19E139544}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,11 +63,20 @@ Global
 		{E654D62A-6668-491A-A5AA-435FF337363C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E654D62A-6668-491A-A5AA-435FF337363C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E654D62A-6668-491A-A5AA-435FF337363C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B953B762-1119-43AC-823D-408319F14D21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B953B762-1119-43AC-823D-408319F14D21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B953B762-1119-43AC-823D-408319F14D21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B953B762-1119-43AC-823D-408319F14D21}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {376F40E1-511E-451C-B0B8-E288A4569DC7}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E654D62A-6668-491A-A5AA-435FF337363C} = {B90FA5FB-4DB9-43B3-8EB9-CEBB03058EA2}
+		{02A58F33-955D-49E0-B1BB-99A2F3E97648} = {B90FA5FB-4DB9-43B3-8EB9-CEBB03058EA2}
+		{0A448975-766A-4609-9C63-F4888139FB29} = {9174C1F4-2577-401E-B3AE-1CF19E139544}
 	EndGlobalSection
 EndGlobal
