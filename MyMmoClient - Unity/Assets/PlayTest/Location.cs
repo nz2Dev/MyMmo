@@ -16,7 +16,7 @@ public class Location : MonoBehaviour {
         player.GetComponent<AvatarItem>().SetState(snapshotData);
     }
 
-    public void ReplaceAvatar(GameObject playerPrefab, ItemSnapshotData itemSnapshotData) {
+    public void PlaceAvatar(GameObject playerPrefab, ItemSnapshotData itemSnapshotData) {
         var target = FindObjectsOfType<AvatarItem>().FirstOrDefault(i => i.State.ItemId == itemSnapshotData.ItemId);
         if (target != null) {
             Destroy(target.gameObject);

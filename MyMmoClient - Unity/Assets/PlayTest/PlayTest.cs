@@ -140,7 +140,7 @@ public class PlayTest : MonoBehaviour, IGameListener {
         
         Debug.Log($"location {locationSnapshotData.LocationId} enters, with items snapshots [{locationSnapshotData.ItemsSnapshotData.AggregateToString()}]");
         foreach (var itemSnapshotData in locationSnapshotData.ItemsSnapshotData) {
-            targetLocation.ReplaceAvatar(playerPrefab, itemSnapshotData);
+            targetLocation.PlaceAvatar(playerPrefab, itemSnapshotData);
         }
     }
 
