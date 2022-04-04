@@ -7,7 +7,8 @@ namespace MyMmo.Processing {
     public class Scene {
 
         private readonly List<Entity> entities = new List<Entity>();
-        private readonly MovementSystem movementSystem = new MovementSystem();
+        private readonly PathfinderSystem pathfinderSystem = new PathfinderSystem();
+        private readonly MotionSystem motionSystem = new MotionSystem();
         private readonly List<IUpdate> updates;
         private readonly Clip clip = new Clip();
 
@@ -42,7 +43,11 @@ namespace MyMmo.Processing {
                 }
                 
                 foreach (var entity in entities) {
-                    movementSystem.Update(this, entity);
+                    pathfinderSystem.Update(this, entity);
+                }
+                
+                foreach (var entity in entities) {
+                    motionSystem.Update(this, entity);
                 }
 
                 foreach (var entity in entities) {

@@ -290,7 +290,8 @@
     <Exec Command="start /d &quot;C:/Photon/Server/SDK/deploy/bin_Win64&quot; PhotonSocketServer /stop1 MyMmoServer" />
   </Target>
   <Target Name="AfterBuild">
-    <Exec Command="start /d &quot;C:/Photon/Server/SDK/deploy/bin_Win64&quot; PhotonSocketServer /run MyMmoServer" />
+<!--    Uncomment when developing to server-->
+<!--    <Exec Command="start /d &quot;C:/Photon/Server/SDK/deploy/bin_Win64&quot; PhotonSocketServer /run MyMmoServer" />-->
   </Target>
   <PropertyGroup>
     <PostBuildEvent>xcopy /Y /Q "$(TargetDir)*.*" "C:\Photon\Server\SDK\deploy\MyMmoServer\bin"</PostBuildEvent>

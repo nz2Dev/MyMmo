@@ -12,7 +12,8 @@ namespace MyMmo.Processing {
 
         public string Id { get; }
         public Transform Transform { get; }
-        public Movement Movement { get; } = new Movement();
+        public Motion Motion { get; } = new Motion();
+        public Pathfinder Pathfinder { get; } = new Pathfinder();
         
         public ItemSnapshotData GenerateSnapshot() {
             return new ItemSnapshotData {

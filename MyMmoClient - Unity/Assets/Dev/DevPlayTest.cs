@@ -52,7 +52,7 @@ namespace Dev {
             // (e.g somewhere from folded C:/.../Editor/netstandart/2.0/extensions/...) when there is compatibility level set to netstandard2.0 in Unity. 
             // so that's why it works probably...
             
-            scene.GetEntity("devItemOne").Movement.Target = new System.Numerics.Vector2(Random.Range(-5, 5), Random.Range(-5 ,5));
+            scene.GetEntity("devItemOne").Pathfinder.Target = new System.Numerics.Vector2(Random.Range(-5, 5), Random.Range(-5 ,5));
             
             // so to work properly in Unity with compatibility level set to netstandaed out of the box, without referencing manually Unity's dll
             // the project that is build, should have target framework set to netstandard

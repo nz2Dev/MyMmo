@@ -18,7 +18,7 @@ namespace MyMmo.Server.Updates {
             
             var item = world.GetItem(sourceItemId);
             var mapRegion = world.GetMapRegion(item.LocationId);
-            scene.GetEntity(sourceItemId).Movement.Target = mapRegion.GetRandomPositionWithinBounds();
+            scene.GetEntity(sourceItemId).Pathfinder.Target = mapRegion.GetRandomPositionWithinBounds();
             targetIsSet = true;
         }
     }
