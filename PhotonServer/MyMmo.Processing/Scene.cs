@@ -16,6 +16,8 @@ namespace MyMmo.Processing {
             this.updates = updates;
             entities.AddRange(initial);
         }
+
+        public IEnumerable<Entity> Entities => entities;
         
         public void RecordSpawnImmediately(Entity entity) {
             entities.Add(entity);
