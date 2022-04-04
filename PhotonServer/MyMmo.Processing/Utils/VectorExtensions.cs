@@ -11,5 +11,9 @@ namespace MyMmo.Processing.Utils {
             return vector2;
         }
 
+        public static Vector2 SetMagnitude(Vector2 vector2, float magnitude) {
+            return Vector2.Normalize(vector2) * magnitude;
+        }
+
     }
 }

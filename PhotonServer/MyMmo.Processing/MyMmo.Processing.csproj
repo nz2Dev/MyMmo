@@ -57,6 +57,7 @@
         <Compile Include="Systems\MotionSystem.cs" />
         <Compile Include="Systems\PathfinderSystem.cs" />
         <Compile Include="Utils\ConverterExtensions.cs" />
+        <Compile Include="Utils\NumberUtils.cs" />
         <Compile Include="Utils\VectorExtensions.cs" />
     </ItemGroup>
     <ItemGroup>
