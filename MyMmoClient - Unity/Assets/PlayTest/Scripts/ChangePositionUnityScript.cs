@@ -38,7 +38,6 @@ public class ChangePositionUnityScript : IUnityScript {
     
     public void UpdateUnityState(float progress) {
         avatar.transform.position = Vector3.Lerp(startPosition, targetPosition, progress);
-        Debug.Log($"Change Position progress {progress} From {startPosition} -> ... {avatar.transform.position} ... -> {targetPosition}");
     }
 
     public void OnUpdateExit() {

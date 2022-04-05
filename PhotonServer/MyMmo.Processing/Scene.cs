@@ -38,13 +38,10 @@ namespace MyMmo.Processing {
             return entities.FirstOrDefault(entity => entity.Id == entityId);
         }
 
-        public ScriptsClipData Simulate() {
-            const float stepTime = 0.2f;
-            const float simulationTime = 2f;
-            const float steps = simulationTime / stepTime;
-            
+        public ScriptsClipData Simulate(float stepTime, float simulationTime) {
             clip.Rest(stepTime);
-            for (var i = 0; i < steps; i++) {
+            var stepsCount = simulationTime / stepTime;
+            for (var i = 0; i < stepsCount; i++) {
                 foreach (var update in updates) {
                     update.Process(this);
                 }

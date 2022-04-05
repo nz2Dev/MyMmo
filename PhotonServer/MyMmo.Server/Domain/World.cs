@@ -75,7 +75,7 @@ namespace MyMmo.Server.Domain {
                 });
 
                 var scene = new Scene(entities, updates.Cast<IUpdate>().ToList());
-                var clip = scene.Simulate();    
+                var clip = scene.Simulate(stepTime: 0.2f, simulationTime: 2f);    
                 return clip;
             }
         }

@@ -14,10 +14,19 @@ namespace Dev {
         public Location devLocation;
         public GameObject playerPrefab;
         public UnityScriptsClipPlayer changesPlayer;
+        
+        private ScriptsClipData simulatedClip;
+        private ItemSnapshotData[] snapshots;
 
         private void Start() {
+            ReSimulate();   
+            PlayClip();
+        }
+
+        [ContextMenu("ReSimulate")]
+        private void ReSimulate() {
             var itemIds = new[] {"devItem1", "devItem2", "devItem3", "devItem4", "devItem5"};
-            var snapshots = itemIds.Select(id => {
+            snapshots = itemIds.Select(id => {
                 return new ItemSnapshotData {
                     ItemId = id,
                     LocationId = devLocation.Id,
@@ -44,18 +53,16 @@ namespace Dev {
             };
 
             var scene = new Scene(entities, new List<IUpdate>(devTestUpdates));
-            var changesData = scene.Simulate();
-
-            PlayClip(snapshots, changesData);
+            simulatedClip = scene.Simulate(0.2f, 4f);
         }
 
-        private void PlayClip(ItemSnapshotData[] snapshots, ScriptsClipData clip) {
+        private void PlayClip() {
             foreach (var snapshotData in snapshots) {
                 devLocation.PlaceAvatar(playerPrefab, snapshotData);
             }
             
-            changesPlayer.PlayClip(devLocation.Id, clip, () => {
-                PlayClip(snapshots, clip);
+            changesPlayer.PlayClip(devLocation.Id, simulatedClip, () => {
+                PlayClip();
             });
         }
 
@@ -63,7 +70,13 @@ namespace Dev {
 
     public class DevTestUpdate : IUpdate {
 
+        private bool updated;
+        
         public void Process(Scene scene) {
+            if (updated) {
+                return;
+            }
+            updated = true;
             foreach (var entity in scene.Entities) {
                 entity.Pathfinder.Target = new System.Numerics.Vector2(Random.Range(-5, 5), Random.Range(-5, 5));
             }
