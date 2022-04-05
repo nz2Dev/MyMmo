@@ -3,10 +3,10 @@ namespace MyMmo.Processing.Systems {
 
         public void Update(Scene scene, Entity entity) {
             if (entity.Pathfinder.Target != default) {
-                var seekForce = entity.Motion.SeekWithArrival(entity.Pathfinder.Target, entity.Transform.Position);
+                var seekForce = entity.Pathfinder.SeekWithArrival(entity.Transform.Position, entity.Motion.Velocity);
                 entity.Motion.ApplyForce(seekForce);
             }
         }
-        
+
     }
 }
