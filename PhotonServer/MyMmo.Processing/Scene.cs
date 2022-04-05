@@ -40,7 +40,7 @@ namespace MyMmo.Processing {
 
         public ScriptsClipData Simulate() {
             const float stepTime = 0.2f;
-            const float simulationTime = 1f;
+            const float simulationTime = 2f;
             const float steps = simulationTime / stepTime;
             
             clip.Rest(stepTime);

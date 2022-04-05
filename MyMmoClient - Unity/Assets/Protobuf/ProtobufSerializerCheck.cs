@@ -39,6 +39,7 @@ public class ProtobufSerializerCheck : MonoBehaviour
         }
         
         File.Copy("MyProtoModel.dll", "Assets/Protobuf/MyProtoModel.dll", true);
+        File.Delete("MyProtoModel.dll");
         
         AssetDatabase.Refresh();
     }
