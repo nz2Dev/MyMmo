@@ -34,6 +34,7 @@ public class ChangePositionUnityScript : IUnityScript {
         var locationCenter = avatarLocation.transform.position;
         startPosition = avatar.transform.position;
         targetPosition = locationCenter + scriptData.ToPosition.ToUnityVector3();
+        avatar.SetDisplayVelocity(targetPosition - startPosition);
     }
     
     public void UpdateUnityState(float progress) {
@@ -42,6 +43,7 @@ public class ChangePositionUnityScript : IUnityScript {
 
     public void OnUpdateExit() {
         avatar.transform.position = targetPosition;
+        avatar.SetDisplayVelocity(Vector3.zero);
         // for one time commands, they can do their staff in one of this methods
     }
 
