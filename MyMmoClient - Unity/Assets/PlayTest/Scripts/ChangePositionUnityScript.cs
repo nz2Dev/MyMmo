@@ -30,26 +30,20 @@ public class ChangePositionUnityScript : IUnityScript {
         }
     }
 
-    public bool UpdateUnityState(float timeSinceScriptStart) {
-        // what to do with "scriptData.FromPosition"? maybe state validation.. or exclude it whatsoever
+    public void OnUpdateEnter() {
         var locationCenter = avatarLocation.transform.position;
-        if (startPosition == default) {
-//            startPosition = locationCenter + scriptData.FromPosition.ToUnityVector3();    
-            startPosition = avatar.transform.position;
-        }
+        startPosition = avatar.transform.position;
         targetPosition = locationCenter + scriptData.ToPosition.ToUnityVector3();
-
-        var progress = timeSinceScriptStart / 0.5f;
+    }
+    
+    public void UpdateUnityState(float progress) {
         avatar.transform.position = Vector3.Lerp(startPosition, targetPosition, progress);
-        Debug.Log($"Change Position progress {progress} From {scriptData.FromPosition} -> ... {avatar.transform.position} ... -> {scriptData.ToPosition}");
-        
-        var arrived = progress > 0.95f;
-        if (arrived) {
-            startPosition = default;
-        }
-        
-        var needMoreUpdate = !arrived; 
-        return needMoreUpdate;
+        Debug.Log($"Change Position progress {progress} From {startPosition} -> ... {avatar.transform.position} ... -> {targetPosition}");
+    }
+
+    public void OnUpdateExit() {
+        avatar.transform.position = targetPosition;
+        // for one time commands, they can do their staff in one of this methods
     }
 
 }

@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using MyMmo.Client;
 using MyMmo.Commons.Scripts;
-using UnityEngine;
 using Object = UnityEngine.Object;
 
 public class ChangeLocationUnityScript : IUnityScript {
@@ -26,22 +25,20 @@ public class ChangeLocationUnityScript : IUnityScript {
             throw new Exception("can't find script's target location with id: " + scriptData.ToLocation);
         }
     }
-    
-    public bool UpdateUnityState(float timeSinceScriptStart) {
-        targetAvatar.transform.position =
-            Vector3.Lerp(targetAvatar.transform.position, targetLocation.transform.position, Time.deltaTime * 1);
-        
-        var arrived = (targetLocation.transform.position - targetAvatar.transform.position).magnitude < 0.5f;
-        if (arrived) {
-            targetAvatar.transform.position = targetLocation.transform.position;
-            
-            // todo Important! we could centralize state management, and use not Common.ItemSnapshotData
-            // But client implementation of wrapper over that data, with all necessary api for state reset, move forward/backward etc. 
-            targetAvatar.State.LocationId = scriptData.ToLocation;
-        }
 
-        var needMoreUpdate = !arrived; 
-        return needMoreUpdate;
+    public void OnUpdateEnter() {
+        targetAvatar.State.LocationId = scriptData.ToLocation;
+        // todo Important! we could centralize state management, and use not Common.ItemSnapshotData
+        // But client implementation of wrapper over that data, with all necessary api for state reset, move forward/backward etc. 
+    }
+    
+    public void UpdateUnityState(float progress) {
+        // no needs to call this for toggle changes, maybe use other interface for this changes updates
+    }
+
+    public void OnUpdateExit() {
+        targetAvatar.State.LocationId = scriptData.ToLocation;
+        // any of this methods should work, but maybe some animation or cleanups will take place here
     }
 
 }

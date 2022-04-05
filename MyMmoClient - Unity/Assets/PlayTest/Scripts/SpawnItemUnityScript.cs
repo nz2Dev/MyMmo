@@ -19,9 +19,16 @@ public class SpawnItemUnityScript : IUnityScript {
         }
     }
 
-    public bool UpdateUnityState(float timeSinceScriptStart) {
+    public void OnUpdateEnter() {
         targetLocation.SpawnAvatar(PlayTest.Instance.playerPrefab, scriptData.ItemSnapshotData);
-        return false;
+    }
+
+    public void UpdateUnityState(float progress) {
+        // no needs for this
+    }
+
+    public void OnUpdateExit() {
+        // one time command, can't spawn two times
     }
 
 }

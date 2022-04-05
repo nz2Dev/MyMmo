@@ -17,7 +17,7 @@ public class UnityScriptsClipPlayer : MonoBehaviour {
         }
 
         foreach (var itemData in clip.ItemDataArray) {
-            StartScripts(itemData.ScriptDataArray, BuildFinisher(CountdownAction));
+            StartScripts(clip.ChangesDeltaTime, itemData.ScriptDataArray, BuildFinisher(CountdownAction));
         }
     }
 
@@ -26,24 +26,27 @@ public class UnityScriptsClipPlayer : MonoBehaviour {
         countdown();
     }
 
-    public void StartScripts(BaseScriptData[] scriptsData, IEnumerator onFinish) {
+    public void StartScripts(float changesDeltaTime, BaseScriptData[] scriptsData, IEnumerator onFinish) {
         IEnumerator nextProcess = onFinish;
         foreach (var script in scriptsData.Reverse()) {
-            nextProcess = BuildCoroutine(UnityScriptFactory.Create(script), nextProcess);
+            nextProcess = BuildCoroutine(changesDeltaTime, UnityScriptFactory.Create(script), nextProcess);
         }
 
         StartCoroutine(nextProcess);
     }
 
-    private IEnumerator BuildCoroutine(IUnityScript unityScript, IEnumerator continuation) {
-        var needUpdate = true;
+    private IEnumerator BuildCoroutine(float changesDeltaTime, IUnityScript unityScript, IEnumerator continuation) {
         var timePassed = 0f;
-        while (needUpdate) {
+        
+        unityScript.OnUpdateEnter();
+        while (timePassed < changesDeltaTime) {
             timePassed += Time.deltaTime;
-            needUpdate = unityScript.UpdateUnityState(timePassed);
+            var progress = timePassed / changesDeltaTime;
+            unityScript.UpdateUnityState(progress);
             yield return new WaitForEndOfFrame();
         }
 
+        unityScript.OnUpdateExit();
         if (continuation != null) {
             yield return StartCoroutine(continuation);
         }

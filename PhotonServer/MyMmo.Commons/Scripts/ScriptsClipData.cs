@@ -8,5 +8,8 @@ namespace MyMmo.Commons.Scripts {
         [ProtoMember(1)]
         public ItemScriptsData[] ItemDataArray { get; set; } = new ItemScriptsData[0];
 
+        [ProtoMember(2)]
+        public float ChangesDeltaTime { get; set; } = 1f;
+
     }
 }

@@ -39,7 +39,12 @@ namespace MyMmo.Processing {
         }
 
         public ScriptsClipData Simulate() {
-            for (int i = 0; i < 5; i++) {
+            const float stepTime = 0.2f;
+            const float simulationTime = 1f;
+            const float steps = simulationTime / stepTime;
+            
+            clip.Rest(stepTime);
+            for (var i = 0; i < steps; i++) {
                 foreach (var update in updates) {
                     update.Process(this);
                 }
@@ -53,7 +58,7 @@ namespace MyMmo.Processing {
                 }
 
                 foreach (var entity in entities) {
-                    entity.RecordAllChanges(clip);
+                    entity.RecordAllChanges(clip, stepTime);
                 }
             }
 

@@ -23,8 +23,8 @@ namespace MyMmo.Processing {
             };
         }
         
-        public void RecordAllChanges(Clip clip) {
-            Transform.RecordChanges(Id, clip);
+        public void RecordAllChanges(Clip clip, float deltaTime) {
+            Transform.RecordChanges(Id, clip, deltaTime);
             // other components that can do that, should
         }
 

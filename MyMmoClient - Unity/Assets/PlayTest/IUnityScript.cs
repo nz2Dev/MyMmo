@@ -1,5 +1,9 @@
 public interface IUnityScript {
 
-    bool UpdateUnityState(float timeSinceScriptStart);
+    void OnUpdateEnter();
+    
+    void UpdateUnityState(float progress);
+
+    void OnUpdateExit();
 
 }
