@@ -77,6 +77,18 @@ namespace Dev {
                 return;
             }
             updated = true;
+            
+            SetRandomPathfindingTarget(scene);
+            EnableWandering(scene);
+        }
+
+        private static void EnableWandering(Scene scene) {
+            foreach (var entity in scene.Entities) {
+                entity.Wondering.Enabled = true;
+            }
+        }
+
+        private static void SetRandomPathfindingTarget(Scene scene) {
             foreach (var entity in scene.Entities) {
                 entity.Pathfinder.Target = new System.Numerics.Vector2(Random.Range(-5, 5), Random.Range(-5, 5));
             }

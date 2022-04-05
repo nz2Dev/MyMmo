@@ -8,6 +8,7 @@ namespace MyMmo.Processing {
 
         private readonly List<Entity> entities = new List<Entity>();
         private readonly PathfinderSystem pathfinderSystem = new PathfinderSystem();
+        private readonly WonderingSystem wonderingSystem = new WonderingSystem();
         private readonly MotionSystem motionSystem = new MotionSystem();
         private readonly List<IUpdate> updates;
         private readonly Clip clip = new Clip();
@@ -47,11 +48,15 @@ namespace MyMmo.Processing {
                 }
                 
                 foreach (var entity in entities) {
-                    pathfinderSystem.Update(this, entity);
+                    pathfinderSystem.Update(entity);
                 }
                 
                 foreach (var entity in entities) {
-                    motionSystem.Update(this, entity);
+                    wonderingSystem.Update(entity);
+                }
+                
+                foreach (var entity in entities) {
+                    motionSystem.Update(entity);
                 }
 
                 foreach (var entity in entities) {

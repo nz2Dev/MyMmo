@@ -49,6 +49,7 @@
         <Compile Include="Components\Pathfinder.cs" />
         <Compile Include="Components\Motion.cs" />
         <Compile Include="Components\Transform.cs" />
+        <Compile Include="Components\Wondering.cs" />
         <Compile Include="Entity.cs" />
         <Compile Include="IUpdate.cs" />
         <Compile Include="Primitives\Line.cs" />
@@ -56,6 +57,7 @@
         <Compile Include="Scene.cs" />
         <Compile Include="Systems\MotionSystem.cs" />
         <Compile Include="Systems\PathfinderSystem.cs" />
+        <Compile Include="Systems\WonderingSystem.cs" />
         <Compile Include="Utils\ConverterExtensions.cs" />
         <Compile Include="Utils\NumberUtils.cs" />
         <Compile Include="Utils\VectorExtensions.cs" />
