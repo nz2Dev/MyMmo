@@ -61,6 +61,7 @@
         <Compile Include="Utils\ConverterExtensions.cs" />
         <Compile Include="Utils\NumberUtils.cs" />
         <Compile Include="Utils\VectorExtensions.cs" />
+        <Compile Include="Utils\VectorMath.cs" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\MyMmo.Commons\MyMmo.Commons.csproj">
