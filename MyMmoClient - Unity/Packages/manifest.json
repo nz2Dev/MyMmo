@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.acegikmo.shapes": "file:E:/dev/games/packages/Shapes - Freya Holmer, Unity/Packages/com.acegikmo.shapes",
     "com.unity.collab-proxy": "1.11.2",
     "com.unity.connect.share": "4.2.3",
     "com.unity.ide.rider": "2.0.7",

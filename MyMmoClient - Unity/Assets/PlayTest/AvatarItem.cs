@@ -24,9 +24,4 @@ public class AvatarItem : MonoBehaviour {
         displayVelocity = direction;
     }
 
-    private void OnDrawGizmos() {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawLine(transform.position, transform.position + displayVelocity.normalized);
-    }
-
 }
