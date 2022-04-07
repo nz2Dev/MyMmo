@@ -38,7 +38,7 @@ public class PlayTest : MonoBehaviour, IGameListener {
         isManualSetup = true;
         if (isManualSetup) {
             enteredUserName = "unity_editor_manual";
-            game.Initialize(new PlayTestPeer(game, ConnectionProtocol.Tcp));
+            game.Initialize(new UnityPeer(game, ConnectionProtocol.Tcp));
             game.Connect("localhost:4530");
         }
 #elif UNITY_WEBGL
@@ -69,14 +69,14 @@ public class PlayTest : MonoBehaviour, IGameListener {
                 
                 var uri = new Uri(serverAddress);
                 if (uri.Scheme.Equals("ws")) {
-                    game.Initialize(new PlayTestPeer(game, ConnectionProtocol.WebSocket));
+                    game.Initialize(new UnityPeer(game, ConnectionProtocol.WebSocket));
                 } else if (uri.Scheme.Equals("wss")) {
-                    game.Initialize(new PlayTestPeer(game, ConnectionProtocol.WebSocketSecure));
+                    game.Initialize(new UnityPeer(game, ConnectionProtocol.WebSocketSecure));
                 } else if (uri.Scheme.Equals("tcp")) {
-                    game.Initialize(new PlayTestPeer(game, ConnectionProtocol.Tcp));
+                    game.Initialize(new UnityPeer(game, ConnectionProtocol.Tcp));
                 } else {
                     OnLog(DebugLevel.WARNING, "uri.Schema is empty, init as tcp");
-                    game.Initialize(new PlayTestPeer(game, ConnectionProtocol.Tcp));
+                    game.Initialize(new UnityPeer(game, ConnectionProtocol.Tcp));
                 }
                 
                 game.Connect(serverAddress);

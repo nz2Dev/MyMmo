@@ -5,13 +5,13 @@
 using System;
 using ExitGames.Client.Photon;
 
-public class PlayTestPeer : PhotonPeer {
+public class UnityPeer : PhotonPeer {
 
-    public PlayTestPeer(ConnectionProtocol protocolType) : base(protocolType) {
+    public UnityPeer(ConnectionProtocol protocolType) : base(protocolType) {
         ConfigUnitySockets();
     }
 
-    public PlayTestPeer(IPhotonPeerListener listener, ConnectionProtocol protocolType) : this(protocolType) {
+    public UnityPeer(IPhotonPeerListener listener, ConnectionProtocol protocolType) : this(protocolType) {
         Listener = listener;
     }
 
