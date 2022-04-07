@@ -4,11 +4,12 @@ using MyMmo.Commons.Scripts;
 using MyMmo.Commons.Snapshots;
 using MyMmo.Processing;
 using MyMmo.Processing.Utils;
+using Player;
 using UnityEngine;
 using Transform = MyMmo.Processing.Components.Transform;
 using Vector2 = MyMmo.Commons.Primitives.Vector2;
 
-namespace Dev {
+namespace DevPlay {
     public class DevPlayTest : MonoBehaviour {
 
         public Location devLocation;

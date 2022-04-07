@@ -1,9 +1,11 @@
-public interface IUnityScript {
+namespace Player {
+    public interface IUnityScript {
 
-    void OnUpdateEnter();
+        void OnUpdateEnter();
     
-    void UpdateUnityState(float progress);
+        void UpdateUnityState(float progress);
 
-    void OnUpdateExit();
+        void OnUpdateExit();
 
+    }
 }
