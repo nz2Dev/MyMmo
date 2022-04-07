@@ -5,7 +5,7 @@ import shutil
 
 rootPath = os.path.abspath(__file__ + '/../../../')
 srcPath = os.path.abspath(rootPath + "/PhotonServer/MyMmo.Processing/bin/Debug/")
-dstPath = os.path.abspath(rootPath + '/MyMmoClient - Unity/Assets/Dev/Processing/')
+dstPath = os.path.abspath(rootPath + '/MyMmoClient - Unity/Assets/DevPlay/ProcessLibs/')
 print("srcPath: " + srcPath)
 print("dstPath: " + dstPath)
 
