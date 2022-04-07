@@ -35,16 +35,15 @@ namespace Player.Scripts {
             var locationCenter = avatarLocation.transform.position;
             startPosition = avatar.transform.position;
             targetPosition = locationCenter + scriptData.ToPosition.ToUnityVector3();
-            avatar.SetDisplayVelocity(targetPosition - startPosition);
         }
     
         public void UpdateUnityState(float progress) {
-            avatar.transform.position = Vector3.Lerp(startPosition, targetPosition, progress);
+            var newPosition = Vector3.Lerp(startPosition, targetPosition, progress);
+            avatar.Move(newPosition - avatar.transform.position);
         }
 
         public void OnUpdateExit() {
             avatar.transform.position = targetPosition;
-            avatar.SetDisplayVelocity(Vector3.zero);
             // for one time commands, they can do their staff in one of this methods
         }
 

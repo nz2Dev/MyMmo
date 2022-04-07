@@ -79,7 +79,7 @@ namespace DevPlay {
             }
             updated = true;
             
-            SetRandomPathfindingTarget(scene);
+            //SetRandomPathfindingTarget(scene);
             EnableWandering(scene);
         }
 

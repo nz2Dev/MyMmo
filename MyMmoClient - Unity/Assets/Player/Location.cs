@@ -14,6 +14,7 @@ namespace Player {
             var initPosition = snapshotData.PositionInLocation.ToUnityVector3() + Vector3.up * spawnHeight;
             var player = Instantiate(playerPrefab, centerOfLocation + initPosition, Quaternion.identity);
             player.GetComponent<AvatarItem>().SetState(snapshotData);
+            player.GetComponent<Rigidbody>().isKinematic = false;
         }
 
         public void PlaceAvatar(GameObject playerPrefab, ItemSnapshotData itemSnapshotData) {
