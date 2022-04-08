@@ -156,7 +156,9 @@ namespace ServerPlay {
         }
 
         public void OnLog(DebugLevel debugLevel, string message) {
-            Debug.Log($"GameListenerLog {debugLevel}: {message}");
+            if (debugLevel <= DebugLevel.WARNING) {
+                Debug.Log($"GameListenerLog {debugLevel}: {message}");
+            }
         }
 
     }

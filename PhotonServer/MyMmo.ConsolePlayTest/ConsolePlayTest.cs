@@ -18,6 +18,7 @@ namespace MyMmo.ConsolePlayTest {
         private const string WorldName = "UnityWorld";
 
         private readonly Dictionary<string, ConsoleItem> itemCache = new Dictionary<string, ConsoleItem>();
+        private static bool isGameLogEnabled = false;
 
         public static void Main(string[] args) {
             var playTest = new ConsolePlayTest();
@@ -116,8 +117,8 @@ namespace MyMmo.ConsolePlayTest {
                     }
 
                     case "-l": {
-                        isLogEnabled = !isLogEnabled;
-                        Console.WriteLine("Logs is " + (isLogEnabled ? "enabled" : "disabled"));
+                        isGameLogEnabled = !isGameLogEnabled;
+                        Console.WriteLine("Logs is " + (isGameLogEnabled ? "enabled" : "disabled"));
                         break;
                     }
 
@@ -154,13 +155,9 @@ namespace MyMmo.ConsolePlayTest {
 
             Console.WriteLine("-----------");
         }
-
-        private static bool isLogEnabled = true;
         
         public static void PrintLog(string message) {
-            if (isLogEnabled) {
-                Console.WriteLine(message + "  >> press any key to continue <<");
-            }
+            Console.WriteLine(message + "  >> press any key to continue <<");
         }
 
         public void OnConnected() {
@@ -199,9 +196,11 @@ namespace MyMmo.ConsolePlayTest {
             PrintLog($"region {locationId} updates with scripts");
             ConsoleScriptClipPlayer.Play(scriptsClipData, itemCache);
         }
-
+        
         void IGameListener.OnLog(DebugLevel debugLevel, string message) {
-            PrintLog($"Game Log: {message}");
+            if (isGameLogEnabled) {
+                PrintLog($"Game Log: {message}");
+            }
         }
 
     }
