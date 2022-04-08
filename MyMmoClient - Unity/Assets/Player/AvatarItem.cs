@@ -32,6 +32,8 @@ namespace Player {
 
         private void OnCollisionEnter(Collision other) {
             capsuleRigidbody.isKinematic = true;
+            var pos = transform.position; 
+            transform.position = new Vector3(pos.x, 0, pos.z);
         }
 
         public void DrawShapesAnnotation() {
