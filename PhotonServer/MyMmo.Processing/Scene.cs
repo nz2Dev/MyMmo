@@ -41,11 +41,11 @@ namespace MyMmo.Processing {
 
         public ScriptsClipData Simulate(float stepTime, float simulationTime) {
             clip.Rest(stepTime);
-            var stepsCount = simulationTime / stepTime;
-            for (var i = 0; i < stepsCount; i++) {
-                foreach (var update in updates) {
-                    update.Process(this);
-                }
+            
+            for (var timePassed = 0f; timePassed < simulationTime && updates.Count > 0; timePassed += stepTime) {
+                updates.RemoveAll(update => {
+                    return update.Process(this, timePassed, simulationTime);
+                });
                 
                 foreach (var entity in entities) {
                     pathfinderSystem.Update(entity);

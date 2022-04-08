@@ -6,8 +6,6 @@ using MyMmo.Processing;
 using MyMmo.Processing.Utils;
 using Player;
 using UnityEngine;
-using Transform = MyMmo.Processing.Components.Transform;
-using Vector2 = MyMmo.Commons.Primitives.Vector2;
 
 namespace DevPlay {
     public class DevPlayTest : MonoBehaviour {
@@ -31,7 +29,7 @@ namespace DevPlay {
                 return new ItemSnapshotData {
                     ItemId = id,
                     LocationId = devLocation.Id,
-                    PositionInLocation = new Vector2 {
+                    PositionInLocation = new MyMmo.Commons.Primitives.Vector2 {
                         X = Random.Range(-5, 5),
                         Y = Random.Range(-5, 5)
                     }
@@ -41,7 +39,7 @@ namespace DevPlay {
             var entities = snapshots.Select(snapshotData => {
                 return new Entity(
                     snapshotData.ItemId,
-                    new Transform(
+                    new MyMmo.Processing.Components.Transform(
                         snapshotData.PositionInLocation.ToComputeVector(),
                         snapshotData.LocationId,
                         data => { }
@@ -49,8 +47,9 @@ namespace DevPlay {
                 );
             });
 
-            var devTestUpdates = new[] {
-                new DevTestUpdate()
+            var devTestUpdates = new IUpdate[] {
+                new EnableWandering(),
+                new Waiter(-1f)
             };
 
             var scene = new Scene(entities, new List<IUpdate>(devTestUpdates));
@@ -69,31 +68,39 @@ namespace DevPlay {
 
     }
 
-    public class DevTestUpdate : IUpdate {
+    class Waiter : IUpdate {
 
-        private bool updated;
-        
-        public void Process(Scene scene) {
-            if (updated) {
-                return;
-            }
-            updated = true;
-            
-            //SetRandomPathfindingTarget(scene);
-            EnableWandering(scene);
+        private readonly float time;
+
+        public Waiter(float time) {
+            this.time = time;
         }
 
-        private static void EnableWandering(Scene scene) {
-            foreach (var entity in scene.Entities) {
-                entity.Wondering.Enabled = true;
-            }
+        public bool Process(Scene scene, float timePassed, float timeLimit) {
+            return time > 0 && timePassed > time;
         }
+    }
 
-        private static void SetRandomPathfindingTarget(Scene scene) {
+    class SetRandomMoveTargets : IUpdate {
+
+        public bool Process(Scene scene, float timePassed, float timeLimit) {
             foreach (var entity in scene.Entities) {
                 entity.Pathfinder.Target = new System.Numerics.Vector2(Random.Range(-5, 5), Random.Range(-5, 5));
             }
+
+            return true;
         }
 
+    } 
+    
+    class EnableWandering : IUpdate {
+
+        public bool Process(Scene scene, float timePassed, float timeLimit) {
+            foreach (var entity in scene.Entities) {
+                entity.Wondering.Enabled = true;
+            }
+
+            return true;
+        }
     }
 }

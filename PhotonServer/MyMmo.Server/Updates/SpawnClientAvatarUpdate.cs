@@ -18,14 +18,8 @@ namespace MyMmo.Server.Updates {
         public bool IsValidAt(World world) {
             return !world.ContainItem(avatarItem.Id);
         }
-
-        private bool spawned;
-
-        public override void Process(Scene scene) {
-            if (spawned) {
-                return;
-            }
-
+        
+        public override bool Process(Scene scene, float timePassed, float timeLimit) {
             // spawn position logic, NOTE: we are in Entity/Component/System context, so can use that in our adventages
             // probably this call to world.GetMapRegion() should be part of ECS, and has to be populated before starting simulation
             var position = world.GetMapRegion(locationId).GetRandomPositionWithinBounds();
@@ -42,8 +36,8 @@ namespace MyMmo.Server.Updates {
             // but does it has to be together with scene changes?
             // entity is separated from items, so no state or logic of ECS is affected, but does the ChangesCallbacks 
             world.RegisterItem(avatarItem);
-            
-            spawned = true;
+
+            return true;
         }
 
     }

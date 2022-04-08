@@ -9,19 +9,13 @@ namespace MyMmo.Server.Updates {
             this.itemId = itemId;
         }
 
-        private bool destroyed;
-        
-        public override void Process(Scene scene) {
-            if (destroyed) {
-                return;
-            }
-            
+        public override bool Process(Scene scene, float timePassed, float timeLimit) {
             scene.RecordDeleteImmediately(itemId);
             var item = world.GetItem(itemId);
             world.RemoveItem(item);
             item.Destroy();
             item.Dispose();
-            destroyed = true;
+            return true;
         }
 
     }

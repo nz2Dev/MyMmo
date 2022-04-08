@@ -12,7 +12,7 @@ namespace MyMmo.Server.Updates {
             this.newLocationId = newLocationId;
         }
 
-        public override void Process(Scene scene) {
+        public override bool Process(Scene scene, float timePassed, float timeLimit) {
             throw new NotImplementedException();
         }
 

@@ -10,7 +10,7 @@ namespace MyMmo.Server.Updates {
             world = worldInstance;
         }
         
-        public abstract void Process(Scene scene);
+        public abstract bool Process(Scene scene, float timePassed, float timeLimit);
 
     }
 }
