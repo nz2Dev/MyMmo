@@ -27,9 +27,16 @@ namespace MyMmo.Server.Domain {
         private readonly ItemCache itemRegistry = new ItemCache();
 
         public World() {
-            rootMapRegion = new MapRegion(RootLocationId);
-            secondMapRegion = new MapRegion(SecondLocationId);
-            thirdMapRegion = new MapRegion(ThirdLocationId);
+            rootMapRegion = new MapRegion(RootLocationId) {
+                locationToTheRight = SecondLocationId
+            };
+            secondMapRegion = new MapRegion(SecondLocationId) {
+                locationToTheLeft = RootLocationId,
+                locationToTheRight = ThirdLocationId
+            };
+            thirdMapRegion = new MapRegion(ThirdLocationId) {
+                locationToTheLeft = SecondLocationId
+            };
 
             rootLocation = new Location(this, RootLocationId);
             secondLocation = new Location(this, SecondLocationId);
