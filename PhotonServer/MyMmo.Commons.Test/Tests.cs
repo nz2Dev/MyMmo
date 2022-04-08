@@ -11,32 +11,6 @@ namespace TestProject1 {
     public class Tests {
 
         [Test]
-        public void Test1() {
-            Assert.True(true);
-            var bytes = ScriptsDataProtocol.Serialize(new ScriptsClipData {
-                ItemDataArray = new[] {
-                    new ItemScriptsData {
-                        ItemId = "item1",
-                        ScriptDataArray = new BaseScriptData[] {
-                            new ChangeLocationScriptData {
-                                ItemId = "it1",
-                                FromLocation = 1,
-                                ToLocation = 2
-                            }
-                        }    
-                    }, 
-                    new ItemScriptsData {
-                        ItemId = "item2"
-                    }
-                }
-            });
-
-            var scriptsClip = ScriptsDataProtocol.Deserialize(bytes);
-            Assert.IsInstanceOf<ChangeLocationScriptData>(scriptsClip.ItemDataArray[0].ScriptDataArray[0]);
-            Assert.AreEqual(((ChangeLocationScriptData) scriptsClip.ItemDataArray[0].ScriptDataArray[0]).ItemId, "it1");
-        }
-
-        [Test]
         public void SnapshotsTest() {
             var bytes = SnapshotsDataProtocol.Serialize(new LocationSnapshotData {
                 ItemsSnapshotData = new List<ItemSnapshotData> {

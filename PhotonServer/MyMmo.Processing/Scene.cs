@@ -35,6 +35,22 @@ namespace MyMmo.Processing {
             });
         }
 
+        // todo: last changes update probably won't be recorded in this way, has to be enqueued and executed after changes recording is done
+        public void RecordExitImmediately(string id) {
+            var toExit = entities.FirstOrDefault(entity => entity.Id == id);
+            entities.Remove(toExit);
+            clip.AddChangesScript(id, new ExitItemScriptData {
+                ItemId = id
+            });
+        }
+
+        public void RecordEnterImmediately(Entity entity) {
+            entities.Add(entity);
+            clip.AddChangesScript(entity.Id, new EnterItemScriptData {
+                ItemSnapshotData = entity.GenerateSnapshot()
+            });
+        }
+
         public Entity GetEntity(string entityId) {
             return entities.FirstOrDefault(entity => entity.Id == entityId);
         }

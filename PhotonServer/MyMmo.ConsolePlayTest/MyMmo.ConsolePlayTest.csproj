@@ -46,10 +46,10 @@
         <Compile Include="IConsoleScriptApplier.cs" />
         <Compile Include="ConsoleItem.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="Scripts\ChangeLocationConsoleScriptApplier.cs" />
         <Compile Include="Scripts\ChangePositionConsoleScriptApplier.cs" />
         <Compile Include="Scripts\ConsoleScriptApplierFactory.cs" />
         <Compile Include="Scripts\DestroyItemConsoleScriptApplier.cs" />
+        <Compile Include="Scripts\EnterItemConsoleScriptApplier.cs" />
         <Compile Include="Scripts\SpawnItemConsoleScriptApplier.cs" />
     </ItemGroup>
     <ItemGroup>

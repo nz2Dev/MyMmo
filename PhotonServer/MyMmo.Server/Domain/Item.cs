@@ -27,6 +27,7 @@ namespace MyMmo.Server.Domain {
         public string Id { get; }
         public PeerBase Owner { get; }
         public int LocationId { get; private set; } = -1;
+        public bool Transitive { get; set; }
         
         // to be classified...
         public bool Disposed { get; private set; }
@@ -42,6 +43,7 @@ namespace MyMmo.Server.Domain {
             }
             
             LocationId = newLocationId;
+            Transitive = false;
             locationChangedChannel.Publish(new ItemLocationChangedMessage(newLocationId));
         }
 

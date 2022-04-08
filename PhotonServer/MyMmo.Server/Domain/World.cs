@@ -74,7 +74,9 @@ namespace MyMmo.Server.Domain {
             lock (syncRoot) {
                 updates.ForEach(update => update.Attach(this));
                 
-                var entities = itemRegistry.GetItemsWithLocationId(locationId).Select(item => {
+                var entities = itemRegistry.GetItemsWithLocationId(locationId)
+                    .Where(item => item.Transitive == false)
+                    .Select(item => {
                     var transform = new Transform(item.PositionInLocation, item.LocationId, changes => {
                         item.ChangePositionInLocation(changes.ToPosition.ToComputeVector());
                     });
@@ -82,7 +84,7 @@ namespace MyMmo.Server.Domain {
                 });
 
                 var scene = new Scene(entities, updates.Cast<IUpdate>().ToList());
-                var clip = scene.Simulate(stepTime: 0.2f, simulationTime: 2f);    
+                var clip = scene.Simulate(stepTime: 0.2f, simulationTime: 10f);    
                 return clip;
             }
         }

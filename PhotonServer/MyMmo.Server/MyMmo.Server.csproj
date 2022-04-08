@@ -262,7 +262,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Updates\BaseServerUpdate.cs" />
-    <Compile Include="Updates\ChangeLocationUpdate.cs" />
+    <Compile Include="Updates\EnterFromLocationUpdate.cs" />
+    <Compile Include="Updates\ExitToLocationUpdate.cs" />
     <Compile Include="Updates\DestroyItemUpdate.cs" />
     <Compile Include="Updates\MoveItemRandomlyUpdate.cs" />
     <Compile Include="Updates\SpawnClientAvatarUpdate.cs" />

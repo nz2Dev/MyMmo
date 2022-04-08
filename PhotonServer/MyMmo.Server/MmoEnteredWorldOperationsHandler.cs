@@ -49,7 +49,7 @@ namespace MyMmo.Server {
             }
             
             var avatarLocation = world.GetLocation(avatarItem.LocationId);
-            avatarLocation.RequestUpdate(new ChangeLocationUpdate(avatarItem.Id, operationChangeLocation.LocationId));
+            avatarLocation.RequestUpdate(new ExitToLocationUpdate(avatarItem.Id, operationChangeLocation.LocationId));
 
             return MmoOperationsUtils.OperationSuccess(operationRequest);
         }

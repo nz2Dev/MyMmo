@@ -5,8 +5,10 @@ namespace Player.Scripts {
     public static class UnityScriptFactory {
 
         public static IUnityScript Create(BaseScriptData data) {
-            if (data is ChangeLocationScriptData changeLocationScriptData) {
-                return new ChangeLocationUnityScript(changeLocationScriptData);
+            if (data is ExitItemScriptData exitItemScriptData) {
+                return new ItemExitLocationUnityScript(exitItemScriptData);
+            } else if (data is EnterItemScriptData enterItemScriptData) {
+                return new ItemEnterLocationUnityScript(enterItemScriptData);  
             } else if (data is ChangePositionScriptData changePositionScriptData) {
                 return new ChangePositionUnityScript(changePositionScriptData);
             } else if (data is SpawnItemScriptData spawnItemScriptData) {
@@ -17,5 +19,6 @@ namespace Player.Scripts {
                 throw new Exception($"Unity script is not implemented for script data: " + data);
             }
         }
+
     }
 }

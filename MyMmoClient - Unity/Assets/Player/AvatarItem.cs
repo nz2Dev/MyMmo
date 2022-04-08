@@ -10,6 +10,7 @@ namespace Player {
         private Vector3 heading = Vector3.zero;
     
         public ItemSnapshotData State { get; private set; } = new ItemSnapshotData();
+        public bool TransitiveState { get; set; }
 
         private void Awake() {
             capsuleRigidbody = GetComponentInChildren<Rigidbody>();

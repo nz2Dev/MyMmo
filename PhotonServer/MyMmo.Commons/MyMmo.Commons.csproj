@@ -49,9 +49,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReturnCode.cs" />
     <Compile Include="Scripts\BaseScriptData.cs" />
-    <Compile Include="Scripts\ChangeLocationScriptData.cs" />
     <Compile Include="Scripts\ChangePositionScriptData.cs" />
     <Compile Include="Scripts\DestroyItemScriptData.cs" />
+    <Compile Include="Scripts\EnterItemScriptData.cs" />
+    <Compile Include="Scripts\ExitItemScriptData.cs" />
     <Compile Include="Scripts\ItemScriptsData.cs" />
     <Compile Include="Scripts\ScriptsClipData.cs" />
     <Compile Include="Scripts\ScriptsDataProtocol.cs" />
