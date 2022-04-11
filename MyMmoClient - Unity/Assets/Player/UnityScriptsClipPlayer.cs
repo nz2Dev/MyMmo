@@ -16,10 +16,13 @@ namespace Player {
         public void PlayClip(int locationId, ScriptsClipData clip, Action onFinishPlaying = null) {
             onFinish = onFinishPlaying;
 
+            var firstItemId = clip.ItemDataArray.ElementAtOrDefault(0)?.ItemId;
+            
             timePassed = 0;
             scriptTracks = clip.ItemDataArray.Select(data => new Track(
                 data.ScriptDataArray.Select(UnityScriptFactory.Create).ToList(),
-                clip.ChangesDeltaTime
+                clip.ChangesDeltaTime,
+                data.ItemId == firstItemId
             )).ToList();
         }
 
@@ -40,11 +43,14 @@ namespace Player {
             private readonly float segmentTimeLength;
             private readonly List<IUnityScript> unityScripts;
             private float currentSegmentEnterTime;
-            private int currentSegmentIndex;
+            private int currentSegmentIndex = -1;
 
-            public Track(List<IUnityScript> unityScripts, float segmentTimeLength) {
+            private bool debug;
+
+            public Track(List<IUnityScript> unityScripts, float segmentTimeLength, bool debug) {
                 this.unityScripts = unityScripts;
                 this.segmentTimeLength = segmentTimeLength;
+                this.debug = debug;
             }
 
             public bool Play(float timePassed) {
@@ -57,6 +63,9 @@ namespace Player {
                 var timeDelta = timePassed - currentSegmentEnterTime;
                 if (timeDelta > segmentTimeLength) {
                     ExitCurrentSegment();
+                    // ...should return next segment, then enter/exit all segments in between,
+                    // so that state is correct, and all scripts contributes,
+                    // in case if each next script don't have previous state... 
                     if (!EnterNextSegment(timePassed)) {
                         return false;
                     }
@@ -84,6 +93,9 @@ namespace Player {
                 if (currSegment != null) {
                     currSegment.UpdateUnityState(progress: 1);
                     currSegment.OnUpdateExit();
+                    if (debug) {
+                        Debug.Log($"{currentSegmentEnterTime} .. [{currentSegmentIndex}] >> ");
+                    }
                 }
             }
 
@@ -91,12 +103,15 @@ namespace Player {
                 var segmentsPassedApprox = timePassed / segmentTimeLength;
                 var segmentsPassedCount = Mathf.FloorToInt(segmentsPassedApprox);
 
-                var nextSegmentIndex = segmentsPassedCount - 1;
+                var nextSegmentIndex = segmentsPassedCount;
                 var nextScript = unityScripts.ElementAtOrDefault(nextSegmentIndex);
                 if (nextScript != null) {
                     currentSegmentIndex = nextSegmentIndex;
                     currentSegmentEnterTime = segmentsPassedCount * segmentTimeLength;
                     nextScript.OnUpdateEnter();
+                    if (debug) {
+                        Debug.Log($"<< [{currentSegmentIndex}] .. {currentSegmentEnterTime}");
+                    }
                     return true;
                 } else {
                     return false;

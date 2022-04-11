@@ -13,6 +13,7 @@ namespace DevPlay {
         public Location devLocation;
         public GameObject playerPrefab;
         public UnityScriptsClipPlayer changesPlayer;
+        public bool replay = true;
         
         private ScriptsClipData simulatedClip;
         private ItemSnapshotData[] snapshots;
@@ -62,7 +63,9 @@ namespace DevPlay {
             }
             
             changesPlayer.PlayClip(devLocation.Id, simulatedClip, () => {
-                PlayClip();
+                if (replay) {
+                    PlayClip();
+                }
             });
         }
 
