@@ -15,10 +15,10 @@ namespace ServerPlay {
         private const string WorldName = "UnityWorld";
 
         public GameObject playerPrefab;
-    
-        private Game game;
-        private UnityScriptsClipPlayer scriptsPlayer;
 
+        private UnityScriptsTimeline scriptsTimeline;
+
+        private Game game;
         private bool isConnectState;
         private bool isEnterState;
         private bool isPlayState;
@@ -29,7 +29,7 @@ namespace ServerPlay {
             Application.runInBackground = true;
             Application.targetFrameRate = 60;
             DontDestroyOnLoad(gameObject);
-            scriptsPlayer = GetComponent<UnityScriptsClipPlayer>();
+            scriptsTimeline = GetComponent<UnityScriptsTimeline>();
         }
 
         private void Start() {
@@ -152,7 +152,7 @@ namespace ServerPlay {
 
         public void OnLocationUpdate(int locationId, ScriptsClipData clipData) {
             Debug.Log($"on location update: {locationId} with items[{clipData.ItemDataArray.Length}] [{clipData.ItemDataArray.Select(data => $"item {data.ItemId} scripts[" + data.ScriptDataArray.AggregateToString() + "]").AggregateToString()}]");
-            scriptsPlayer.PlayClip(locationId, clipData);
+            scriptsTimeline.PlayChangesClipImmediately(locationId, clipData);
         }
 
         public void OnLog(DebugLevel debugLevel, string message) {

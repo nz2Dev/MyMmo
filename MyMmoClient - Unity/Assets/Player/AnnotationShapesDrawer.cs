@@ -11,7 +11,12 @@ namespace Player {
                 var avatars = FindObjectsOfType<AvatarItem>();
                 foreach (var avatarItem in avatars) {
                     avatarItem.DrawShapesAnnotation();
-                }   
+                }
+
+                var scriptPlayers = FindObjectsOfType<Location>();
+                foreach (var scriptPlayer in scriptPlayers) {
+                    scriptPlayer.DrawShapesAnnotation();
+                }
             }
         }
 

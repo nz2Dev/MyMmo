@@ -1,12 +1,25 @@
+using System;
 using System.Linq;
+using MyMmo.Commons.Scripts;
 using MyMmo.Commons.Snapshots;
 using Player.Scripts;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Player {
+    
+    [ExecuteInEditMode] 
     public class Location : MonoBehaviour {
 
         public int Id;
+        public Transform AnnotationDrawingOffset;
+
+        private UnityScriptsClipPlayer scriptsPlayer;
+
+        private void Awake() {
+            scriptsPlayer = GetComponent<UnityScriptsClipPlayer>();
+            Assert.IsNotNull(scriptsPlayer);
+        }
 
         public void SpawnAvatar(GameObject playerPrefab, ItemSnapshotData snapshotData) {
             const int spawnHeight = 5;
@@ -29,7 +42,13 @@ namespace Player {
             player.GetComponent<AvatarItem>().SetState(itemSnapshotData);
         }
 
-    
+        public void PlayClipImmediately(ScriptsClipData clipData, Action onFinish = null) {
+            scriptsPlayer.PlayClip(clipData, onFinish);
+        }
+
+        public void DrawShapesAnnotation() {
+            scriptsPlayer.DrawShapesAnnotation(AnnotationDrawingOffset.localToWorldMatrix);
+        }
 
     }
 }

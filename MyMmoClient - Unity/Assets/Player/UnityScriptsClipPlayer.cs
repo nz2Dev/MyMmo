@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using MyMmo.Commons.Scripts;
 using Player.Scripts;
+using Shapes;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Player {
     public class UnityScriptsClipPlayer : MonoBehaviour {
 
-        private List<Track> scriptTracks;
+        private List<Track> scriptTracks = new List<Track>();
         private float timePassed;
         private Action onFinish;
 
-        public void PlayClip(int locationId, ScriptsClipData clip, Action onFinishPlaying = null) {
+        public void PlayClip(ScriptsClipData clip, Action onFinishPlaying = null) {
             onFinish = onFinishPlaying;
 
             var firstItemId = clip.ItemDataArray.ElementAtOrDefault(0)?.ItemId;
@@ -24,6 +25,29 @@ namespace Player {
                 clip.ChangesDeltaTime,
                 data.ItemId == firstItemId
             )).ToList();
+        }
+
+        public void DrawShapesAnnotation(Matrix4x4 worldTransformationMatrix) {
+            Draw.ResetAllDrawStates();
+            Draw.Matrix = worldTransformationMatrix;
+            Draw.ThicknessSpace = ThicknessSpace.Meters;
+
+            const float maxWidth = 5;
+            const float maxHeight = 0.4f;
+            Draw.Translate(-maxWidth / 2f, 0, -maxHeight / 2f);
+            Draw.Rotate(Quaternion.LookRotation(Vector3.down, Vector3.forward));
+
+            void DrawTrackProgress(Vector3 position, float progress) {
+                Draw.Rectangle(position, maxWidth, maxHeight, RectPivot.Corner, Color.white);
+                Draw.Rectangle(position, maxWidth * progress, maxHeight, RectPivot.Corner, Color.green);    
+            }
+
+            if (scriptTracks.Count == 0) {
+                DrawTrackProgress(Vector3.zero, 0.5f); // for debug
+            }
+            for (var i = 0; i < scriptTracks.Count; i++) {
+                DrawTrackProgress((maxHeight + 0.1f) * i * Vector3.down, scriptTracks[i].GetTimeProgress(timePassed));
+            }
         }
 
         private void Update() {
@@ -55,6 +79,10 @@ namespace Player {
                 this.debug = debug;
             }
 
+            public float GetTimeProgress(float timePassed) {
+                return timePassed / (unityScripts.Count * segmentTimeLength);
+            }
+            
             public bool Play(float timePassed) {
                 if (currentSegmentIndex == -1) {
                     if (!EnterNextSegment(timePassed)) {

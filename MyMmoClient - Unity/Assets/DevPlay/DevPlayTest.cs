@@ -6,13 +6,14 @@ using MyMmo.Processing;
 using MyMmo.Processing.Utils;
 using Player;
 using UnityEngine;
+using Transform = MyMmo.Processing.Components.Transform;
+using Vector2 = MyMmo.Commons.Primitives.Vector2;
 
 namespace DevPlay {
     public class DevPlayTest : MonoBehaviour {
 
         public Location devLocation;
         public GameObject playerPrefab;
-        public UnityScriptsClipPlayer changesPlayer;
         public bool replay = true;
         
         private ScriptsClipData simulatedClip;
@@ -30,7 +31,7 @@ namespace DevPlay {
                 return new ItemSnapshotData {
                     ItemId = id,
                     LocationId = devLocation.Id,
-                    PositionInLocation = new MyMmo.Commons.Primitives.Vector2 {
+                    PositionInLocation = new Vector2 {
                         X = Random.Range(-5, 5),
                         Y = Random.Range(-5, 5)
                     }
@@ -40,7 +41,7 @@ namespace DevPlay {
             var entities = snapshots.Select(snapshotData => {
                 return new Entity(
                     snapshotData.ItemId,
-                    new MyMmo.Processing.Components.Transform(
+                    new Transform(
                         snapshotData.PositionInLocation.ToComputeVector(),
                         snapshotData.LocationId,
                         data => { }
@@ -62,7 +63,7 @@ namespace DevPlay {
                 devLocation.PlaceAvatar(playerPrefab, snapshotData);
             }
             
-            changesPlayer.PlayClip(devLocation.Id, simulatedClip, () => {
+            devLocation.PlayClipImmediately(simulatedClip, () => {
                 if (replay) {
                     PlayClip();
                 }
