@@ -16,11 +16,18 @@ namespace MyMmo.Server.Updates {
             
             if (entity.Pathfinder.Target == default) {
                 entity.Pathfinder.Target = mapRegion.GetRandomPositionWithinBounds();
-                return false;
+                return false; // false = it's not done yet, todo flip
             } else {
                 var distanceToTarget = (entity.Pathfinder.Target - entity.Transform.Position).Length();
+                
+                var isAtTarget = distanceToTarget < 0.1f;
+                if (isAtTarget) {
+                    // because now scene state is persistent after simulation, we have to reset some logic components state
+                    entity.Pathfinder.Target = default;
+                }
+
                 // keep alive until at target destination
-                return distanceToTarget < 0.1f;
+                return isAtTarget;
             }
         }
     }

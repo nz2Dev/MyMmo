@@ -54,8 +54,8 @@ namespace DevPlay {
                 new Waiter(-1f)
             };
 
-            var scene = new Scene(entities, new List<IUpdate>(devTestUpdates));
-            simulatedClip = scene.Simulate(0.2f, 4f);
+            var scene = new Scene(entities);
+            simulatedClip = scene.Simulate(new List<IUpdate>(devTestUpdates), 0.2f, 4f);
         }
 
         private void PlayClip() {

@@ -6,6 +6,7 @@ using ExitGames.Concurrency.Fibers;
 using ExitGames.Logging;
 using MyMmo.Commons;
 using MyMmo.Commons.Scripts;
+using MyMmo.Processing;
 using MyMmo.Server.Events;
 using MyMmo.Server.Updates;
 using Photon.SocketServer;
@@ -24,6 +25,7 @@ namespace MyMmo.Server.Domain {
 
         private readonly IFiber updateFiber = new PoolFiber();
         private readonly HashSet<BaseServerUpdate> updatesBuffer = new HashSet<BaseServerUpdate>();
+        private readonly Scene locationScene = new Scene();
         private bool scheduled;
 
         private readonly Channel<LocationEventMessage> locationEventChannel =
@@ -72,10 +74,14 @@ namespace MyMmo.Server.Domain {
                 updatesBuffer.Clear();
                 scheduled = false;
             }
-            
-            var updatesClip = world.ExecuteSimulationAt(id, updates);
 
-            var scriptsClipBytes = ScriptsDataProtocol.Serialize(updatesClip);
+            ScriptsClipData clipData;
+            lock (World.SimulationSyncRoot) {
+                updates.ForEach(update => update.Attach(world));
+                clipData = locationScene.Simulate(updates, 0.2f, 10f);
+            }
+            
+            var scriptsClipBytes = ScriptsDataProtocol.Serialize(clipData);
             var regionUpdateData = new LocationUpdatedData(scriptsClipBytes, id);
             var regionUpdateEvent = new EventData((byte) EventCode.LocationUpdated, regionUpdateData);
             locationEventChannel.Publish(new LocationEventMessage(regionUpdateEvent, new SendParameters()));

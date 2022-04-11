@@ -1,16 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MyMmo.Commons.Scripts;
-using MyMmo.Processing;
-using MyMmo.Processing.Components;
-using MyMmo.Processing.Utils;
-using MyMmo.Server.Updates;
 
 namespace MyMmo.Server.Domain {
     public class World /*todo Dispose*/ {
 
-        private readonly object syncRoot = new object();
+        public static readonly object SimulationSyncRoot = new object();
 
         public const int RootLocationId = 0;
         public const int SecondLocationId = 1;
@@ -69,26 +64,7 @@ namespace MyMmo.Server.Domain {
                 default: throw new ArgumentOutOfRangeException($"locationId: {locationId}");
             }
         }
-
-        public ScriptsClipData ExecuteSimulationAt(int locationId, List<BaseServerUpdate> updates) {
-            lock (syncRoot) {
-                updates.ForEach(update => update.Attach(this));
-                
-                var entities = itemRegistry.GetItemsWithLocationId(locationId)
-                    .Where(item => item.Transitive == false)
-                    .Select(item => {
-                    var transform = new Transform(item.PositionInLocation, item.LocationId, changes => {
-                        item.ChangePositionInLocation(changes.ToPosition.ToComputeVector());
-                    });
-                    return new Entity(item.Id, transform);
-                });
-
-                var scene = new Scene(entities, updates.Cast<IUpdate>().ToList());
-                var clip = scene.Simulate(stepTime: 0.2f, simulationTime: 10f);    
-                return clip;
-            }
-        }
-
+        
         public ICollection<ItemSnapshot> GetItemSnapshotsAtLocation(int locationId) {
             return itemRegistry.GetItemsWithLocationId(locationId).Select(item => item.GenerateItemSnapshot()).ToArray();
         }

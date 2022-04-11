@@ -10,16 +10,16 @@ namespace MyMmo.Processing {
         private readonly PathfinderSystem pathfinderSystem = new PathfinderSystem();
         private readonly WonderingSystem wonderingSystem = new WonderingSystem();
         private readonly MotionSystem motionSystem = new MotionSystem();
-        private readonly List<IUpdate> updates;
         private readonly Clip clip = new Clip();
 
-        public Scene(IEnumerable<Entity> initial, List<IUpdate> updates) {
-            this.updates = updates;
-            entities.AddRange(initial);
+        public IEnumerable<Entity> Entities => entities;
+
+        public Scene(IEnumerable<Entity> initialEntities = null) {
+            if (initialEntities != null) {
+                entities.AddRange(initialEntities);
+            }
         }
 
-        public IEnumerable<Entity> Entities => entities;
-        
         public void RecordSpawnImmediately(Entity entity) {
             entities.Add(entity);
             clip.AddChangesScript(entity.Id, new SpawnItemScriptData {
@@ -55,11 +55,12 @@ namespace MyMmo.Processing {
             return entities.FirstOrDefault(entity => entity.Id == entityId);
         }
 
-        public ScriptsClipData Simulate(float stepTime, float simulationTime) {
+        public ScriptsClipData Simulate(IEnumerable<IUpdate> updates, float stepTime, float simulationTime) {
             clip.Rest(stepTime);
             
-            for (var timePassed = 0f; timePassed < simulationTime && updates.Count > 0; timePassed += stepTime) {
-                updates.RemoveAll(update => {
+            var updatesLeft = updates.ToList();
+            for (var timePassed = 0f; timePassed < simulationTime && updatesLeft.Count > 0; timePassed += stepTime) {
+                updatesLeft.RemoveAll(update => {
                     return update.Process(this, timePassed, simulationTime);
                 });
                 
