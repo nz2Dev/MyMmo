@@ -7,6 +7,7 @@ using MyMmo.Commons.Scripts;
 using MyMmo.Commons.Snapshots;
 using Player;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace ServerPlay {
     public class PlayTest : MonoBehaviour, IGameListener {
@@ -30,6 +31,7 @@ namespace ServerPlay {
             Application.targetFrameRate = 60;
             DontDestroyOnLoad(gameObject);
             scriptsTimeline = GetComponent<UnityScriptsTimeline>();
+            Assert.IsNotNull(scriptsTimeline);
         }
 
         private void Start() {

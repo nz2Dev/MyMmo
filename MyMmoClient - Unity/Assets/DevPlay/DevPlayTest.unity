@@ -216,36 +216,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1 &813078581
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 813078582}
-  m_Layer: 0
-  m_Name: Annotations
-  m_TagString: Untagged
-  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &813078582
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 813078581}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -6}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1177988148}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1037958699
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -361,11 +331,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1177988148 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3936501247631992775, guid: f15267e38119e1f47b55d55a716050eb, type: 3}
-  m_PrefabInstance: {fileID: 1892652558}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1576725702 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8117159627841462085, guid: f15267e38119e1f47b55d55a716050eb, type: 3}
@@ -566,10 +531,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8117159627841462085, guid: f15267e38119e1f47b55d55a716050eb, type: 3}
-      propertyPath: AnnotationDrawingOffset
-      value: 
-      objectReference: {fileID: 813078582}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f15267e38119e1f47b55d55a716050eb, type: 3}
 --- !u!64 &8392010460701166848
