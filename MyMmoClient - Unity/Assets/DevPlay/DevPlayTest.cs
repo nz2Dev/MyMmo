@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using MyMmo.Commons.Scripts;
 using MyMmo.Commons.Snapshots;
@@ -46,13 +45,10 @@ namespace DevPlay {
                 );
             });
 
-            var devTestUpdates = new IUpdate[] {
-                new EnableWandering(),
-                new Waiter(-1f)
-            };
-
             var scene = new Scene(entities);
-            simulatedClip = scene.Simulate(new List<IUpdate>(devTestUpdates), 0.2f, 4f);
+            scene.BufferUpdate(new Waiter(-1f));
+            scene.BufferUpdate(new EnableWandering());
+            simulatedClip = scene.Simulate(0.2f, 4f);
         }
 
         private void PlayClip() {

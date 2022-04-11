@@ -7,10 +7,14 @@ namespace MyMmo.Processing {
 
         private readonly Dictionary<string, List<BaseScriptData>> scripts = new Dictionary<string, List<BaseScriptData>>();
         private float changesDeltaTime;
+        private bool isRecording;
 
-        public void Rest(float deltaTime) {
-            scripts.Clear();
+        public bool IsRecording => isRecording;
+        
+        public void RestartRecord(float deltaTime) {
             changesDeltaTime = deltaTime;
+            isRecording = true;
+            scripts.Clear();
         }
         
         public void AddChangesScript(string id, BaseScriptData script) {
@@ -28,6 +32,7 @@ namespace MyMmo.Processing {
         }
 
         public ScriptsClipData ToData() {
+            isRecording = false;
             return new ScriptsClipData {
                 ChangesDeltaTime = changesDeltaTime, 
                 ItemDataArray = scripts.Select(entry => new ItemScriptsData {

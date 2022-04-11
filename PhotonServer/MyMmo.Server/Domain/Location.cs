@@ -9,7 +9,6 @@ using MyMmo.Commons.Scripts;
 using MyMmo.Commons.Snapshots;
 using MyMmo.Processing;
 using MyMmo.Server.Events;
-using MyMmo.Server.Updates;
 using Photon.SocketServer;
 
 namespace MyMmo.Server.Domain {
@@ -25,8 +24,7 @@ namespace MyMmo.Server.Domain {
         private readonly int id;
 
         private readonly IFiber updateFiber = new PoolFiber();
-        private readonly HashSet<BaseServerUpdate> updatesBuffer = new HashSet<BaseServerUpdate>();
-        private readonly Scene locationScene;
+        private readonly Scene scene;
         private bool scheduled;
 
         private readonly Channel<LocationEventMessage> locationEventChannel =
@@ -35,15 +33,16 @@ namespace MyMmo.Server.Domain {
         public Location(World world, int id, MapRegion mapRegion) {
             this.world = world;
             this.id = id;
-            locationScene = new Scene(mapRegion: mapRegion);
+            scene = new Scene(mapRegion: mapRegion);
             updateFiber.Start();
         }
 
         public int Id => id;
+        public Scene Scene => scene;
 
         public void EnqueueSceneSnapshot(Action<SceneSnapshotData> snapshotCallback) {
             updateFiber.Enqueue(() => {
-                snapshotCallback(locationScene.GenerateSnapshot());
+                snapshotCallback(scene.GenerateSnapshot());
             });
         }
 
@@ -51,9 +50,9 @@ namespace MyMmo.Server.Domain {
             return locationEventChannel.Subscribe(fiber, onLocationEventMessage);
         }
 
-        public void RequestUpdate(BaseServerUpdate update) {
+        public void RequestUpdate(IUpdate update) {
             lock (requestLock) {
-                updatesBuffer.Add(update);
+                scene.BufferUpdate(update);
                 CheckScheduling();
             }
         }
@@ -68,15 +67,11 @@ namespace MyMmo.Server.Domain {
         private void Update() {
             logger.ConditionalDebug($"Location {id} start execution of Update");
 
-            List<BaseServerUpdate> updates;
+            ScriptsClipData clipData;
             lock (requestLock) {
-                updates = updatesBuffer.ToList();
-                updatesBuffer.Clear();
+                clipData = scene.Simulate(0.2f, 10f);
                 scheduled = false;
             }
-
-            updates.ForEach(update => update.Attach(world));
-            var clipData = locationScene.Simulate(updates, 0.2f, 10f);
             
             world.ApplyChanges(id, clipData);
             

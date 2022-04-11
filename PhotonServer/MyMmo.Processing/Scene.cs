@@ -3,6 +3,7 @@ using System.Linq;
 using MyMmo.Commons.Scripts;
 using MyMmo.Commons.Snapshots;
 using MyMmo.Processing.Systems;
+using MyMmo.Processing.Utils;
 
 namespace MyMmo.Processing {
     public class Scene {
@@ -14,8 +15,10 @@ namespace MyMmo.Processing {
         private readonly Clip clip = new Clip();
         private readonly MapRegion mapRegion;
         
+        private readonly List<IUpdate> updatesBuffer = new List<IUpdate>();
+        
         public Scene(IEnumerable<Entity> initialEntities = null, MapRegion mapRegion = null) {
-            this.mapRegion = mapRegion ?? new MapRegion();
+            this.mapRegion = mapRegion ?? new MapRegion(0);
             if (initialEntities != null) {
                 entities.AddRange(initialEntities);
             }
@@ -23,6 +26,11 @@ namespace MyMmo.Processing {
 
         public IEnumerable<Entity> Entities => entities;
         public MapRegion MapRegion => mapRegion;
+
+        public void BufferUpdate(IUpdate update) {
+            Assertions.AssertIsTrue(!clip.IsRecording, () => "clip is in record state");
+            updatesBuffer.Add(update);
+        }
 
         public void RecordSpawnImmediately(Entity entity) {
             entities.Add(entity);
@@ -65,12 +73,18 @@ namespace MyMmo.Processing {
             };
         }
 
-        public ScriptsClipData Simulate(IEnumerable<IUpdate> updates, float stepTime, float simulationTime) {
-            clip.Rest(stepTime);
+        private List<IUpdate> FlushUpdates() {
+            var updates = updatesBuffer.ToList();
+            updatesBuffer.Clear();
+            return updates;
+        }
 
-            var updatesLeft = updates.ToList();
+        public ScriptsClipData Simulate(float stepTime, float simulationTime) {
+            clip.RestartRecord(stepTime);
+            
+            var updatesLeft = FlushUpdates();
             for (var timePassed = 0f; timePassed < simulationTime && updatesLeft.Count > 0; timePassed += stepTime) {
-                updatesLeft.RemoveAll(update => { return update.Process(this, timePassed, simulationTime); });
+                updatesLeft.RemoveAll(update => update.Process(this, timePassed, simulationTime));
 
                 foreach (var entity in entities) {
                     pathfinderSystem.Update(entity);

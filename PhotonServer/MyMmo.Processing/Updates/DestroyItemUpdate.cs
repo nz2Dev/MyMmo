@@ -1,7 +1,5 @@
-using MyMmo.Processing;
-
-namespace MyMmo.Server.Updates {
-    public class DestroyItemUpdate : BaseServerUpdate {
+namespace MyMmo.Processing.Updates {
+    public class DestroyItemUpdate : IUpdate {
 
         private readonly string itemId;
 
@@ -9,7 +7,7 @@ namespace MyMmo.Server.Updates {
             this.itemId = itemId;
         }
 
-        public override bool Process(Scene scene, float timePassed, float timeLimit) {
+        public bool Process(Scene scene, float timePassed, float timeLimit) {
             scene.RecordDeleteImmediately(itemId);
             return true;
         }

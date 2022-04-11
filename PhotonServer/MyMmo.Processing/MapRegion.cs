@@ -6,6 +6,8 @@ namespace MyMmo.Processing {
         
         private static Random random = new Random();
 
+        public readonly int Id;
+
         public int locationToTheRight = -1;
         public readonly Vector2 rightExitPoint = new Vector2(5, 0);
         public readonly Vector2 rightEnterPoint = new Vector2(5, 0);
@@ -13,6 +15,10 @@ namespace MyMmo.Processing {
         public int locationToTheLeft = -1;
         public readonly Vector2 leftExitPoint = new Vector2(-5, 0);
         public readonly Vector2 leftEnterPoint = new Vector2(-5, 0);
+
+        public MapRegion(int id) {
+            Id = id;
+        }
 
         public Vector2 GetExitPositionTo(int otherLocationId) {
             if (locationToTheLeft >= 0 && otherLocationId == locationToTheLeft) {

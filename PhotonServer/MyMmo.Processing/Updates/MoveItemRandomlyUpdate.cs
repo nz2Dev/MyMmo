@@ -1,7 +1,5 @@
-using MyMmo.Processing;
-
-namespace MyMmo.Server.Updates {
-    public class MoveItemRandomlyUpdate : BaseServerUpdate {
+namespace MyMmo.Processing.Updates {
+    public class MoveItemRandomlyUpdate : IUpdate {
 
         private readonly string sourceItemId;
 
@@ -9,7 +7,7 @@ namespace MyMmo.Server.Updates {
             this.sourceItemId = sourceItemId;
         }
         
-        public override bool Process(Scene scene, float timePassed, float timeLimit) {
+        public bool Process(Scene scene, float timePassed, float timeLimit) {
             var entity = scene.GetEntity(sourceItemId);
             
             if (entity.Pathfinder.Target == default) {

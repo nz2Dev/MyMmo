@@ -1,8 +1,8 @@
 using ExitGames.Logging;
 using MyMmo.Commons;
+using MyMmo.Processing.Updates;
 using MyMmo.Server.Domain;
 using MyMmo.Server.Operations;
-using MyMmo.Server.Updates;
 using Photon.SocketServer;
 using Photon.SocketServer.Rpc;
 
@@ -49,7 +49,8 @@ namespace MyMmo.Server {
             }
             
             var avatarLocation = world.GetLocation(avatarItem.LocationId);
-            avatarLocation.RequestUpdate(new ExitToLocationUpdate(avatarItem.Id, operationChangeLocation.LocationId));
+            var newLocation = world.GetLocation(operationChangeLocation.LocationId);
+            avatarLocation.RequestUpdate(new ExitToLocationUpdate(avatarItem.Id, newLocation.Scene));
 
             return MmoOperationsUtils.OperationSuccess(operationRequest);
         }

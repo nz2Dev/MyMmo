@@ -20,14 +20,14 @@ namespace MyMmo.Server.Domain {
         private readonly ItemCache itemRegistry = new ItemCache();
 
         public World() {
-            rootLocation = new Location(this, RootLocationId, new MapRegion {
+            rootLocation = new Location(this, RootLocationId, new MapRegion(RootLocationId) {
                 locationToTheRight = SecondLocationId
             });
-            secondLocation = new Location(this, SecondLocationId, new MapRegion {
+            secondLocation = new Location(this, SecondLocationId, new MapRegion(SecondLocationId) {
                 locationToTheLeft = RootLocationId,
                 locationToTheRight = ThirdLocationId
             });
-            thirdLocation = new Location(this, ThirdLocationId, new MapRegion {
+            thirdLocation = new Location(this, ThirdLocationId, new MapRegion(ThirdLocationId) {
                 locationToTheLeft = SecondLocationId
             });
         }

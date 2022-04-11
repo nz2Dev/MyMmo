@@ -1,10 +1,8 @@
-using MyMmo.Processing;
 using MyMmo.Processing.Components;
-using MyMmo.Server.Domain;
 
-namespace MyMmo.Server.Updates {
+namespace MyMmo.Processing.Updates {
     
-    public class SpawnClientAvatarUpdate : BaseServerUpdate {
+    public class SpawnClientAvatarUpdate : IUpdate {
 
         private readonly string itemId;
 
@@ -12,7 +10,7 @@ namespace MyMmo.Server.Updates {
             this.itemId = itemId;
         }
 
-        public override bool Process(Scene scene, float timePassed, float timeLimit) {
+        public bool Process(Scene scene, float timePassed, float timeLimit) {
             var position = scene.MapRegion.GetRandomPositionWithinBounds();
             scene.RecordSpawnImmediately(new Entity(itemId, new Transform(position)));
             return true;
