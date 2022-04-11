@@ -318,7 +318,7 @@ MonoBehaviour:
   devLocation: {fileID: 1576725702}
   playerPrefab: {fileID: 7746906731115792878, guid: 9ddf40b945a763244be014b9c6679ed7, type: 3}
   changesPlayer: {fileID: 1147844845}
-  replay: 0
+  replay: 1
 --- !u!4 &1147844844
 Transform:
   m_ObjectHideFlags: 0

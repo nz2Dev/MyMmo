@@ -44,7 +44,9 @@ namespace Player {
             private readonly List<IUnityScript> unityScripts;
             private float currentSegmentEnterTime;
             private int currentSegmentIndex = -1;
-
+            
+            private float timePassedDebug;
+            private float frameTimeDeltaDebug;
             private bool debug;
 
             public Track(List<IUnityScript> unityScripts, float segmentTimeLength, bool debug) {
@@ -61,6 +63,8 @@ namespace Player {
                 }
 
                 var timeDelta = timePassed - currentSegmentEnterTime;
+                timePassedDebug = timePassed;
+                frameTimeDeltaDebug = Time.deltaTime;
                 if (timeDelta > segmentTimeLength) {
                     ExitCurrentSegment();
                     // ...should return next segment, then enter/exit all segments in between,
@@ -94,7 +98,7 @@ namespace Player {
                     currSegment.UpdateUnityState(progress: 1);
                     currSegment.OnUpdateExit();
                     if (debug) {
-                        Debug.Log($"{currentSegmentEnterTime} .. [{currentSegmentIndex}] >> ");
+                        Debug.Log($"[{currentSegmentIndex}] |{currentSegmentEnterTime}s .. {frameTimeDeltaDebug}/{timePassedDebug}s >> ");
                     }
                 }
             }
@@ -110,7 +114,7 @@ namespace Player {
                     currentSegmentEnterTime = segmentsPassedCount * segmentTimeLength;
                     nextScript.OnUpdateEnter();
                     if (debug) {
-                        Debug.Log($"<< [{currentSegmentIndex}] .. {currentSegmentEnterTime}");
+                        Debug.Log($"<< .. {frameTimeDeltaDebug}/{timePassedDebug}s .. {currentSegmentEnterTime}s| [{currentSegmentIndex}]");
                     }
                     return true;
                 } else {
@@ -120,6 +124,9 @@ namespace Player {
 
             private void CurrentSegmentInterpolation(float progress) {
                 unityScripts[currentSegmentIndex].UpdateUnityState(progress);
+                if (debug) {
+                    Debug.Log($"[{currentSegmentIndex}] |{currentSegmentEnterTime}s .. {frameTimeDeltaDebug}/{timePassedDebug}s .. ");
+                }
             }
 
         }
