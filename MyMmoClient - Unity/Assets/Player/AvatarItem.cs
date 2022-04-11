@@ -9,14 +9,14 @@ namespace Player {
         private Rigidbody capsuleRigidbody;
         private Vector3 heading = Vector3.zero;
     
-        public ItemSnapshotData State { get; private set; } = new ItemSnapshotData();
+        public EntitySnapshotData State { get; private set; } = new EntitySnapshotData();
         public bool TransitiveState { get; set; }
 
         private void Awake() {
             capsuleRigidbody = GetComponentInChildren<Rigidbody>();
         }
 
-        public void SetState(ItemSnapshotData snapshotData) {
+        public void SetState(EntitySnapshotData snapshotData) {
             State = snapshotData;
         }
 

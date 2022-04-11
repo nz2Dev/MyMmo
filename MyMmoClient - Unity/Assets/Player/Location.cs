@@ -21,7 +21,7 @@ namespace Player {
             Assert.IsNotNull(scriptsPlayer);
         }
 
-        public void SpawnAvatar(GameObject playerPrefab, ItemSnapshotData snapshotData) {
+        public void SpawnAvatar(GameObject playerPrefab, EntitySnapshotData snapshotData) {
             const int spawnHeight = 5;
             var centerOfLocation = transform.position;
             var initPosition = snapshotData.PositionInLocation.ToUnityVector3() + Vector3.up * spawnHeight;
@@ -30,16 +30,16 @@ namespace Player {
             player.GetComponent<Rigidbody>().isKinematic = false;
         }
 
-        public void PlaceAvatar(GameObject playerPrefab, ItemSnapshotData itemSnapshotData) {
-            var target = FindObjectsOfType<AvatarItem>().FirstOrDefault(i => i.State.ItemId == itemSnapshotData.ItemId);
+        public void PlaceAvatar(GameObject playerPrefab, EntitySnapshotData entitySnapshotData) {
+            var target = FindObjectsOfType<AvatarItem>().FirstOrDefault(i => i.State.ItemId == entitySnapshotData.ItemId);
             if (target != null) {
                 Destroy(target.gameObject);
             }
 
             var centerOfLocation = transform.position;
-            var initPosition = itemSnapshotData.PositionInLocation.ToUnityVector3();
+            var initPosition = entitySnapshotData.PositionInLocation.ToUnityVector3();
             var player = Instantiate(playerPrefab, centerOfLocation + initPosition, Quaternion.identity);
-            player.GetComponent<AvatarItem>().SetState(itemSnapshotData);
+            player.GetComponent<AvatarItem>().SetState(entitySnapshotData);
         }
 
         public void PlayClipImmediately(ScriptsClipData clipData, Action onFinish = null) {

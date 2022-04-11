@@ -11,8 +11,8 @@ namespace MyMmo.ConsolePlayTest.Scripts {
         }
 
         public void ApplyClientState(Dictionary<string, ConsoleItem> itemCache) {
-            var consoleItem = new ConsoleItem(enterItemScriptData.ItemSnapshotData);
-            itemCache[enterItemScriptData.ItemSnapshotData.ItemId] = consoleItem;
+            var consoleItem = new ConsoleItem(enterItemScriptData.EntitySnapshotData);
+            itemCache[enterItemScriptData.EntitySnapshotData.ItemId] = consoleItem;
             ConsolePlayTest.PrintLog($"item {consoleItem.ItemId} enters location {consoleItem.LocationId} at position {consoleItem.PositionInLocation}");
         }
 

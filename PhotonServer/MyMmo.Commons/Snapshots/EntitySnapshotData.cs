@@ -3,7 +3,7 @@ using ProtoBuf;
 
 namespace MyMmo.Commons.Snapshots {
     [ProtoContract]
-    public class ItemSnapshotData {
+    public class EntitySnapshotData {
 
         [ProtoMember(1)]
         public string ItemId { get; set; }

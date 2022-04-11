@@ -17,7 +17,7 @@ namespace DevPlay {
         public bool replay = true;
         
         private ScriptsClipData simulatedClip;
-        private ItemSnapshotData[] snapshots;
+        private EntitySnapshotData[] snapshots;
 
         private void Start() {
             ReSimulate();   
@@ -28,7 +28,7 @@ namespace DevPlay {
         private void ReSimulate() {
             var itemIds = new[] {"devItem1", "devItem2", "devItem3", "devItem4", "devItem5"};
             snapshots = itemIds.Select(id => {
-                return new ItemSnapshotData {
+                return new EntitySnapshotData {
                     ItemId = id,
                     LocationId = devLocation.Id,
                     PositionInLocation = new Vector2 {

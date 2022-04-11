@@ -12,19 +12,18 @@ namespace TestProject1 {
 
         [Test]
         public void SnapshotsTest() {
-            var bytes = SnapshotsDataProtocol.Serialize(new LocationSnapshotData {
-                ItemsSnapshotData = new List<ItemSnapshotData> {
-                    new ItemSnapshotData {
+            var bytes = SnapshotsDataProtocol.Serialize(new SceneSnapshotData {
+                EntitiesSnapshotData = new List<EntitySnapshotData> {
+                    new EntitySnapshotData {
                         ItemId = "id_1"
                     }
-                }.ToArray(),
-                LocationId = 1
+                }.ToArray()
             });
 
             var data = SnapshotsDataProtocol.Deserialize(bytes);
-            Assert.IsNotNull(data.ItemsSnapshotData);
-            Assert.AreEqual(data.ItemsSnapshotData.Length, 1);
-            Assert.AreEqual(data.ItemsSnapshotData[0].ItemId, "id_1");
+            Assert.IsNotNull(data.EntitiesSnapshotData);
+            Assert.AreEqual(data.EntitiesSnapshotData.Length, 1);
+            Assert.AreEqual(data.EntitiesSnapshotData[0].ItemId, "id_1");
         }
 
         [Test]

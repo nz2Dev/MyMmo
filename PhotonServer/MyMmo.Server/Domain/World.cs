@@ -64,10 +64,6 @@ namespace MyMmo.Server.Domain {
                 default: throw new ArgumentOutOfRangeException($"locationId: {locationId}");
             }
         }
-        
-        public ICollection<ItemSnapshot> GetItemSnapshotsAtLocation(int locationId) {
-            return itemRegistry.GetItemsWithLocationId(locationId).Select(item => item.GenerateItemSnapshot()).ToArray();
-        }
 
         public void RegisterItem(Item item) {
             itemRegistry.Add(item);

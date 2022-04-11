@@ -1,4 +1,5 @@
 using MyMmo.Commons;
+using MyMmo.Commons.Snapshots;
 using MyMmo.Server.Events;
 using Photon.SocketServer;
 
@@ -11,10 +12,10 @@ namespace MyMmo.Server.Domain {
             this.peer = peer;
         }
 
-        protected override void OnLocationEnter(LocationSnapshot snapshot) {
+        protected override void OnLocationEnter(Location location, SceneSnapshotData sceneSnapshot) {
             peer.RequestFiber.Enqueue(() => {
                 peer.SendEvent(
-                    new EventData((byte) EventCode.LocationEnterEvent, new LocationEnterData(snapshot)),
+                    new EventData((byte) EventCode.LocationEnterEvent, new LocationEnterData(location.Id, sceneSnapshot)),
                     new SendParameters()
                 );
             });

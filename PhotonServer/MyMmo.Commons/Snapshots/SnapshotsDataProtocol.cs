@@ -7,16 +7,16 @@ namespace MyMmo.Commons.Snapshots {
 
         public static TypeModel DeserializeTypeModel = RuntimeTypeModel.Default;
         
-        public static byte[] Serialize(LocationSnapshotData snapshotData) {
+        public static byte[] Serialize(SceneSnapshotData snapshotData) {
             using (var stream = new MemoryStream()) {
                 Serializer.Serialize(stream, snapshotData);
                 return stream.ToArray();
             }
         }
 
-        public static LocationSnapshotData Deserialize(byte[] data) {
+        public static SceneSnapshotData Deserialize(byte[] data) {
             using (var stream = new MemoryStream(data)) {
-                return (LocationSnapshotData) DeserializeTypeModel.Deserialize(stream, null, typeof(LocationSnapshotData));
+                return (SceneSnapshotData) DeserializeTypeModel.Deserialize(stream, null, typeof(SceneSnapshotData));
             }
         }
 

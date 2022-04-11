@@ -7,7 +7,7 @@ namespace MyMmo.Commons.Scripts {
     public class EnterItemScriptData : BaseScriptData {
 
         [ProtoMember(1)]
-        public ItemSnapshotData ItemSnapshotData { get; set; }
+        public EntitySnapshotData EntitySnapshotData { get; set; }
 
     }
 }

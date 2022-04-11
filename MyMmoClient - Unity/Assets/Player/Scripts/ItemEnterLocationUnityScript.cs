@@ -14,12 +14,12 @@ namespace Player.Scripts {
         }
 
         public void OnUpdateEnter() {
-            var targetLocation = Object.FindObjectsOfType<Location>().FirstOrDefault(location => location.Id == scriptData.ItemSnapshotData.LocationId);
+            var targetLocation = Object.FindObjectsOfType<Location>().FirstOrDefault(location => location.Id == scriptData.EntitySnapshotData.LocationId);
             if (targetLocation == null) {
-                throw new Exception("can't find script's target location: " + scriptData.ItemSnapshotData.LocationId);
+                throw new Exception("can't find script's target location: " + scriptData.EntitySnapshotData.LocationId);
             }
             
-            targetLocation.PlaceAvatar(PlayTest.Instance.playerPrefab, scriptData.ItemSnapshotData);
+            targetLocation.PlaceAvatar(PlayTest.Instance.playerPrefab, scriptData.EntitySnapshotData);
         }
 
         public void UpdateUnityState(float progress) {

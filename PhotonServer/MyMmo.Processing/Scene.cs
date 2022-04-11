@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MyMmo.Commons.Scripts;
+using MyMmo.Commons.Snapshots;
 using MyMmo.Processing.Systems;
 
 namespace MyMmo.Processing {
@@ -23,7 +24,7 @@ namespace MyMmo.Processing {
         public void RecordSpawnImmediately(Entity entity) {
             entities.Add(entity);
             clip.AddChangesScript(entity.Id, new SpawnItemScriptData {
-                ItemSnapshotData = entity.GenerateSnapshot()
+                EntitySnapshotData = entity.GenerateSnapshot()
             });
         }
 
@@ -47,12 +48,18 @@ namespace MyMmo.Processing {
         public void RecordEnterImmediately(Entity entity) {
             entities.Add(entity);
             clip.AddChangesScript(entity.Id, new EnterItemScriptData {
-                ItemSnapshotData = entity.GenerateSnapshot()
+                EntitySnapshotData = entity.GenerateSnapshot()
             });
         }
 
         public Entity GetEntity(string entityId) {
             return entities.FirstOrDefault(entity => entity.Id == entityId);
+        }
+
+        public SceneSnapshotData GenerateSnapshot() {
+            return new SceneSnapshotData {
+                EntitiesSnapshotData = entities.Select(entity => entity.GenerateSnapshot()).ToArray(),
+            };
         }
 
         public ScriptsClipData Simulate(IEnumerable<IUpdate> updates, float stepTime, float simulationTime) {

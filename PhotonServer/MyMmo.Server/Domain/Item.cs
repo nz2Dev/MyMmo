@@ -60,10 +60,6 @@ namespace MyMmo.Server.Domain {
             Destroyed = true;
         }
 
-        public ItemSnapshot GenerateItemSnapshot() {
-            return new ItemSnapshot(Id, LocationId, PositionInLocation);
-        }
-
         public void Dispose() {
             logger.Info($"item {Id} is going to dispose");
             Dispose(true);

@@ -136,15 +136,15 @@ namespace ServerPlay {
             isPlayState = true;
         }
 
-        public void OnLocationEntered(LocationSnapshotData locationSnapshotData) {
-            var targetLocation = FindObjectsOfType<Location>().FirstOrDefault(location => location.Id == locationSnapshotData.LocationId);
+        public void OnLocationEntered(int locationId, SceneSnapshotData sceneSnapshotData) {
+            var targetLocation = FindObjectsOfType<Location>().FirstOrDefault(location => location.Id == locationId);
             if (targetLocation == null) {
-                throw new Exception("Location not found: " + locationSnapshotData.LocationId);
+                throw new Exception("Location not found: " + locationId);
             }
         
-            Debug.Log($"location {locationSnapshotData.LocationId} enters, with items snapshots [{locationSnapshotData.ItemsSnapshotData.AggregateToString()}]");
-            foreach (var itemSnapshotData in locationSnapshotData.ItemsSnapshotData) {
-                targetLocation.PlaceAvatar(playerPrefab, itemSnapshotData);
+            Debug.Log($"location {locationId} enters, with entities snapshots [{sceneSnapshotData.EntitiesSnapshotData.AggregateToString()}]");
+            foreach (var entitySnapshotData in sceneSnapshotData.EntitiesSnapshotData) {
+                targetLocation.PlaceAvatar(playerPrefab, entitySnapshotData);
             }
         }
 

@@ -174,14 +174,14 @@ namespace MyMmo.ConsolePlayTest {
             PrintLog("WorldEntered...");
         }
 
-        public void OnLocationEntered(LocationSnapshotData locationSnapshotData) {
-            PrintLog($"On location {locationSnapshotData.LocationId} entered, and we recreate its state representation...");
-            var itemsAtLocation = itemCache.Values.Where(item => item.LocationId == locationSnapshotData.LocationId);
+        public void OnLocationEntered(int locationId, SceneSnapshotData sceneSnapshotData) {
+            PrintLog($"On location {locationId} entered, and we recreate its state representation...");
+            var itemsAtLocation = itemCache.Values.Where(item => item.LocationId == locationId);
             foreach (var item in itemsAtLocation) {
                 itemCache.Remove(item.ItemId);
             }
                     
-            foreach (var itemSnapshotData in locationSnapshotData.ItemsSnapshotData) {
+            foreach (var itemSnapshotData in sceneSnapshotData.EntitiesSnapshotData) {
                 itemCache.Add(itemSnapshotData.ItemId, new ConsoleItem(
                     itemSnapshotData
                 ));

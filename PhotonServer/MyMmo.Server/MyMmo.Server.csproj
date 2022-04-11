@@ -241,11 +241,9 @@
     <Compile Include="Domain\ItemCache.cs" />
     <Compile Include="Domain\ItemMessages.cs" />
     <Compile Include="Domain\ItemNotFound.cs" />
-    <Compile Include="Domain\ItemSnapshot.cs" />
     <Compile Include="Domain\Location.cs" />
     <Compile Include="Domain\LocationMessages.cs" />
     <Compile Include="Domain\MapRegion.cs" />
-    <Compile Include="Domain\LocationSnapshot.cs" />
     <Compile Include="Domain\World.cs" />
     <Compile Include="Domain\WorldCache.cs" />
     <Compile Include="FiberUtils.cs" />

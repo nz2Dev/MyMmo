@@ -111,7 +111,7 @@ namespace MyMmo.Client {
                 case EventCode.LocationEnterEvent: {
                     var enterEvent = EventDataConverter.Convert<LocationEnterEvent>(eventData.Parameters.paramDict);
                     var locationSnapshotData = enterEvent.DeserializeLocationSnapshotData();
-                    listener.OnLocationEntered(locationSnapshotData);
+                    listener.OnLocationEntered(enterEvent.LocationId, locationSnapshotData);
                     break;
                 }
 

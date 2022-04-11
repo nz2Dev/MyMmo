@@ -16,8 +16,8 @@ namespace MyMmo.Processing {
         public Pathfinder Pathfinder { get; } = new Pathfinder();
         public Wondering Wondering { get; } = new Wondering();
         
-        public ItemSnapshotData GenerateSnapshot() {
-            return new ItemSnapshotData {
+        public EntitySnapshotData GenerateSnapshot() {
+            return new EntitySnapshotData {
                 ItemId = Id,
                 LocationId = Transform.LocationId,
                 PositionInLocation = Transform.Position.ToDataVector2()

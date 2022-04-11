@@ -11,7 +11,7 @@ namespace MyMmo.Client {
 
         void OnWorldEntered();
 
-        void OnLocationEntered(LocationSnapshotData locationSnapshotData);
+        void OnLocationEntered(int locationId, SceneSnapshotData sceneSnapshotData);
 
         void OnLocationExit(int locationId);
 

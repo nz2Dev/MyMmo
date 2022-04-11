@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ExitGames.Concurrency.Fibers;
 using ExitGames.Logging;
+using MyMmo.Commons.Snapshots;
 
 namespace MyMmo.Server.Domain {
     public class InterestArea : IDisposable {
@@ -86,9 +87,9 @@ namespace MyMmo.Server.Domain {
                     logger.Info($"interest area {id} is going to enter location {location.Id}");
                     
                     logger.Info($"interest area {id} enqueue location {location.Id} snapshot callback");
-                    location.EnqueueLocationSnapshot(snapshot => {
-                        logger.Info($"interest area {id}' location {snapshot.Source.Id} callback with snapshot");
-                        OnLocationEnter(snapshot);
+                    location.EnqueueSceneSnapshot(snapshot => {
+                        logger.Info($"interest area {id}' location {location.Id} callback with snapshot");
+                        OnLocationEnter(location, snapshot);
                     });
                     
                     logger.Info($"interest area {id} subscribes location {location.Id} events");
@@ -100,7 +101,7 @@ namespace MyMmo.Server.Domain {
             }
         }
 
-        protected virtual void OnLocationEnter(LocationSnapshot snapshot) {
+        protected virtual void OnLocationEnter(Location location, SceneSnapshotData sceneSnapshot) {
         }
 
         protected virtual void OnLocationEvent(LocationEventMessage message) {

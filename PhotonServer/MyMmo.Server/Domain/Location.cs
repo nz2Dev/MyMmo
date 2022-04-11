@@ -6,6 +6,7 @@ using ExitGames.Concurrency.Fibers;
 using ExitGames.Logging;
 using MyMmo.Commons;
 using MyMmo.Commons.Scripts;
+using MyMmo.Commons.Snapshots;
 using MyMmo.Processing;
 using MyMmo.Server.Events;
 using MyMmo.Server.Updates;
@@ -39,11 +40,9 @@ namespace MyMmo.Server.Domain {
 
         public int Id => id;
 
-        public void EnqueueLocationSnapshot(Action<LocationSnapshot> snapshotCallback) {
+        public void EnqueueSceneSnapshot(Action<SceneSnapshotData> snapshotCallback) {
             updateFiber.Enqueue(() => {
-                var itemSnapshots = world.GetItemSnapshotsAtLocation(id);
-                var locationSnapshot = new LocationSnapshot(this, itemSnapshots);
-                snapshotCallback(locationSnapshot);
+                snapshotCallback(locationScene.GenerateSnapshot());
             });
         }
 

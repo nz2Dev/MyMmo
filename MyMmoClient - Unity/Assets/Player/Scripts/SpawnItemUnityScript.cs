@@ -15,14 +15,14 @@ namespace Player.Scripts {
             this.scriptData = scriptData;
 
             targetLocation = Object.FindObjectsOfType<Location>()
-                .FirstOrDefault(location => location.Id == scriptData.ItemSnapshotData.LocationId);
+                .FirstOrDefault(location => location.Id == scriptData.EntitySnapshotData.LocationId);
             if (targetLocation == null) {
-                throw new Exception("can't find script's target location: " + scriptData.ItemSnapshotData.LocationId);
+                throw new Exception("can't find script's target location: " + scriptData.EntitySnapshotData.LocationId);
             }
         }
 
         public void OnUpdateEnter() {
-            targetLocation.SpawnAvatar(PlayTest.Instance.playerPrefab, scriptData.ItemSnapshotData);
+            targetLocation.SpawnAvatar(PlayTest.Instance.playerPrefab, scriptData.EntitySnapshotData);
         }
 
         public void UpdateUnityState(float progress) {

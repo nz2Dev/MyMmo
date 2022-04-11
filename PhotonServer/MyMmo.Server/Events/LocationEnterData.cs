@@ -1,6 +1,5 @@
 using MyMmo.Commons;
 using MyMmo.Commons.Snapshots;
-using MyMmo.Server.Domain;
 using Photon.SocketServer.Rpc;
 
 namespace MyMmo.Server.Events {
@@ -12,8 +11,12 @@ namespace MyMmo.Server.Events {
         [DataMember(Code = (byte) ParameterCode.SerializedLocationSnapshot, IsOptional = false)]
         public byte[] LocationSnapshotsBytes { get; }
 
-        public LocationEnterData(LocationSnapshot locationSnapshot) {
-            LocationSnapshotsBytes = SnapshotsDataProtocol.Serialize(locationSnapshot.ToData());
+        [DataMember(Code = (byte) ParameterCode.LocationId, IsOptional = false)]
+        public int LocationId { get; }
+        
+        public LocationEnterData(int locationId, SceneSnapshotData sceneSnapshot) {
+            LocationId = locationId;
+            LocationSnapshotsBytes = SnapshotsDataProtocol.Serialize(sceneSnapshot);
         }
     }
 }

@@ -8,7 +8,10 @@ namespace MyMmo.Client.Events {
         [PropertyKey(Key = (byte) ParameterCode.SerializedLocationSnapshot, IsOptional = false)]
         public byte[] LocationSnapshotBytes { get; set; }
 
-        public LocationSnapshotData DeserializeLocationSnapshotData() {
+        [PropertyKey(Key = (byte) ParameterCode.LocationId, IsOptional =  false)]
+        public int LocationId { get; set; }
+
+        public SceneSnapshotData DeserializeLocationSnapshotData() {
             return SnapshotsDataProtocol.Deserialize(LocationSnapshotBytes);
         }
 
