@@ -19,7 +19,6 @@ namespace MyMmo.Processing {
         public EntitySnapshotData GenerateSnapshot() {
             return new EntitySnapshotData {
                 ItemId = Id,
-                LocationId = Transform.LocationId,
                 PositionInLocation = Transform.Position.ToDataVector2()
             };
         }

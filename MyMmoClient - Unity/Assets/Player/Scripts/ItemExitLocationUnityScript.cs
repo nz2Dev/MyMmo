@@ -22,17 +22,17 @@ namespace Player.Scripts {
             }
         }
 
-        public void OnUpdateEnter() {
-            targetAvatar.TransitiveState = true;
+        public void OnUpdateEnter(int locationId) {
+            targetAvatar.DetachFromLocation();
             // todo Important! we could centralize state management, and use not Common.ItemSnapshotData
             // But client implementation of wrapper over that data, with all necessary api for state reset, move forward/backward etc. 
         }
     
-        public void UpdateUnityState(float progress) {
+        public void UpdateUnityState(int locationId, float progress) {
             // no needs to call this for toggle changes, maybe use other interface for this changes updates
         }
 
-        public void OnUpdateExit() {
+        public void OnUpdateExit(int locationId) {
             // any of this methods should work, but maybe some animation or cleanups will take place here
         }
 

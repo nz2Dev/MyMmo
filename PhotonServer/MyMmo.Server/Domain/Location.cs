@@ -26,15 +26,16 @@ namespace MyMmo.Server.Domain {
 
         private readonly IFiber updateFiber = new PoolFiber();
         private readonly HashSet<BaseServerUpdate> updatesBuffer = new HashSet<BaseServerUpdate>();
-        private readonly Scene locationScene = new Scene();
+        private readonly Scene locationScene;
         private bool scheduled;
 
         private readonly Channel<LocationEventMessage> locationEventChannel =
             new Channel<LocationEventMessage>();
 
-        public Location(World world, int id) {
+        public Location(World world, int id, MapRegion mapRegion) {
             this.world = world;
             this.id = id;
+            locationScene = new Scene(mapRegion: mapRegion);
             updateFiber.Start();
         }
 
@@ -74,11 +75,10 @@ namespace MyMmo.Server.Domain {
                 scheduled = false;
             }
 
-            ScriptsClipData clipData;
-            lock (World.SimulationSyncRoot) {
-                updates.ForEach(update => update.Attach(world));
-                clipData = locationScene.Simulate(updates, 0.2f, 10f);
-            }
+            updates.ForEach(update => update.Attach(world));
+            var clipData = locationScene.Simulate(updates, 0.2f, 10f);
+            
+            world.ApplyChanges(id, clipData);
             
             var scriptsClipBytes = ScriptsDataProtocol.Serialize(clipData);
             var regionUpdateData = new LocationUpdatedData(scriptsClipBytes, id);

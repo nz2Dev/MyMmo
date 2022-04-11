@@ -26,7 +26,7 @@ namespace Player {
             var centerOfLocation = transform.position;
             var initPosition = snapshotData.PositionInLocation.ToUnityVector3() + Vector3.up * spawnHeight;
             var player = Instantiate(playerPrefab, centerOfLocation + initPosition, Quaternion.identity);
-            player.GetComponent<AvatarItem>().SetState(snapshotData);
+            player.GetComponent<AvatarItem>().AttachToLocation(Id, snapshotData);
             player.GetComponent<Rigidbody>().isKinematic = false;
         }
 
@@ -39,11 +39,11 @@ namespace Player {
             var centerOfLocation = transform.position;
             var initPosition = entitySnapshotData.PositionInLocation.ToUnityVector3();
             var player = Instantiate(playerPrefab, centerOfLocation + initPosition, Quaternion.identity);
-            player.GetComponent<AvatarItem>().SetState(entitySnapshotData);
+            player.GetComponent<AvatarItem>().AttachToLocation(Id, entitySnapshotData);
         }
 
         public void PlayClipImmediately(ScriptsClipData clipData, Action onFinish = null) {
-            scriptsPlayer.PlayClip(clipData, onFinish);
+            scriptsPlayer.PlayClip(Id, clipData, onFinish);
         }
 
         public void DrawShapesAnnotation() {

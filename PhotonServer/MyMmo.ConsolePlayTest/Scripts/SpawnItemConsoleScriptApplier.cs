@@ -10,10 +10,10 @@ namespace MyMmo.ConsolePlayTest.Scripts {
             this.scriptData = scriptData;
         }
 
-        public void ApplyClientState(Dictionary<string, ConsoleItem> itemCache) {
+        public void ApplyClientState(int locationId, Dictionary<string, ConsoleItem> itemCache) {
             var itemSnapshot = scriptData.EntitySnapshotData;
-            ConsolePlayTest.PrintLog($"item {itemSnapshot.ItemId} spawned at location {itemSnapshot.LocationId}");
-            itemCache.Add(itemSnapshot.ItemId, new ConsoleItem(itemSnapshot));
+            ConsolePlayTest.PrintLog($"item {itemSnapshot.ItemId} spawned at location {locationId}");
+            itemCache.Add(itemSnapshot.ItemId, new ConsoleItem(locationId, itemSnapshot));
         }
 
     }

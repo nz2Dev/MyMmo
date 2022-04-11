@@ -11,10 +11,6 @@ namespace MyMmo.Server.Updates {
 
         public override bool Process(Scene scene, float timePassed, float timeLimit) {
             scene.RecordDeleteImmediately(itemId);
-            var item = world.GetItem(itemId);
-            world.RemoveItem(item);
-            item.Destroy();
-            item.Dispose();
             return true;
         }
 

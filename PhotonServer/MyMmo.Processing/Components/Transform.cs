@@ -1,23 +1,18 @@
-using System;
 using System.Numerics;
 using MyMmo.Commons.Scripts;
 using MyMmo.Processing.Utils;
 
 namespace MyMmo.Processing.Components {
     public class Transform {
-
-        private readonly Action<ChangePositionScriptData> onChangesRecorded;
+        
         private Vector2 positionChanges;
 
-        public Transform(Vector2 position, int locationId, Action<ChangePositionScriptData> onChangesRecorded) {
-            this.onChangesRecorded = onChangesRecorded;
+        public Transform(Vector2 position) {
             Position = position;
-            LocationId = locationId;
         }
 
         public Vector2 Position { get; private set; }
-        public int LocationId { get; }
-
+        
         public void Translate(Vector2 vectorUnscaled) {
             positionChanges = vectorUnscaled;
         }
@@ -34,7 +29,6 @@ namespace MyMmo.Processing.Components {
                 };
                 
                 clip.AddChangesScript(id, changePositionScriptData);
-                onChangesRecorded(changePositionScriptData);
                 positionChanges = default;
                 Position = nextPosition;
             }

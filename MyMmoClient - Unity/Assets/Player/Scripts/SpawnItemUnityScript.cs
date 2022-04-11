@@ -7,29 +7,27 @@ using Object = UnityEngine.Object;
 namespace Player.Scripts {
     public class SpawnItemUnityScript : IUnityScript {
 
-        private SpawnItemScriptData scriptData;
+        private readonly SpawnItemScriptData scriptData;
 
         private Location targetLocation;
     
         public SpawnItemUnityScript(SpawnItemScriptData scriptData) {
             this.scriptData = scriptData;
-
-            targetLocation = Object.FindObjectsOfType<Location>()
-                .FirstOrDefault(location => location.Id == scriptData.EntitySnapshotData.LocationId);
-            if (targetLocation == null) {
-                throw new Exception("can't find script's target location: " + scriptData.EntitySnapshotData.LocationId);
-            }
         }
 
-        public void OnUpdateEnter() {
+        public void OnUpdateEnter(int locationId) {
+            targetLocation = Object.FindObjectsOfType<Location>().FirstOrDefault(location => location.Id == locationId);
+            if (targetLocation == null) {
+                throw new Exception("can't find script's target location: " + locationId);
+            }
             targetLocation.SpawnAvatar(PlayTest.Instance.playerPrefab, scriptData.EntitySnapshotData);
         }
 
-        public void UpdateUnityState(float progress) {
+        public void UpdateUnityState(int locationId, float progress) {
             // no needs for this
         }
 
-        public void OnUpdateExit() {
+        public void OnUpdateExit(int locationId) {
             // one time command, can't spawn two times
         }
 

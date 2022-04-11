@@ -10,14 +10,20 @@ namespace Player {
         private Vector3 heading = Vector3.zero;
     
         public EntitySnapshotData State { get; private set; } = new EntitySnapshotData();
-        public bool TransitiveState { get; set; }
+        public int LocationId { get; private set; }
+        public bool TransitiveState { get; private set; }
 
         private void Awake() {
             capsuleRigidbody = GetComponentInChildren<Rigidbody>();
         }
 
-        public void SetState(EntitySnapshotData snapshotData) {
+        public void AttachToLocation(int locationId, EntitySnapshotData snapshotData) {
+            LocationId = locationId;
             State = snapshotData;
+        }
+        
+        public void DetachFromLocation() {
+            TransitiveState = true;
         }
 
         public void Move(Vector3 translation) {

@@ -12,14 +12,17 @@ namespace MyMmo.Processing {
         private readonly WonderingSystem wonderingSystem = new WonderingSystem();
         private readonly MotionSystem motionSystem = new MotionSystem();
         private readonly Clip clip = new Clip();
-
-        public IEnumerable<Entity> Entities => entities;
-
-        public Scene(IEnumerable<Entity> initialEntities = null) {
+        private readonly MapRegion mapRegion;
+        
+        public Scene(IEnumerable<Entity> initialEntities = null, MapRegion mapRegion = null) {
+            this.mapRegion = mapRegion ?? new MapRegion();
             if (initialEntities != null) {
                 entities.AddRange(initialEntities);
             }
         }
+
+        public IEnumerable<Entity> Entities => entities;
+        public MapRegion MapRegion => mapRegion;
 
         public void RecordSpawnImmediately(Entity entity) {
             entities.Add(entity);
@@ -64,21 +67,19 @@ namespace MyMmo.Processing {
 
         public ScriptsClipData Simulate(IEnumerable<IUpdate> updates, float stepTime, float simulationTime) {
             clip.Rest(stepTime);
-            
+
             var updatesLeft = updates.ToList();
             for (var timePassed = 0f; timePassed < simulationTime && updatesLeft.Count > 0; timePassed += stepTime) {
-                updatesLeft.RemoveAll(update => {
-                    return update.Process(this, timePassed, simulationTime);
-                });
-                
+                updatesLeft.RemoveAll(update => { return update.Process(this, timePassed, simulationTime); });
+
                 foreach (var entity in entities) {
                     pathfinderSystem.Update(entity);
                 }
-                
+
                 foreach (var entity in entities) {
                     wonderingSystem.Update(entity);
                 }
-                
+
                 foreach (var entity in entities) {
                     motionSystem.Update(entity);
                 }

@@ -1,11 +1,9 @@
 using System;
 using System.Numerics;
 
-namespace MyMmo.Server.Domain {
+namespace MyMmo.Processing {
     public class MapRegion {
-
-        private readonly int locationId;
-
+        
         private static Random random = new Random();
 
         public int locationToTheRight = -1;
@@ -15,10 +13,6 @@ namespace MyMmo.Server.Domain {
         public int locationToTheLeft = -1;
         public readonly Vector2 leftExitPoint = new Vector2(-5, 0);
         public readonly Vector2 leftEnterPoint = new Vector2(-5, 0);
-
-        public MapRegion(int locationId) {
-            this.locationId = locationId;
-        }
 
         public Vector2 GetExitPositionTo(int otherLocationId) {
             if (locationToTheLeft >= 0 && otherLocationId == locationToTheLeft) {

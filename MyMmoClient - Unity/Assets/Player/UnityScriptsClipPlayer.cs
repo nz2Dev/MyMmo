@@ -16,7 +16,7 @@ namespace Player {
         private float timePassed;
         private Action onFinish;
 
-        public void PlayClip(ScriptsClipData clip, Action onFinishPlaying = null) {
+        public void PlayClip(int locationId, ScriptsClipData clip, Action onFinishPlaying = null) {
             onFinish = onFinishPlaying;
 
             var firstItemId = clip.ItemDataArray.ElementAtOrDefault(0)?.ItemId;
@@ -25,6 +25,7 @@ namespace Player {
             scriptTracks = clip.ItemDataArray.Select(data => new Track(
                 data.ScriptDataArray.Select(UnityScriptFactory.Create).ToList(),
                 clip.ChangesDeltaTime,
+                locationId,
                 data.ItemId == firstItemId
             )).ToList();
         }
@@ -66,6 +67,7 @@ namespace Player {
 
         class Track {
 
+            private readonly int locationId;
             private readonly float segmentTimeLength;
             private readonly List<IUnityScript> unityScripts;
             private float currentSegmentEnterTime;
@@ -75,10 +77,11 @@ namespace Player {
             private float frameTimeDeltaDebug;
             private bool debug;
 
-            public Track(List<IUnityScript> unityScripts, float segmentTimeLength, bool debug) {
+            public Track(List<IUnityScript> unityScripts, float segmentTimeLength, int locationId, bool debug) {
                 this.unityScripts = unityScripts;
                 this.segmentTimeLength = segmentTimeLength;
                 this.debug = debug;
+                this.locationId = locationId;
             }
 
             public float GetTimeProgress(float timePassed) {
@@ -125,8 +128,8 @@ namespace Player {
             private void ExitCurrentSegment() {
                 var currSegment = unityScripts.ElementAtOrDefault(currentSegmentIndex);
                 if (currSegment != null) {
-                    currSegment.UpdateUnityState(progress: 1);
-                    currSegment.OnUpdateExit();
+                    currSegment.UpdateUnityState(locationId, progress: 1);
+                    currSegment.OnUpdateExit(locationId);
                     if (debug) {
                         Debug.Log($"[{currentSegmentIndex}] |{currentSegmentEnterTime}s .. {frameTimeDeltaDebug}/{timePassedDebug}s >> ");
                     }
@@ -142,7 +145,7 @@ namespace Player {
                 if (nextScript != null) {
                     currentSegmentIndex = nextSegmentIndex;
                     currentSegmentEnterTime = segmentsPassedCount * segmentTimeLength;
-                    nextScript.OnUpdateEnter();
+                    nextScript.OnUpdateEnter(locationId);
                     if (debug) {
                         Debug.Log($"<< .. {frameTimeDeltaDebug}/{timePassedDebug}s .. {currentSegmentEnterTime}s| [{currentSegmentIndex}]");
                     }
@@ -153,7 +156,7 @@ namespace Player {
             }
 
             private void CurrentSegmentInterpolation(float progress) {
-                unityScripts[currentSegmentIndex].UpdateUnityState(progress);
+                unityScripts[currentSegmentIndex].UpdateUnityState(locationId, progress);
                 if (debug) {
                     Debug.Log($"[{currentSegmentIndex}] |{currentSegmentEnterTime}s .. {frameTimeDeltaDebug}/{timePassedDebug}s .. ");
                 }

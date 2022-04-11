@@ -10,7 +10,7 @@ namespace MyMmo.ConsolePlayTest.Scripts {
             this.scriptData = scriptData;
         }
         
-        public void ApplyClientState(Dictionary<string, ConsoleItem> itemCache) {
+        public void ApplyClientState(int locationId, Dictionary<string, ConsoleItem> itemCache) {
             ConsolePlayTest.PrintLog($"item {scriptData.ItemId} destroyed");
             itemCache.Remove(scriptData.ItemId);
         }

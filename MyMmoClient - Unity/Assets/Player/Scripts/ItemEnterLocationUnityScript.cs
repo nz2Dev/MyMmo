@@ -13,19 +13,19 @@ namespace Player.Scripts {
             this.scriptData = scriptData;
         }
 
-        public void OnUpdateEnter() {
-            var targetLocation = Object.FindObjectsOfType<Location>().FirstOrDefault(location => location.Id == scriptData.EntitySnapshotData.LocationId);
+        public void OnUpdateEnter(int locationId) {
+            var targetLocation = Object.FindObjectsOfType<Location>().FirstOrDefault(location => location.Id == locationId);
             if (targetLocation == null) {
-                throw new Exception("can't find script's target location: " + scriptData.EntitySnapshotData.LocationId);
+                throw new Exception("can't find script's target location: " + locationId);
             }
             
             targetLocation.PlaceAvatar(PlayTest.Instance.playerPrefab, scriptData.EntitySnapshotData);
         }
 
-        public void UpdateUnityState(float progress) {
+        public void UpdateUnityState(int locationId, float progress) {
         }
 
-        public void OnUpdateExit() {
+        public void OnUpdateExit(int locationId) {
         }
 
     }

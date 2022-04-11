@@ -8,9 +8,9 @@ namespace MyMmo.ConsolePlayTest {
         public int LocationId { get; set; }
         public Vector2 PositionInLocation { get; set; }
         
-        public ConsoleItem(EntitySnapshotData entitySnapshotData) {
+        public ConsoleItem(int locationId, EntitySnapshotData entitySnapshotData) {
+            LocationId = locationId;
             ItemId = entitySnapshotData.ItemId;
-            LocationId = entitySnapshotData.LocationId;
             PositionInLocation = entitySnapshotData.PositionInLocation;
         }
     }

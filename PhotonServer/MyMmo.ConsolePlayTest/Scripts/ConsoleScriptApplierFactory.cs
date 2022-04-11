@@ -37,7 +37,7 @@ namespace MyMmo.ConsolePlayTest.Scripts {
             this.exitItemScriptData = exitItemScriptData;
         }
 
-        public void ApplyClientState(Dictionary<string, ConsoleItem> itemCache) {
+        public void ApplyClientState(int locationId, Dictionary<string, ConsoleItem> itemCache) {
             var consoleItem = itemCache[exitItemScriptData.ItemId];
             ConsolePlayTest.PrintLog($"item {consoleItem} exits its current location {consoleItem.LocationId} and become transitive");
         }

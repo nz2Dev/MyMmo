@@ -183,6 +183,7 @@ namespace MyMmo.ConsolePlayTest {
                     
             foreach (var itemSnapshotData in sceneSnapshotData.EntitiesSnapshotData) {
                 itemCache.Add(itemSnapshotData.ItemId, new ConsoleItem(
+                    locationId,
                     itemSnapshotData
                 ));
             }
@@ -194,7 +195,7 @@ namespace MyMmo.ConsolePlayTest {
 
         public void OnLocationUpdate(int locationId, ScriptsClipData scriptsClipData) {
             PrintLog($"region {locationId} updates with scripts");
-            ConsoleScriptClipPlayer.Play(scriptsClipData, itemCache);
+            ConsoleScriptClipPlayer.Play(locationId, scriptsClipData, itemCache);
         }
         
         void IGameListener.OnLog(DebugLevel debugLevel, string message) {

@@ -3,8 +3,8 @@ using MyMmo.Processing;
 namespace MyMmo.Server.Updates {
     public class ExitToLocationUpdate : BaseServerUpdate {
 
-        private string itemId;
-        private int newLocationId;
+        private readonly string itemId;
+        private readonly int newLocationId;
 
         public ExitToLocationUpdate(string itemId, int newLocationId) {
             this.itemId = itemId;
@@ -13,16 +13,13 @@ namespace MyMmo.Server.Updates {
 
         public override bool Process(Scene scene, float timePassed, float timeLimit) {
             var entity = scene.GetEntity(itemId);
-            
-            var item = world.GetItem(itemId);
-            var mapRegion = world.GetMapRegion(item.LocationId);
-            entity.Pathfinder.Target = mapRegion.GetExitPositionTo(newLocationId);
+            entity.Pathfinder.Target = scene.MapRegion.GetExitPositionTo(newLocationId);
             
             var distanceToTarget = (entity.Pathfinder.Target - entity.Transform.Position).Length();
             if (distanceToTarget < 0.1f) {
-                item.Transitive = true;
                 scene.RecordExitImmediately(entity.Id);
-                world.GetLocation(newLocationId).RequestUpdate(new EnterFromLocationUpdate(item, item.LocationId, newLocationId));
+                var fromLocationId = world.GetItem(itemId).LocationId;
+                world.GetLocation(newLocationId).RequestUpdate(new EnterFromLocationUpdate(itemId, fromLocationId));
                 return true;
             }
             

@@ -1,20 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using MyMmo.Commons.Scripts;
+using MyMmo.Processing;
+using MyMmo.Processing.Utils;
 
 namespace MyMmo.Server.Domain {
     public class World /*todo Dispose*/ {
 
-        public static readonly object SimulationSyncRoot = new object();
+        private static readonly object SyncRoot = new object();
 
         public const int RootLocationId = 0;
         public const int SecondLocationId = 1;
         public const int ThirdLocationId = 2;
-
-        private readonly MapRegion rootMapRegion;
-        private readonly MapRegion secondMapRegion;
-        private readonly MapRegion thirdMapRegion;
-
+        
         private readonly Location rootLocation;
         private readonly Location secondLocation;
         private readonly Location thirdLocation;
@@ -22,20 +20,16 @@ namespace MyMmo.Server.Domain {
         private readonly ItemCache itemRegistry = new ItemCache();
 
         public World() {
-            rootMapRegion = new MapRegion(RootLocationId) {
+            rootLocation = new Location(this, RootLocationId, new MapRegion {
                 locationToTheRight = SecondLocationId
-            };
-            secondMapRegion = new MapRegion(SecondLocationId) {
+            });
+            secondLocation = new Location(this, SecondLocationId, new MapRegion {
                 locationToTheLeft = RootLocationId,
                 locationToTheRight = ThirdLocationId
-            };
-            thirdMapRegion = new MapRegion(ThirdLocationId) {
+            });
+            thirdLocation = new Location(this, ThirdLocationId, new MapRegion {
                 locationToTheLeft = SecondLocationId
-            };
-
-            rootLocation = new Location(this, RootLocationId);
-            secondLocation = new Location(this, SecondLocationId);
-            thirdLocation = new Location(this, ThirdLocationId);
+            });
         }
 
         public HashSet<Location> GetSurroundedLocationsIncluded(int locationId) {
@@ -43,15 +37,6 @@ namespace MyMmo.Server.Domain {
                 case RootLocationId: return new HashSet<Location> {rootLocation, secondLocation};
                 case SecondLocationId: return new HashSet<Location> {rootLocation, secondLocation, thirdLocation};
                 case ThirdLocationId: return new HashSet<Location> {secondLocation, thirdLocation};
-                default: throw new ArgumentOutOfRangeException($"locationId: {locationId}");
-            }
-        }
-
-        public MapRegion GetMapRegion(int locationId) {
-            switch (locationId) {
-                case RootLocationId: return rootMapRegion;
-                case SecondLocationId: return secondMapRegion;
-                case ThirdLocationId: return thirdMapRegion;
                 default: throw new ArgumentOutOfRangeException($"locationId: {locationId}");
             }
         }
@@ -65,16 +50,50 @@ namespace MyMmo.Server.Domain {
             }
         }
 
+        public void ApplyChanges(int locationId, ScriptsClipData updateData) {
+            lock (SyncRoot) {
+                foreach (var itemScriptsData in updateData.ItemDataArray) {
+                    foreach (var baseScriptData in itemScriptsData.ScriptDataArray) {
+                        if (baseScriptData is SpawnItemScriptData spawnItemScriptData) {
+                            var item = itemRegistry.GetItem(spawnItemScriptData.EntitySnapshotData.ItemId);
+                            item.Spawn(locationId, spawnItemScriptData.EntitySnapshotData);
+                            break;
+                        }
+
+                        if (baseScriptData is DestroyItemScriptData destroyItemScriptData) {
+                            var item = itemRegistry.GetItem(destroyItemScriptData.ItemId);
+                            itemRegistry.Remove(item);
+                            item.Destroy();
+                            item.Dispose();
+                            break;
+                        }
+
+                        if (baseScriptData is ExitItemScriptData exitItemScriptData) {
+                            var item = itemRegistry.GetItem(exitItemScriptData.ItemId);
+                            item.DetachFromLocation();
+                            break;
+                        }
+
+                        if (baseScriptData is EnterItemScriptData enterItemScriptData) {
+                            var item = itemRegistry.GetItem(enterItemScriptData.EntitySnapshotData.ItemId);
+                            item.AttachToLocation(locationId, enterItemScriptData.EntitySnapshotData);
+                            break;
+                        }
+
+                        if (baseScriptData is ChangePositionScriptData changePositionScriptData) {
+                            var item = itemRegistry.GetItem(changePositionScriptData.ItemId);
+                            item.ChangePositionInLocation(changePositionScriptData.ToPosition.ToComputeVector());
+                            break;
+                        }
+                        
+                        throw new Exception($"Can't recognise scriptData {baseScriptData} or break; is missing");
+                    }
+                }
+            }
+        }
+
         public void RegisterItem(Item item) {
             itemRegistry.Add(item);
-        }
-
-        public void RemoveItem(Item item) {
-            itemRegistry.Remove(item);
-        }
-
-        public bool TryGetItem(string itemId, out Item item) {
-            return itemRegistry.TryGetItem(itemId, out item);
         }
 
         public Item GetItem(string itemId) {

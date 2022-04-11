@@ -11,7 +11,7 @@ namespace MyMmo.ConsolePlayTest.Scripts {
             scriptData = changePositionScriptData;
         }
 
-        public void ApplyClientState(Dictionary<string, ConsoleItem> itemCache) {
+        public void ApplyClientState(int locationId, Dictionary<string, ConsoleItem> itemCache) {
             if (!itemCache.TryGetValue(scriptData.ItemId, out var item)) {
                 throw new Exception("client item not found: " + scriptData.ItemId);
             }

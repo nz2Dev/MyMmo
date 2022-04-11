@@ -97,7 +97,7 @@ namespace ServerPlay {
                 var currentItems = FindObjectsOfType<AvatarItem>();
                 GUILayout.BeginVertical();
                 foreach (var item in currentItems) {
-                    GUILayout.Label($"+id={item.State.ItemId} location={item.State.LocationId}");
+                    GUILayout.Label($"+id={item.State.ItemId} location={item.LocationId}");
                 }
                 GUILayout.EndVertical();
             }

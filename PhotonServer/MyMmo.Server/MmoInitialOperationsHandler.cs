@@ -67,9 +67,9 @@ namespace MyMmo.Server {
             }
 
             var avatarItem = new Item(enterWorldOperation.UserName, peer);
-            var spawnLocation = world.GetLocation(World.RootLocationId);
-            var spawnAvatarUpdate = new SpawnClientAvatarUpdate(avatarItem, spawnLocation.Id);
-            if (!spawnAvatarUpdate.IsValidAt(world)) {
+            if (!world.ContainItem(avatarItem.Id)) {
+                world.RegisterItem(avatarItem);
+            } else {
                 return MmoOperationsUtils.OperationError(
                     operationRequest,
                     ReturnCode.AvatarRegistrationError,
@@ -77,11 +77,12 @@ namespace MyMmo.Server {
                 );
             }
 
+            var spawnLocation = world.GetLocation(World.RootLocationId);
             var interestArea = new ClientInterestArea(peer, world, enterWorldOperation.UserName);
             interestArea.FollowLocationOf(avatarItem);
             interestArea.WatchLocationManually(spawnLocation.Id);
             interestArea.EnqueueInLocationChangingFiber(() => {
-                spawnLocation.RequestUpdate(spawnAvatarUpdate);
+                spawnLocation.RequestUpdate(new SpawnClientAvatarUpdate(avatarItem.Id));
             });
 
             var enteredWorldOperationHandler = new MmoEnteredWorldOperationsHandler(avatarItem, interestArea, world);

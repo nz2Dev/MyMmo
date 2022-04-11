@@ -30,7 +30,6 @@ namespace DevPlay {
             snapshots = itemIds.Select(id => {
                 return new EntitySnapshotData {
                     ItemId = id,
-                    LocationId = devLocation.Id,
                     PositionInLocation = new Vector2 {
                         X = Random.Range(-5, 5),
                         Y = Random.Range(-5, 5)
@@ -42,9 +41,7 @@ namespace DevPlay {
                 return new Entity(
                     snapshotData.ItemId,
                     new Transform(
-                        snapshotData.PositionInLocation.ToComputeVector(),
-                        snapshotData.LocationId,
-                        data => { }
+                        snapshotData.PositionInLocation.ToComputeVector()
                     )
                 );
             });
