@@ -10,6 +10,8 @@ using UnityEngine.Assertions;
 namespace Player {
     public class UnityScriptsClipPlayer : MonoBehaviour {
 
+        public bool debugAnnotationDrawing;
+            
         private List<Track> scriptTracks = new List<Track>();
         private float timePassed;
         private Action onFinish;
@@ -42,7 +44,7 @@ namespace Player {
                 Draw.Rectangle(position, maxWidth * progress, maxHeight, RectPivot.Corner, Color.green);    
             }
 
-            if (scriptTracks.Count == 0) {
+            if (!Application.isPlaying && debugAnnotationDrawing) {
                 DrawTrackProgress(Vector3.zero, 0.5f); // for debug
             }
             for (var i = 0; i < scriptTracks.Count; i++) {
