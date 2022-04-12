@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ExitGames.Logging;
 using MyMmo.Commons.Scripts;
 using MyMmo.Processing;
 using MyMmo.Processing.Updates;
@@ -9,6 +10,7 @@ namespace MyMmo.Server.Domain {
     public class World /*todo Dispose*/ {
 
         private static readonly object SyncRoot = new object();
+        private readonly ILogger logger = LogManager.GetCurrentClassLogger();
 
         public const int RootLocationId = 0;
         public const int SecondLocationId = 1;
@@ -55,10 +57,14 @@ namespace MyMmo.Server.Domain {
             lock (SyncRoot) {
                 foreach (var itemScriptsData in updateData.ItemDataArray) {
                     foreach (var baseScriptData in itemScriptsData.ScriptDataArray) {
+                        if (!(baseScriptData is ChangePositionScriptData)) {
+                            logger.ConditionalDebug($"world is going to apply {baseScriptData}, position changes are skipped...");
+                        }
+                        
                         if (baseScriptData is SpawnItemScriptData spawnItemScriptData) {
                             var item = itemRegistry.GetItem(spawnItemScriptData.EntitySnapshotData.ItemId);
                             item.Spawn(locationId, spawnItemScriptData.EntitySnapshotData);
-                            break;
+                            continue;
                         }
 
                         if (baseScriptData is DestroyItemScriptData destroyItemScriptData) {
@@ -66,7 +72,7 @@ namespace MyMmo.Server.Domain {
                             itemRegistry.Remove(item);
                             item.Destroy();
                             item.Dispose();
-                            break;
+                            continue;
                         }
 
                         if (baseScriptData is ExitItemScriptData exitItemScriptData) {
@@ -74,19 +80,19 @@ namespace MyMmo.Server.Domain {
                             item.DetachFromLocation();
                             var newLocation = GetLocation(exitItemScriptData.ToLocationId);
                             newLocation.RequestUpdate(new EnterFromLocationUpdate(item.Id, exitItemScriptData.FromLocationId));
-                            break;
+                            continue;
                         }
 
                         if (baseScriptData is EnterItemScriptData enterItemScriptData) {
                             var item = itemRegistry.GetItem(enterItemScriptData.EntitySnapshotData.ItemId);
                             item.AttachToLocation(locationId, enterItemScriptData.EntitySnapshotData);
-                            break;
+                            continue;
                         }
 
                         if (baseScriptData is ChangePositionScriptData changePositionScriptData) {
                             var item = itemRegistry.GetItem(changePositionScriptData.ItemId);
                             item.ChangePositionInLocation(changePositionScriptData.ToPosition.ToComputeVector());
-                            break;
+                            continue;
                         }
                         
                         throw new Exception($"Can't recognise scriptData {baseScriptData} or break; is missing");

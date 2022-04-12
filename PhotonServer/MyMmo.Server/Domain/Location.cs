@@ -53,6 +53,7 @@ namespace MyMmo.Server.Domain {
 
         public void RequestUpdate(IUpdate update) {
             lock (requestLock) {
+                logger.ConditionalDebug($"location {id} receive update request: {update}");
                 updatesBuffer.Add(update);
                 CheckScheduling();
             }
