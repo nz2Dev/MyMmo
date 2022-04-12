@@ -39,7 +39,6 @@ namespace MyMmo.Server.Domain {
         }
 
         public int Id => id;
-        public Scene Scene => scene;
 
         public void EnqueueSceneSnapshot(Action<SceneSnapshotData> snapshotCallback) {
             updateFiber.Enqueue(() => {

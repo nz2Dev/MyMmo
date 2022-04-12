@@ -105,10 +105,6 @@ namespace MyMmo.Server.Domain {
             itemRegistry.Add(item);
         }
 
-        public Item GetItem(string itemId) {
-            return itemRegistry.GetItem(itemId);
-        }
-
         public bool ContainItem(string itemId) {
             return itemRegistry.Contain(itemId);
         }
