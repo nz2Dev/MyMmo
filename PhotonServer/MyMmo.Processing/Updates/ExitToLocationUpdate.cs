@@ -2,22 +2,20 @@ namespace MyMmo.Processing.Updates {
     public class ExitToLocationUpdate : IUpdate {
 
         private readonly string itemId;
-        private readonly Scene newScene;
+        private readonly int locationId;
 
-        public ExitToLocationUpdate(string itemId, Scene newScene) {
+        public ExitToLocationUpdate(string itemId, int locationId) {
             this.itemId = itemId;
-            this.newScene = newScene;
+            this.locationId = locationId;
         }
 
         public bool Process(Scene scene, float timePassed, float timeLimit) {
             var entity = scene.GetEntity(itemId);
-            entity.Pathfinder.Target = scene.MapRegion.GetExitPositionTo(newScene.MapRegion.Id);
+            entity.Pathfinder.Target = scene.MapRegion.GetExitPositionTo(locationId);
             
             var distanceToTarget = (entity.Pathfinder.Target - entity.Transform.Position).Length();
             if (distanceToTarget < 0.1f) {
-                var fromMapRegionId = scene.MapRegion.Id;
-                scene.RecordExitImmediately(entity.Id);
-                newScene.BufferUpdate(new EnterFromLocationUpdate(itemId, fromMapRegionId));
+                scene.RecordExitImmediately(entity.Id, locationId);
                 return true;
             }
             

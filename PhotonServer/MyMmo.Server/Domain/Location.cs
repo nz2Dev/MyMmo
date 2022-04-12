@@ -24,6 +24,7 @@ namespace MyMmo.Server.Domain {
         private readonly int id;
 
         private readonly IFiber updateFiber = new PoolFiber();
+        private readonly List<IUpdate> updatesBuffer = new List<IUpdate>();
         private readonly Scene scene;
         private bool scheduled;
 
@@ -52,7 +53,7 @@ namespace MyMmo.Server.Domain {
 
         public void RequestUpdate(IUpdate update) {
             lock (requestLock) {
-                scene.BufferUpdate(update);
+                updatesBuffer.Add(update);
                 CheckScheduling();
             }
         }
@@ -64,15 +65,22 @@ namespace MyMmo.Server.Domain {
             }
         }
 
+        private IEnumerable<IUpdate> FlushUpdates() {
+            List<IUpdate> updates;
+            lock (requestLock) {
+                updates = updatesBuffer.ToList();
+                updatesBuffer.Clear();
+                scheduled = false;
+            }
+
+            return updates;
+        }
+
         private void Update() {
             logger.ConditionalDebug($"Location {id} start execution of Update");
 
-            ScriptsClipData clipData;
-            lock (requestLock) {
-                clipData = scene.Simulate(0.2f, 10f);
-                scheduled = false;
-            }
-            
+            var updates = FlushUpdates();
+            var clipData = scene.Simulate(updates, 0.2f, 10f);
             world.ApplyChanges(id, clipData);
             
             var scriptsClipBytes = ScriptsDataProtocol.Serialize(clipData);

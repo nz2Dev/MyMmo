@@ -50,7 +50,7 @@ namespace MyMmo.Server {
             
             var avatarLocation = world.GetLocation(avatarItem.LocationId);
             var newLocation = world.GetLocation(operationChangeLocation.LocationId);
-            avatarLocation.RequestUpdate(new ExitToLocationUpdate(avatarItem.Id, newLocation.Scene));
+            avatarLocation.RequestUpdate(new ExitToLocationUpdate(avatarItem.Id, newLocation.Id));
 
             return MmoOperationsUtils.OperationSuccess(operationRequest);
         }

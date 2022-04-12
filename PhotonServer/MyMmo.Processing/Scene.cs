@@ -3,7 +3,6 @@ using System.Linq;
 using MyMmo.Commons.Scripts;
 using MyMmo.Commons.Snapshots;
 using MyMmo.Processing.Systems;
-using MyMmo.Processing.Utils;
 
 namespace MyMmo.Processing {
     public class Scene {
@@ -15,8 +14,6 @@ namespace MyMmo.Processing {
         private readonly Clip clip = new Clip();
         private readonly MapRegion mapRegion;
         
-        private readonly List<IUpdate> updatesBuffer = new List<IUpdate>();
-        
         public Scene(IEnumerable<Entity> initialEntities = null, MapRegion mapRegion = null) {
             this.mapRegion = mapRegion ?? new MapRegion(0);
             if (initialEntities != null) {
@@ -26,11 +23,6 @@ namespace MyMmo.Processing {
 
         public IEnumerable<Entity> Entities => entities;
         public MapRegion MapRegion => mapRegion;
-
-        public void BufferUpdate(IUpdate update) {
-            Assertions.AssertIsTrue(!clip.IsRecording, () => "clip is in record state");
-            updatesBuffer.Add(update);
-        }
 
         public void RecordSpawnImmediately(Entity entity) {
             entities.Add(entity);
@@ -48,10 +40,12 @@ namespace MyMmo.Processing {
         }
 
         // todo: last changes update probably won't be recorded in this way, has to be enqueued and executed after changes recording is done
-        public void RecordExitImmediately(string id) {
+        public void RecordExitImmediately(string id, int locationId) {
             var toExit = entities.FirstOrDefault(entity => entity.Id == id);
             entities.Remove(toExit);
             clip.AddChangesScript(id, new ExitItemScriptData {
+                FromLocationId = mapRegion.Id,
+                ToLocationId = locationId,
                 ItemId = id
             });
         }
@@ -73,16 +67,10 @@ namespace MyMmo.Processing {
             };
         }
 
-        private List<IUpdate> FlushUpdates() {
-            var updates = updatesBuffer.ToList();
-            updatesBuffer.Clear();
-            return updates;
-        }
-
-        public ScriptsClipData Simulate(float stepTime, float simulationTime) {
+        public ScriptsClipData Simulate(IEnumerable<IUpdate> updates, float stepTime, float simulationTime) {
             clip.RestartRecord(stepTime);
             
-            var updatesLeft = FlushUpdates();
+            var updatesLeft = updates.ToList();
             for (var timePassed = 0f; timePassed < simulationTime && updatesLeft.Count > 0; timePassed += stepTime) {
                 updatesLeft.RemoveAll(update => update.Process(this, timePassed, simulationTime));
 

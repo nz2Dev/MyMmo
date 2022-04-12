@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using MyMmo.Commons.Scripts;
 using MyMmo.Processing;
+using MyMmo.Processing.Updates;
 using MyMmo.Processing.Utils;
 
 namespace MyMmo.Server.Domain {
@@ -71,6 +72,8 @@ namespace MyMmo.Server.Domain {
                         if (baseScriptData is ExitItemScriptData exitItemScriptData) {
                             var item = itemRegistry.GetItem(exitItemScriptData.ItemId);
                             item.DetachFromLocation();
+                            var newLocation = GetLocation(exitItemScriptData.ToLocationId);
+                            newLocation.RequestUpdate(new EnterFromLocationUpdate(item.Id, exitItemScriptData.FromLocationId));
                             break;
                         }
 

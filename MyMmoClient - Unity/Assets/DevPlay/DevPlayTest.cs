@@ -45,10 +45,12 @@ namespace DevPlay {
                 );
             });
 
+            var updates = new IUpdate[] {
+                new Waiter(-1f),
+                new EnableWandering()
+            };
             var scene = new Scene(entities);
-            scene.BufferUpdate(new Waiter(-1f));
-            scene.BufferUpdate(new EnableWandering());
-            simulatedClip = scene.Simulate(0.2f, 4f);
+            simulatedClip = scene.Simulate(updates, 0.2f, 4f);
         }
 
         private void PlayClip() {
