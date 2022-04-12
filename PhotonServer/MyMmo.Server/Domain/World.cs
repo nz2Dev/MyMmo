@@ -53,14 +53,16 @@ namespace MyMmo.Server.Domain {
             }
         }
 
-        public void ApplyChanges(int locationId, ScriptsClipData updateData) {
+        public void ApplyChanges(int locationId, ScriptsClipData simulationClip) {
             lock (SyncRoot) {
-                foreach (var itemScriptsData in updateData.ItemDataArray) {
-                    foreach (var baseScriptData in itemScriptsData.ScriptDataArray) {
-                        if (!(baseScriptData is ChangePositionScriptData)) {
-                            logger.ConditionalDebug($"world is going to apply {baseScriptData}, position changes are skipped...");
+                foreach (var itemScriptsData in simulationClip.ItemDataArray) {
+                    for (var dataUpdateIndex = 0; dataUpdateIndex < itemScriptsData.ScriptDataArray.Length; dataUpdateIndex++) {
+                        var baseScriptData = itemScriptsData.ScriptDataArray[dataUpdateIndex];
+                        if (!(baseScriptData is ChangePositionScriptData || baseScriptData is StepIdle)) {
+                            logger.ConditionalDebug(
+                                $"world is going to apply {baseScriptData}, position changes are skipped...");
                         }
-                        
+
                         if (baseScriptData is SpawnItemScriptData spawnItemScriptData) {
                             var item = itemRegistry.GetItem(spawnItemScriptData.EntitySnapshotData.ItemId);
                             item.Spawn(locationId, spawnItemScriptData.EntitySnapshotData);
@@ -78,8 +80,17 @@ namespace MyMmo.Server.Domain {
                         if (baseScriptData is ExitItemScriptData exitItemScriptData) {
                             var item = itemRegistry.GetItem(exitItemScriptData.ItemId);
                             item.DetachFromLocation();
-                            var newLocation = GetLocation(exitItemScriptData.ToLocationId);
-                            newLocation.RequestUpdate(new EnterFromLocationUpdate(item.Id, exitItemScriptData.FromLocationId));
+
+                            var updateEndIndex = dataUpdateIndex + 1;
+                            var exitTimeInExitSimulation = simulationClip.ChangesDeltaTime * updateEndIndex;
+                            var predictedExitTime = DateTime.Now.Add(TimeSpan.FromSeconds(exitTimeInExitSimulation));
+                            
+                            var enterLocation = GetLocation(exitItemScriptData.ToLocationId);
+                            var enterLocationNextSimulationScheduleTime = enterLocation.PredictNextSimulationScheduleFromNow();
+                            var enterTimeInFutureSimulation = predictedExitTime - enterLocationNextSimulationScheduleTime;
+                                
+                            var enterUpdate = new EnterFromLocationUpdate(item.Id, exitItemScriptData.FromLocationId, (float) enterTimeInFutureSimulation.TotalSeconds);
+                            enterLocation.RequestUpdate(enterUpdate);
                             continue;
                         }
 
@@ -94,7 +105,11 @@ namespace MyMmo.Server.Domain {
                             item.ChangePositionInLocation(changePositionScriptData.ToPosition.ToComputeVector());
                             continue;
                         }
-                        
+
+                        if (baseScriptData is StepIdle) {
+                            continue;
+                        }
+
                         throw new Exception($"Can't recognise scriptData {baseScriptData} or break; is missing");
                     }
                 }

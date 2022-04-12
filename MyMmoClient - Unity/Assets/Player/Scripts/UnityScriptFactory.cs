@@ -5,6 +5,10 @@ namespace Player.Scripts {
     public static class UnityScriptFactory {
 
         public static IUnityScript Create(BaseScriptData data) {
+            if (data is StepIdle) {
+                return new StepIdleUnityScript();
+            }
+            
             if (data is ExitItemScriptData exitItemScriptData) {
                 return new ItemExitLocationUnityScript(exitItemScriptData);
             } else if (data is EnterItemScriptData enterItemScriptData) {

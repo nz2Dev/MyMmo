@@ -23,8 +23,20 @@ namespace MyMmo.ConsolePlayTest.Scripts {
             if (baseScriptData is ExitItemScriptData exitItemScriptData) {
                 return new ExitItemConsoleScriptApplier(exitItemScriptData);
             }
+
+            if (baseScriptData is StepIdle) {
+                return new StepIdleConsoleScriptApplier();
+            }
             
             throw new Exception("No factory found for scriptData: " + baseScriptData);
+        }
+
+    }
+
+    public class StepIdleConsoleScriptApplier : IConsoleScriptApplier {
+
+        public void ApplyClientState(int locationId, Dictionary<string, ConsoleItem> itemCache) {
+            ConsolePlayTest.PrintLog("some item waits and take execution time for some other script.");
         }
 
     }

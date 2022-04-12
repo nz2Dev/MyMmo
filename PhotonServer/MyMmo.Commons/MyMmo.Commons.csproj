@@ -57,6 +57,7 @@
     <Compile Include="Scripts\ScriptsClipData.cs" />
     <Compile Include="Scripts\ScriptsDataProtocol.cs" />
     <Compile Include="Scripts\SpawnItemScriptData.cs" />
+    <Compile Include="Scripts\StepIdle.cs" />
     <Compile Include="Snapshots\EntitySnapshotData.cs" />
     <Compile Include="Snapshots\SnapshotsDataProtocol.cs" />
     <Compile Include="Snapshots\SceneSnapshotData.cs" />

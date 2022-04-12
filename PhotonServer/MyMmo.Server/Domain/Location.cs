@@ -16,8 +16,6 @@ namespace MyMmo.Server.Domain {
 
         private static readonly ILogger logger = LogManager.GetCurrentClassLogger();
 
-        private const int UpdateInterval = 1000;
-
         private readonly object requestLock = new object();
 
         private readonly World world;
@@ -26,7 +24,10 @@ namespace MyMmo.Server.Domain {
         private readonly IFiber updateFiber = new PoolFiber();
         private readonly List<IUpdate> updatesBuffer = new List<IUpdate>();
         private readonly Scene scene;
-        private bool scheduled;
+        
+        private ScriptsClipData activeClip;
+        private DateTime activeClipSimulationTime;
+        private IDisposable updateScheduler;
 
         private readonly Channel<LocationEventMessage> locationEventChannel =
             new Channel<LocationEventMessage>();
@@ -52,45 +53,64 @@ namespace MyMmo.Server.Domain {
 
         public void RequestUpdate(IUpdate update) {
             lock (requestLock) {
-                logger.ConditionalDebug($"location {id} receive update request: {update}");
                 updatesBuffer.Add(update);
-                CheckScheduling();
+                logger.ConditionalDebug($"location {id} receive update request: {update}");
+
+                // Re Schedule Next Update
+                updateScheduler?.Dispose();
+                var activeClipExpirationTime = CalculateActiveClipExpirationTime();
+                if (activeClipExpirationTime > DateTime.Now) {
+                    var utilExpiration = activeClipExpirationTime.Subtract(DateTime.Now);
+                    updateScheduler = updateFiber.Schedule(Update, (int) utilExpiration.TotalMilliseconds);
+                } else {
+                    updateFiber.Enqueue(Update);
+                }
             }
         }
 
-        private void CheckScheduling() {
-            if (!scheduled) {
-                scheduled = true;
-                updateFiber.Schedule(Update, UpdateInterval);
+        public DateTime PredictNextSimulationScheduleFromNow() {
+            if (activeClip == null) {
+                return DateTime.Now;
             }
+
+            var activeClipExpirationTime = CalculateActiveClipExpirationTime();
+            return activeClipExpirationTime > DateTime.Now ? activeClipExpirationTime : DateTime.Now;
         }
 
-        private IEnumerable<IUpdate> FlushUpdates() {
-            List<IUpdate> updates;
-            lock (requestLock) {
-                updates = updatesBuffer.ToList();
-                updatesBuffer.Clear();
-                scheduled = false;
+        private DateTime CalculateActiveClipExpirationTime() {
+            if (activeClip == null) {
+                return DateTime.Now;
             }
-
-            return updates;
+            
+            var activeClipLongestLength = activeClip.ItemDataArray.Select(data => data.ScriptDataArray.Length).Max() * activeClip.ChangesDeltaTime;
+            return activeClipSimulationTime.Add(TimeSpan.FromSeconds(activeClipLongestLength));
         }
 
         private void Update() {
-            logger.ConditionalDebug($"Location {id} start execution of Update");
-
-            var updates = FlushUpdates();
-            var clipData = scene.Simulate(updates, 0.2f, 10f);
-            world.ApplyChanges(id, clipData);
+            lock (requestLock) {
+                logger.ConditionalDebug($"Location {id} start execution of Update");
+                var updates = updatesBuffer.ToList();
+                updatesBuffer.Clear();
+                
+                var clipData = scene.Simulate(updates, 0.2f, 10f);
+                activeClipSimulationTime = DateTime.Now;
+                activeClip = clipData;
+            }
             
+            world.ApplyChanges(id, activeClip);
+            PublishNextClip(activeClip);
+        }
+        
+        public void Dispose() {
+            updateScheduler?.Dispose(); // actually not necessary because updateFiber will be disposed next, but lets be specific 
+            updateFiber.Dispose();
+        }
+
+        private void PublishNextClip(ScriptsClipData clipData) {
             var scriptsClipBytes = ScriptsDataProtocol.Serialize(clipData);
             var regionUpdateData = new LocationUpdatedData(scriptsClipBytes, id);
             var regionUpdateEvent = new EventData((byte) EventCode.LocationUpdated, regionUpdateData);
             locationEventChannel.Publish(new LocationEventMessage(regionUpdateEvent, new SendParameters()));
-        }
-        
-        public void Dispose() {
-            updateFiber.Dispose();
         }
 
     }

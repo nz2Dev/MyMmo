@@ -8,6 +8,7 @@ namespace MyMmo.Commons.Scripts {
     [ProtoInclude(3, typeof(DestroyItemScriptData))]
     [ProtoInclude(4, typeof(ExitItemScriptData))]
     [ProtoInclude(5, typeof(EnterItemScriptData))]
+    [ProtoInclude(20, typeof(StepIdle))]
     public class BaseScriptData {
     }
 }

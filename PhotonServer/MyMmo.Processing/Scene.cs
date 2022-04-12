@@ -57,6 +57,11 @@ namespace MyMmo.Processing {
             });
         }
 
+        // todo add time key concept per change, or empty span concept to clip recording.
+        public void RecordIdleImmediately(string entityId) {
+            clip.AddChangesScript(entityId, new StepIdle());
+        }
+
         public Entity GetEntity(string entityId) {
             return entities.FirstOrDefault(entity => entity.Id == entityId);
         }
