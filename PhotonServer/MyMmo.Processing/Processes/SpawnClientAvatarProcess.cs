@@ -10,7 +10,7 @@ namespace MyMmo.Processing.Processes {
             this.itemId = itemId;
         }
 
-        public bool Process(Scene scene, float timePassed, float timeLimit) {
+        public bool Process(Scene scene, ProcessTimeContext timeContext) {
             var position = scene.MapRegion.GetRandomPositionWithinBounds();
             scene.RecordSpawnImmediately(new Entity(itemId, new Transform(position)));
             return true;

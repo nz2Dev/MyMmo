@@ -21,6 +21,7 @@ namespace MyMmo.Server.Domain {
         private readonly Location thirdLocation;
 
         private readonly ItemCache itemRegistry = new ItemCache();
+        private readonly DateTime creationTime = DateTime.Now;
 
         public World() {
             rootLocation = new Location(this, RootLocationId, new MapRegion(RootLocationId) {
@@ -34,6 +35,8 @@ namespace MyMmo.Server.Domain {
                 locationToTheLeft = SecondLocationId
             });
         }
+
+        public float Time => (float) (DateTime.Now - creationTime).TotalSeconds;
 
         public HashSet<Location> GetSurroundedLocationsIncluded(int locationId) {
             switch (locationId) {
@@ -81,15 +84,9 @@ namespace MyMmo.Server.Domain {
                             var item = itemRegistry.GetItem(exitItemScriptData.ItemId);
                             item.DetachFromLocation();
 
-                            var updateEndIndex = dataUpdateIndex + 1;
-                            var exitTimeInExitSimulation = simulationClip.ChangesDeltaTime * updateEndIndex;
-                            var predictedExitTime = DateTime.Now.Add(TimeSpan.FromSeconds(exitTimeInExitSimulation));
-                            
+                            var exitItemEndTime = simulationClip.ScriptEndTime(dataUpdateIndex);
                             var enterLocation = GetLocation(exitItemScriptData.ToLocationId);
-                            var enterLocationNextSimulationScheduleTime = enterLocation.PredictNextSimulationScheduleFromNow();
-                            var enterTimeInFutureSimulation = predictedExitTime - enterLocationNextSimulationScheduleTime;
-                                
-                            var enterUpdate = new EnterFromLocationProcess(item.Id, exitItemScriptData.FromLocationId, (float) enterTimeInFutureSimulation.TotalSeconds);
+                            var enterUpdate = new EnterFromLocationProcess(item.Id, exitItemScriptData.FromLocationId, exitItemEndTime);
                             enterLocation.RequestProcess(enterUpdate);
                             continue;
                         }

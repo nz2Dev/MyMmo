@@ -5,16 +5,16 @@ namespace MyMmo.Processing.Processes {
 
         private readonly string itemId;
         private readonly int fromMapRegionId;
-        private readonly float enterTime;
+        private readonly float absoluteEnterTime;
 
-        public EnterFromLocationProcess(string itemId, int fromMapRegionId, float enterTime) {
+        public EnterFromLocationProcess(string itemId, int fromMapRegionId, float absoluteEnterTime) {
             this.itemId = itemId;
             this.fromMapRegionId = fromMapRegionId;
-            this.enterTime = enterTime;
+            this.absoluteEnterTime = absoluteEnterTime;
         }
 
-        public bool Process(Scene scene, float timePassed, float timeLimit) {
-            if (timePassed < enterTime) {
+        public bool Process(Scene scene, ProcessTimeContext timeContext) {
+            if (timeContext.AbsoluteTimePassed() < absoluteEnterTime) {
                 // workaround current timing concept,
                 // so EnterChangeScript won't be placed at the beginning
                 scene.RecordIdleImmediately(itemId);

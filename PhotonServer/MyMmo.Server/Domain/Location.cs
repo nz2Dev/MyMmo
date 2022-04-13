@@ -26,7 +26,6 @@ namespace MyMmo.Server.Domain {
         private readonly Scene scene;
         
         private ScriptsClipData activeClip;
-        private DateTime activeClipSimulationTime;
         private IDisposable updateScheduler;
 
         private readonly Channel<LocationEventMessage> locationEventChannel =
@@ -58,32 +57,15 @@ namespace MyMmo.Server.Domain {
 
                 // Re Schedule Next Update
                 updateScheduler?.Dispose();
-                var activeClipExpirationTime = CalculateActiveClipExpirationTime();
-                if (activeClipExpirationTime > DateTime.Now) {
-                    var utilExpiration = activeClipExpirationTime.Subtract(DateTime.Now);
-                    updateScheduler = updateFiber.Schedule(Update, (int) utilExpiration.TotalMilliseconds);
+                var activeClipExpirationTime = activeClip?.EndTime() ?? world.Time;
+                if (activeClipExpirationTime > world.Time) {
+                    var untilExpiration = activeClipExpirationTime - world.Time;
+                    var untilExpirationMillis = (int) untilExpiration * 1000;
+                    updateScheduler = updateFiber.Schedule(Update, untilExpirationMillis);
                 } else {
                     updateFiber.Enqueue(Update);
                 }
             }
-        }
-
-        public DateTime PredictNextSimulationScheduleFromNow() {
-            if (activeClip == null) {
-                return DateTime.Now;
-            }
-
-            var activeClipExpirationTime = CalculateActiveClipExpirationTime();
-            return activeClipExpirationTime > DateTime.Now ? activeClipExpirationTime : DateTime.Now;
-        }
-
-        private DateTime CalculateActiveClipExpirationTime() {
-            if (activeClip == null) {
-                return DateTime.Now;
-            }
-            
-            var activeClipLongestLength = activeClip.ItemDataArray.Select(data => data.ScriptDataArray.Length).Max() * activeClip.ChangesDeltaTime;
-            return activeClipSimulationTime.Add(TimeSpan.FromSeconds(activeClipLongestLength));
         }
 
         private void Update() {
@@ -92,8 +74,7 @@ namespace MyMmo.Server.Domain {
                 var processes = processBuffer.ToList();
                 processBuffer.Clear();
                 
-                var clipData = scene.Simulate(processes, 0.2f, 10f);
-                activeClipSimulationTime = DateTime.Now;
+                var clipData = scene.Simulate(processes, world.Time, 0.2f, 10f);
                 activeClip = clipData;
             }
             

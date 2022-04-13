@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MyMmo.Commons.Scripts;
@@ -13,7 +14,7 @@ namespace MyMmo.Processing {
         private readonly MotionSystem motionSystem = new MotionSystem();
         private readonly Clip clip = new Clip();
         private readonly MapRegion mapRegion;
-        
+
         public Scene(IEnumerable<Entity> initialEntities = null, MapRegion mapRegion = null) {
             this.mapRegion = mapRegion ?? new MapRegion(0);
             if (initialEntities != null) {
@@ -72,12 +73,15 @@ namespace MyMmo.Processing {
             };
         }
 
-        public ScriptsClipData Simulate(IEnumerable<IProcess> processes, float stepTime, float simulationTime) {
-            clip.RestartRecord(stepTime);
-            
+        public ScriptsClipData Simulate(IEnumerable<IProcess> processes, float startTime, float stepTime, float simulationTime) {
+            clip.RestartRecord(startTime, stepTime);
+
             var processesLeft = processes.ToList();
+            var timeContext = new ProcessTimeContext {StartTime = startTime, TimePassed = 0f};
+            
             for (var timePassed = 0f; timePassed < simulationTime && processesLeft.Count > 0; timePassed += stepTime) {
-                processesLeft.RemoveAll(process => process.Process(this, timePassed, simulationTime));
+                timeContext.TimePassed = timePassed;
+                processesLeft.RemoveAll(process => process.Process(this, timeContext));
 
                 foreach (var entity in entities) {
                     pathfinderSystem.Update(entity);

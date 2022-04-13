@@ -7,7 +7,7 @@ namespace MyMmo.Processing.Processes {
             this.sourceItemId = sourceItemId;
         }
         
-        public bool Process(Scene scene, float timePassed, float timeLimit) {
+        public bool Process(Scene scene, ProcessTimeContext timeContext) {
             var entity = scene.GetEntity(sourceItemId);
             
             if (entity.Pathfinder.Target == default) {

@@ -45,12 +45,12 @@ namespace DevPlay {
                 );
             });
 
-            var updates = new IUpdate[] {
+            var updates = new IProcess[] {
                 new Waiter(-1f),
                 new EnableWandering()
             };
             var scene = new Scene(entities);
-            simulatedClip = scene.Simulate(updates, 0.2f, 4f);
+            simulatedClip = scene.Simulate(updates, 0f, 0.2f, 4f);
         }
 
         private void PlayClip() {
@@ -67,7 +67,7 @@ namespace DevPlay {
 
     }
 
-    class Waiter : IUpdate {
+    class Waiter : IProcess {
 
         private readonly float time;
 
@@ -75,14 +75,14 @@ namespace DevPlay {
             this.time = time;
         }
 
-        public bool Process(Scene scene, float timePassed, float timeLimit) {
-            return time > 0 && timePassed > time;
+        public bool Process(Scene scene, ProcessTimeContext timeContext) {
+            return time > 0 && timeContext.TimePassed > time;
         }
     }
 
-    class SetRandomMoveTargets : IUpdate {
+    class SetRandomMoveTargets : IProcess {
 
-        public bool Process(Scene scene, float timePassed, float timeLimit) {
+        public bool Process(Scene scene, ProcessTimeContext timeContext) {
             foreach (var entity in scene.Entities) {
                 entity.Pathfinder.Target = new System.Numerics.Vector2(Random.Range(-5, 5), Random.Range(-5, 5));
             }
@@ -92,9 +92,9 @@ namespace DevPlay {
 
     } 
     
-    class EnableWandering : IUpdate {
+    class EnableWandering : IProcess {
 
-        public bool Process(Scene scene, float timePassed, float timeLimit) {
+        public bool Process(Scene scene, ProcessTimeContext timeContext) {
             foreach (var entity in scene.Entities) {
                 entity.Wondering.Enabled = true;
             }

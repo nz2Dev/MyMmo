@@ -64,6 +64,7 @@
         <Compile Include="Processes\ExitToLocationProcess.cs" />
         <Compile Include="Processes\MoveItemRandomlyProcess.cs" />
         <Compile Include="Processes\SpawnClientAvatarProcess.cs" />
+        <Compile Include="ProcessTimeContext.cs" />
         <Compile Include="Utils\Assertions.cs" />
         <Compile Include="Utils\ConverterExtensions.cs" />
         <Compile Include="Utils\NumberUtils.cs" />

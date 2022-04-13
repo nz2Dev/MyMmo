@@ -9,7 +9,7 @@ namespace MyMmo.Processing.Processes {
             this.locationId = locationId;
         }
 
-        public bool Process(Scene scene, float timePassed, float timeLimit) {
+        public bool Process(Scene scene, ProcessTimeContext timeContext) {
             var entity = scene.GetEntity(itemId);
             entity.Pathfinder.Target = scene.MapRegion.GetExitPositionTo(locationId);
             

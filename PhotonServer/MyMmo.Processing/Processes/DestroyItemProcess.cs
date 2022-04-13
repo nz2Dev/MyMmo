@@ -7,7 +7,7 @@ namespace MyMmo.Processing.Processes {
             this.itemId = itemId;
         }
 
-        public bool Process(Scene scene, float timePassed, float timeLimit) {
+        public bool Process(Scene scene, ProcessTimeContext timeContext) {
             scene.RecordDeleteImmediately(itemId);
             return true;
         }
