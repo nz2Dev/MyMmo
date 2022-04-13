@@ -14,12 +14,9 @@ using Photon.SocketServer;
 namespace MyMmo.Server.Domain {
     public class Location : IDisposable {
 
-        private static readonly ILogger logger = LogManager.GetCurrentClassLogger();
-
-        private readonly object requestLock = new object();
-
-        private readonly World world;
         private readonly int id;
+        private readonly World world;
+        private readonly ILogger logger = LogManager.GetCurrentClassLogger();
 
         private readonly IFiber updateFiber = new PoolFiber();
         private readonly List<IProcess> processBuffer = new List<IProcess>();
@@ -50,48 +47,51 @@ namespace MyMmo.Server.Domain {
             return locationEventChannel.Subscribe(fiber, onLocationEventMessage);
         }
 
-        public void RequestProcess(IProcess process) {
-            lock (requestLock) {
-                processBuffer.Add(process);
-                logger.ConditionalDebug($"location {id} receive process request: {process}");
-
-                // Re Schedule Next Update
-                updateScheduler?.Dispose();
-                var activeClipExpirationTime = activeClip?.EndTime() ?? world.Time;
-                if (activeClipExpirationTime > world.Time) {
-                    var untilExpiration = activeClipExpirationTime - world.Time;
-                    var untilExpirationMillis = (int) untilExpiration * 1000;
-                    updateScheduler = updateFiber.Schedule(Update, untilExpirationMillis);
-                } else {
-                    updateFiber.Enqueue(Update);
-                }
-            }
-        }
-
-        private void Update() {
-            lock (requestLock) {
-                logger.ConditionalDebug($"Location {id} start execution of Update");
-                var processes = processBuffer.ToList();
-                processBuffer.Clear();
-                
-                var clipData = scene.Simulate(processes, world.Time, 0.2f, 10f);
-                activeClip = clipData;
-            }
-            
-            world.ApplyChanges(id, activeClip);
-            PublishNextClip(activeClip);
-        }
-        
-        public void Dispose() {
-            updateScheduler?.Dispose(); // actually not necessary because updateFiber will be disposed next, but lets be specific 
-            updateFiber.Dispose();
-        }
-
         private void PublishNextClip(ScriptsClipData clipData) {
             var scriptsClipBytes = ScriptsDataProtocol.Serialize(clipData);
             var regionUpdateData = new LocationUpdatedData(scriptsClipBytes, id);
             var regionUpdateEvent = new EventData((byte) EventCode.LocationUpdated, regionUpdateData);
             locationEventChannel.Publish(new LocationEventMessage(regionUpdateEvent, new SendParameters()));
+        }
+
+        public void RequestProcess(IProcess process) {
+            updateFiber.Enqueue(() => {
+                logger.ConditionalDebug($"location {id} receive process request: {process}");
+                processBuffer.Add(process);
+                TryScheduleNextUpdate();
+            });
+        }
+
+        private void TryScheduleNextUpdate() {
+            var timeToNextUpdateMillis = 0;
+            var activeClipExpirationTime = activeClip?.EndTime() ?? world.Time;
+            if (activeClipExpirationTime > world.Time) {
+                var timeToActiveClipExpirationMillis = (activeClipExpirationTime - world.Time) * 1000;
+                timeToNextUpdateMillis = (int) timeToActiveClipExpirationMillis;
+            }
+            
+            updateScheduler?.Dispose();
+            updateScheduler = updateFiber.Schedule(Update, timeToNextUpdateMillis);
+        }
+
+        private void Update() {
+            logger.ConditionalDebug($"Location {id} start execution of Update");
+            updateScheduler?.Dispose();
+            updateScheduler = null;
+            
+            var processes = processBuffer.ToList();
+            processBuffer.Clear();
+                
+            var clipData = scene.Simulate(processes, world.Time, 0.2f, 10f);
+            activeClip = clipData;
+            
+            world.ApplyChanges(id, clipData);
+            PublishNextClip(clipData);
+        }
+
+        public void Dispose() {
+            updateScheduler?.Dispose(); // actually not necessary because updateFiber will be disposed next, but lets be specific 
+            updateFiber.Dispose();
         }
 
     }

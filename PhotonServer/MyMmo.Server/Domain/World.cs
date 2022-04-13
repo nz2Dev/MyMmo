@@ -63,7 +63,7 @@ namespace MyMmo.Server.Domain {
                         var baseScriptData = itemScriptsData.ScriptDataArray[dataUpdateIndex];
                         if (!(baseScriptData is ChangePositionScriptData || baseScriptData is StepIdle)) {
                             logger.ConditionalDebug(
-                                $"world is going to apply {baseScriptData}, position changes are skipped...");
+                                $"world is going to apply {baseScriptData}, position changes debugs are skipped...");
                         }
 
                         if (baseScriptData is SpawnItemScriptData spawnItemScriptData) {
@@ -107,7 +107,7 @@ namespace MyMmo.Server.Domain {
                             continue;
                         }
 
-                        throw new Exception($"Can't recognise scriptData {baseScriptData} or break; is missing");
+                        throw new Exception($"Can't recognise scriptData {baseScriptData} or continue; is missing");
                     }
                 }
             }
