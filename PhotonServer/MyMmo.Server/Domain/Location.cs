@@ -22,7 +22,7 @@ namespace MyMmo.Server.Domain {
         private readonly int id;
 
         private readonly IFiber updateFiber = new PoolFiber();
-        private readonly List<IUpdate> updatesBuffer = new List<IUpdate>();
+        private readonly List<IProcess> processBuffer = new List<IProcess>();
         private readonly Scene scene;
         
         private ScriptsClipData activeClip;
@@ -51,10 +51,10 @@ namespace MyMmo.Server.Domain {
             return locationEventChannel.Subscribe(fiber, onLocationEventMessage);
         }
 
-        public void RequestUpdate(IUpdate update) {
+        public void RequestProcess(IProcess process) {
             lock (requestLock) {
-                updatesBuffer.Add(update);
-                logger.ConditionalDebug($"location {id} receive update request: {update}");
+                processBuffer.Add(process);
+                logger.ConditionalDebug($"location {id} receive process request: {process}");
 
                 // Re Schedule Next Update
                 updateScheduler?.Dispose();
@@ -89,10 +89,10 @@ namespace MyMmo.Server.Domain {
         private void Update() {
             lock (requestLock) {
                 logger.ConditionalDebug($"Location {id} start execution of Update");
-                var updates = updatesBuffer.ToList();
-                updatesBuffer.Clear();
+                var processes = processBuffer.ToList();
+                processBuffer.Clear();
                 
-                var clipData = scene.Simulate(updates, 0.2f, 10f);
+                var clipData = scene.Simulate(processes, 0.2f, 10f);
                 activeClipSimulationTime = DateTime.Now;
                 activeClip = clipData;
             }

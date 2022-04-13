@@ -1,6 +1,6 @@
 using ExitGames.Logging;
 using MyMmo.Commons;
-using MyMmo.Processing.Updates;
+using MyMmo.Processing.Processes;
 using MyMmo.Server.Domain;
 using MyMmo.Server.Operations;
 using Photon.SocketServer;
@@ -82,7 +82,7 @@ namespace MyMmo.Server {
             interestArea.FollowLocationOf(avatarItem);
             interestArea.WatchLocationManually(spawnLocation.Id);
             interestArea.EnqueueInLocationChangingFiber(() => {
-                spawnLocation.RequestUpdate(new SpawnClientAvatarUpdate(avatarItem.Id));
+                spawnLocation.RequestProcess(new SpawnClientAvatarProcess(avatarItem.Id));
             });
 
             var enteredWorldOperationHandler = new MmoEnteredWorldOperationsHandler(avatarItem, interestArea, world);

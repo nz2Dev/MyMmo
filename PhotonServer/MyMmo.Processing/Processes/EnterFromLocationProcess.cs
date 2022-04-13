@@ -1,13 +1,13 @@
 using MyMmo.Processing.Components;
 
-namespace MyMmo.Processing.Updates {
-    public class EnterFromLocationUpdate : IUpdate {
+namespace MyMmo.Processing.Processes {
+    public class EnterFromLocationProcess : IProcess {
 
         private readonly string itemId;
         private readonly int fromMapRegionId;
         private readonly float enterTime;
 
-        public EnterFromLocationUpdate(string itemId, int fromMapRegionId, float enterTime) {
+        public EnterFromLocationProcess(string itemId, int fromMapRegionId, float enterTime) {
             this.itemId = itemId;
             this.fromMapRegionId = fromMapRegionId;
             this.enterTime = enterTime;

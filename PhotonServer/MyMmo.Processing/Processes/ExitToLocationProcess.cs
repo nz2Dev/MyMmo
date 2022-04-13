@@ -1,10 +1,10 @@
-namespace MyMmo.Processing.Updates {
-    public class ExitToLocationUpdate : IUpdate {
+namespace MyMmo.Processing.Processes {
+    public class ExitToLocationProcess : IProcess {
 
         private readonly string itemId;
         private readonly int locationId;
 
-        public ExitToLocationUpdate(string itemId, int locationId) {
+        public ExitToLocationProcess(string itemId, int locationId) {
             this.itemId = itemId;
             this.locationId = locationId;
         }

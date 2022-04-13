@@ -1,12 +1,12 @@
 using MyMmo.Processing.Components;
 
-namespace MyMmo.Processing.Updates {
+namespace MyMmo.Processing.Processes {
     
-    public class SpawnClientAvatarUpdate : IUpdate {
+    public class SpawnClientAvatarProcess : IProcess {
 
         private readonly string itemId;
 
-        public SpawnClientAvatarUpdate(string itemId) {
+        public SpawnClientAvatarProcess(string itemId) {
             this.itemId = itemId;
         }
 

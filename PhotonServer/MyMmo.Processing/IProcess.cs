@@ -1,5 +1,5 @@
 namespace MyMmo.Processing {
-    public interface IUpdate {
+    public interface IProcess {
 
         bool Process(Scene scene, float timePassed, float timeLimit);
 

@@ -1,9 +1,9 @@
-namespace MyMmo.Processing.Updates {
-    public class MoveItemRandomlyUpdate : IUpdate {
+namespace MyMmo.Processing.Processes {
+    public class MoveItemRandomlyProcess : IProcess {
 
         private readonly string sourceItemId;
 
-        public MoveItemRandomlyUpdate(string sourceItemId) {
+        public MoveItemRandomlyProcess(string sourceItemId) {
             this.sourceItemId = sourceItemId;
         }
         

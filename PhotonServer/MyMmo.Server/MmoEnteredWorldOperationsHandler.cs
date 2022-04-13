@@ -1,6 +1,6 @@
 using ExitGames.Logging;
 using MyMmo.Commons;
-using MyMmo.Processing.Updates;
+using MyMmo.Processing.Processes;
 using MyMmo.Server.Domain;
 using MyMmo.Server.Operations;
 using Photon.SocketServer;
@@ -50,7 +50,7 @@ namespace MyMmo.Server {
             
             var avatarLocation = world.GetLocation(avatarItem.LocationId);
             var newLocation = world.GetLocation(operationChangeLocation.LocationId);
-            avatarLocation.RequestUpdate(new ExitToLocationUpdate(avatarItem.Id, newLocation.Id));
+            avatarLocation.RequestProcess(new ExitToLocationProcess(avatarItem.Id, newLocation.Id));
 
             return MmoOperationsUtils.OperationSuccess(operationRequest);
         }
@@ -62,7 +62,7 @@ namespace MyMmo.Server {
             }
             
             var avatarLocation = world.GetLocation(avatarItem.LocationId);
-            avatarLocation.RequestUpdate(new MoveItemRandomlyUpdate(avatarItem.Id));
+            avatarLocation.RequestProcess(new MoveItemRandomlyProcess(avatarItem.Id));
 
             return MmoOperationsUtils.OperationSuccess(operationRequest);
         }
@@ -71,7 +71,7 @@ namespace MyMmo.Server {
             logger.Info($"entered world operation handler of avatar {avatarItem} is going to disconnect");
             
             var avatarLocation = world.GetLocation(avatarItem.LocationId);
-            avatarLocation.RequestUpdate(new DestroyItemUpdate(avatarItem.Id));
+            avatarLocation.RequestProcess(new DestroyItemProcess(avatarItem.Id));
             interestArea.Dispose();
             
             ((Peer) peer).SetCurrentOperationHandler(null);

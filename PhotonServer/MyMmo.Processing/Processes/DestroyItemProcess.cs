@@ -1,9 +1,9 @@
-namespace MyMmo.Processing.Updates {
-    public class DestroyItemUpdate : IUpdate {
+namespace MyMmo.Processing.Processes {
+    public class DestroyItemProcess : IProcess {
 
         private readonly string itemId;
 
-        public DestroyItemUpdate(string itemId) {
+        public DestroyItemProcess(string itemId) {
             this.itemId = itemId;
         }
 

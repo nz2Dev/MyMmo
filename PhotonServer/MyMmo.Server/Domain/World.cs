@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using ExitGames.Logging;
 using MyMmo.Commons.Scripts;
 using MyMmo.Processing;
-using MyMmo.Processing.Updates;
+using MyMmo.Processing.Processes;
 using MyMmo.Processing.Utils;
 
 namespace MyMmo.Server.Domain {
@@ -89,8 +89,8 @@ namespace MyMmo.Server.Domain {
                             var enterLocationNextSimulationScheduleTime = enterLocation.PredictNextSimulationScheduleFromNow();
                             var enterTimeInFutureSimulation = predictedExitTime - enterLocationNextSimulationScheduleTime;
                                 
-                            var enterUpdate = new EnterFromLocationUpdate(item.Id, exitItemScriptData.FromLocationId, (float) enterTimeInFutureSimulation.TotalSeconds);
-                            enterLocation.RequestUpdate(enterUpdate);
+                            var enterUpdate = new EnterFromLocationProcess(item.Id, exitItemScriptData.FromLocationId, (float) enterTimeInFutureSimulation.TotalSeconds);
+                            enterLocation.RequestProcess(enterUpdate);
                             continue;
                         }
 

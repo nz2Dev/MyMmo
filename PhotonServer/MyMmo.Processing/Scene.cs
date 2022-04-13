@@ -72,12 +72,12 @@ namespace MyMmo.Processing {
             };
         }
 
-        public ScriptsClipData Simulate(IEnumerable<IUpdate> updates, float stepTime, float simulationTime) {
+        public ScriptsClipData Simulate(IEnumerable<IProcess> processes, float stepTime, float simulationTime) {
             clip.RestartRecord(stepTime);
             
-            var updatesLeft = updates.ToList();
-            for (var timePassed = 0f; timePassed < simulationTime && updatesLeft.Count > 0; timePassed += stepTime) {
-                updatesLeft.RemoveAll(update => update.Process(this, timePassed, simulationTime));
+            var processesLeft = processes.ToList();
+            for (var timePassed = 0f; timePassed < simulationTime && processesLeft.Count > 0; timePassed += stepTime) {
+                processesLeft.RemoveAll(process => process.Process(this, timePassed, simulationTime));
 
                 foreach (var entity in entities) {
                     pathfinderSystem.Update(entity);

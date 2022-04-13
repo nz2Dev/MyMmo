@@ -51,7 +51,7 @@
         <Compile Include="Components\Transform.cs" />
         <Compile Include="Components\Wondering.cs" />
         <Compile Include="Entity.cs" />
-        <Compile Include="IUpdate.cs" />
+        <Compile Include="IProcess.cs" />
         <Compile Include="MapRegion.cs" />
         <Compile Include="Primitives\Line.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
@@ -59,11 +59,11 @@
         <Compile Include="Systems\MotionSystem.cs" />
         <Compile Include="Systems\PathfinderSystem.cs" />
         <Compile Include="Systems\WonderingSystem.cs" />
-        <Compile Include="Updates\DestroyItemUpdate.cs" />
-        <Compile Include="Updates\EnterFromLocationUpdate.cs" />
-        <Compile Include="Updates\ExitToLocationUpdate.cs" />
-        <Compile Include="Updates\MoveItemRandomlyUpdate.cs" />
-        <Compile Include="Updates\SpawnClientAvatarUpdate.cs" />
+        <Compile Include="Processes\DestroyItemProcess.cs" />
+        <Compile Include="Processes\EnterFromLocationProcess.cs" />
+        <Compile Include="Processes\ExitToLocationProcess.cs" />
+        <Compile Include="Processes\MoveItemRandomlyProcess.cs" />
+        <Compile Include="Processes\SpawnClientAvatarProcess.cs" />
         <Compile Include="Utils\Assertions.cs" />
         <Compile Include="Utils\ConverterExtensions.cs" />
         <Compile Include="Utils\NumberUtils.cs" />
