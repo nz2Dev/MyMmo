@@ -58,7 +58,7 @@ namespace DevPlay {
                 devLocation.PlaceAvatar(playerPrefab, snapshotData);
             }
             
-            devLocation.PlayClipImmediately(simulatedClip, () => {
+            devLocation.SetClip(simulatedClip, () => {
                 if (replay) {
                     PlayClip();
                 }

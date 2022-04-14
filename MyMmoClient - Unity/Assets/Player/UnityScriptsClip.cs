@@ -3,71 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using MyMmo.Commons.Scripts;
 using Player.Scripts;
-using Shapes;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Player {
-    public class UnityScriptsClipPlayer : MonoBehaviour {
+    public class UnityScriptsClip {
 
-        public bool debugAnnotationDrawing;
-            
-        private List<Track> scriptTracks = new List<Track>();
-        private float timePassed;
-        private Action onFinish;
+        private readonly List<Track> scriptTracks;
 
-        public void PlayClip(int locationId, ScriptsClipData clip, Action onFinishPlaying = null) {
-            onFinish = onFinishPlaying;
-
-            var firstItemId = clip.ItemDataArray.ElementAtOrDefault(0)?.ItemId;
-            
-            timePassed = 0;
+        public UnityScriptsClip(ScriptsClipData clip) {
             scriptTracks = clip.ItemDataArray.Select(data => new Track(
                 data.ScriptDataArray.Select(UnityScriptFactory.Create).ToList(),
                 clip.ChangesDeltaTime,
-                locationId,
-                data.ItemId == firstItemId
+                false
             )).ToList();
         }
 
-        public void DrawShapesAnnotation(Matrix4x4 worldTransformationMatrix) {
-            Draw.ResetAllDrawStates();
-            Draw.Matrix = worldTransformationMatrix;
-            Draw.ThicknessSpace = ThicknessSpace.Meters;
-
-            const float maxWidth = 5;
-            const float maxHeight = 0.4f;
-            Draw.Translate(-maxWidth / 2f, 0, -maxHeight / 2f);
-            Draw.Rotate(Quaternion.LookRotation(Vector3.down, Vector3.forward));
-
-            void DrawTrackProgress(Vector3 position, float progress) {
-                Draw.Rectangle(position, maxWidth, maxHeight, RectPivot.Corner, Color.white);
-                Draw.Rectangle(position, maxWidth * progress, maxHeight, RectPivot.Corner, Color.green);    
-            }
-
-            if (!Application.isPlaying && debugAnnotationDrawing) {
-                DrawTrackProgress(Vector3.zero, 0.5f); // for debug
-            }
-            for (var i = 0; i < scriptTracks.Count; i++) {
-                DrawTrackProgress((maxHeight + 0.1f) * i * Vector3.down, scriptTracks[i].GetTimeProgress(timePassed));
+        public float Length() {
+            return scriptTracks.Select(track => track.Length()).Max();
+        }
+        
+        public void SampleState(int locationId, float timePassed) {
+            foreach (var scriptTrack in scriptTracks) {
+                if (!scriptTrack.IsEndOfState) {
+                    scriptTrack.SampleState(locationId, timePassed);
+                }
             }
         }
+        
+        public class Track {
 
-        private void Update() {
-            if (scriptTracks.Count == 0) {
-                return;
-            }
-            
-            timePassed += Time.deltaTime;
-            scriptTracks.RemoveAll(track => !track.Play(timePassed));
-            if (scriptTracks.Count == 0) {
-                onFinish?.Invoke();                
-            }
-        }
-
-        class Track {
-
-            private readonly int locationId;
             private readonly float segmentTimeLength;
             private readonly List<IUnityScript> unityScripts;
             private float currentSegmentEnterTime;
@@ -75,23 +40,30 @@ namespace Player {
             
             private float timePassedDebug;
             private float frameTimeDeltaDebug;
+            private bool endOfState;
             private bool debug;
 
-            public Track(List<IUnityScript> unityScripts, float segmentTimeLength, int locationId, bool debug) {
+            public Track(List<IUnityScript> unityScripts, float segmentTimeLength, bool debug) {
                 this.unityScripts = unityScripts;
                 this.segmentTimeLength = segmentTimeLength;
                 this.debug = debug;
-                this.locationId = locationId;
             }
 
-            public float GetTimeProgress(float timePassed) {
-                return timePassed / (unityScripts.Count * segmentTimeLength);
+            public bool IsEndOfState => endOfState; 
+            
+            public float Length() {
+                return unityScripts.Count * segmentTimeLength;
             }
             
-            public bool Play(float timePassed) {
+            public void SampleState(int locationId, float timePassed) {
+                if (endOfState) {
+                    return;
+                }
+                
                 if (currentSegmentIndex == -1) {
-                    if (!EnterNextSegment(timePassed)) {
-                        return false;
+                    if (!EnterNextSegment(locationId, timePassed)) {
+                        endOfState = true;
+                        return;
                     }
                 }
 
@@ -99,33 +71,34 @@ namespace Player {
                 timePassedDebug = timePassed;
                 frameTimeDeltaDebug = Time.deltaTime;
                 if (timeDelta > segmentTimeLength) {
-                    ExitCurrentSegment();
+                    ExitCurrentSegment(locationId);
                     // ...should return next segment, then enter/exit all segments in between,
                     // so that state is correct, and all scripts contributes,
                     // in case if each next script don't have previous state... 
-                    if (!EnterNextSegment(timePassed)) {
-                        return false;
+                    if (!EnterNextSegment(locationId, timePassed)) {
+                        endOfState = true; // workaround to prevent inconsistent behaviour when sampling out of range multiple time 
+                        return;
                     }
 
                     var newTimeDelta = timePassed - currentSegmentEnterTime;
                     Assert.IsTrue(newTimeDelta > 0 && newTimeDelta < segmentTimeLength);
-                    CurrentSegmentInterpolation(newTimeDelta / segmentTimeLength);
-                    return true;
+                    CurrentSegmentInterpolation(locationId, newTimeDelta / segmentTimeLength);
+                    return;
                 }
 
                 if (timeDelta < segmentTimeLength) {
-                    CurrentSegmentInterpolation(timeDelta / segmentTimeLength);
-                    return true;
+                    CurrentSegmentInterpolation(locationId, timeDelta / segmentTimeLength);
+                    return;
                 }
 
                 if (timeDelta < 0) {
-                    throw new Exception("Can't play backwards for now");
+                    throw new Exception("Can't sample backwards for now");
                 }
 
-                throw new Exception("Unexpected play exit");
+                throw new Exception("Unexpected sample exit");
             }
 
-            private void ExitCurrentSegment() {
+            private void ExitCurrentSegment(int locationId) {
                 var currSegment = unityScripts.ElementAtOrDefault(currentSegmentIndex);
                 if (currSegment != null) {
                     currSegment.UpdateUnityState(locationId, progress: 1);
@@ -136,7 +109,7 @@ namespace Player {
                 }
             }
 
-            private bool EnterNextSegment(float timePassed) {
+            private bool EnterNextSegment(int locationId, float timePassed) {
                 var segmentsPassedApprox = timePassed / segmentTimeLength;
                 var segmentsPassedCount = Mathf.FloorToInt(segmentsPassedApprox);
 
@@ -155,7 +128,7 @@ namespace Player {
                 }
             }
 
-            private void CurrentSegmentInterpolation(float progress) {
+            private void CurrentSegmentInterpolation(int locationId, float progress) {
                 unityScripts[currentSegmentIndex].UpdateUnityState(locationId, progress);
                 if (debug) {
                     Debug.Log($"[{currentSegmentIndex}] |{currentSegmentEnterTime}s .. {frameTimeDeltaDebug}/{timePassedDebug}s .. ");
@@ -163,6 +136,5 @@ namespace Player {
             }
 
         }
-
     }
 }

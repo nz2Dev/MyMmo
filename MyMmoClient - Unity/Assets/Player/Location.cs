@@ -14,10 +14,10 @@ namespace Player {
         public int Id;
         public Transform AnnotationDrawingOffset;
 
-        private UnityScriptsClipPlayer scriptsPlayer;
+        private UnityScriptsPlayer scriptsPlayer;
 
         private void Awake() {
-            scriptsPlayer = GetComponent<UnityScriptsClipPlayer>();
+            scriptsPlayer = GetComponent<UnityScriptsPlayer>();
             Assert.IsNotNull(scriptsPlayer);
         }
 
@@ -42,12 +42,16 @@ namespace Player {
             player.GetComponent<AvatarItem>().AttachToLocation(Id, entitySnapshotData);
         }
 
-        public void PlayClipImmediately(ScriptsClipData clipData, Action onFinish = null) {
-            scriptsPlayer.PlayClip(Id, clipData, onFinish);
-        }
-
         public void DrawShapesAnnotation() {
             scriptsPlayer.DrawShapesAnnotation(AnnotationDrawingOffset.localToWorldMatrix);
+        }
+
+        public void SetClip(ScriptsClipData clipData, Action onFinish = null) {
+            scriptsPlayer.SetClip(clipData, onFinish);
+        }
+
+        private void Update() {
+            scriptsPlayer.PlayNextFrame(Id);
         }
 
     }

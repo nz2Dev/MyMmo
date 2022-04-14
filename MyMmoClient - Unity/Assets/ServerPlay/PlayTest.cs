@@ -7,7 +7,6 @@ using MyMmo.Commons.Scripts;
 using MyMmo.Commons.Snapshots;
 using Player;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace ServerPlay {
     public class PlayTest : MonoBehaviour, IGameListener {
@@ -16,8 +15,6 @@ namespace ServerPlay {
         private const string WorldName = "UnityWorld";
 
         public GameObject playerPrefab;
-
-        private UnityScriptsTimeline scriptsTimeline;
 
         private Game game;
         private bool isConnectState;
@@ -30,8 +27,6 @@ namespace ServerPlay {
             Application.runInBackground = true;
             Application.targetFrameRate = 60;
             DontDestroyOnLoad(gameObject);
-            scriptsTimeline = GetComponent<UnityScriptsTimeline>();
-            Assert.IsNotNull(scriptsTimeline);
         }
 
         private void Start() {
@@ -154,7 +149,8 @@ namespace ServerPlay {
 
         public void OnLocationUpdate(int locationId, ScriptsClipData clipData) {
             Debug.Log($"on location update: {locationId} with items[{clipData.ItemDataArray.Length}] [{clipData.ItemDataArray.Select(data => $"item {data.ItemId} scripts[" + data.ScriptDataArray.AggregateToString() + "]").AggregateToString()}]");
-            scriptsTimeline.PlayChangesClipImmediately(locationId, clipData);
+            var updatedLocation = FindObjectsOfType<Location>().First(location => location.Id == locationId);
+            updatedLocation.SetClip(clipData);
         }
 
         public void OnLog(DebugLevel debugLevel, string message) {
