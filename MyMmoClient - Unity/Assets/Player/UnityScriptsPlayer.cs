@@ -6,14 +6,16 @@ using UnityEngine.Assertions;
 namespace Player {
     public class UnityScriptsPlayer : MonoBehaviour {
 
-        public UnityScriptsPlayerDrawer drawer;
+        public UnityScriptsPlayerDrawer playerDrawer;
+        public UnityScriptsClipDrawer clipDrawer;
         
         private UnityScriptsClip singleClip;
         private float timePassed;
         private Action onFinish;
 
         private void Awake() {
-            Assert.IsNotNull(drawer);
+            Assert.IsNotNull(playerDrawer);
+            Assert.IsNotNull(clipDrawer);
         }
 
         public void SetClip(ScriptsClipData clip, Action onFinishPlaying = null) {
@@ -21,9 +23,9 @@ namespace Player {
             onFinish = onFinishPlaying;
             timePassed = 0;
 
-            drawer.clipDuration = singleClip.Length();
-            drawer.clipStartTime = 0f; // for now
-            drawer.globalTime = timePassed;
+            playerDrawer.clipDuration = singleClip.Length();
+            playerDrawer.clipStartTime = 0f; // for now
+            playerDrawer.globalTime = timePassed;
         }
 
         public void PlayNextFrame(int locationId) {
@@ -37,8 +39,11 @@ namespace Player {
             
             timePassed += Time.deltaTime;
             singleClip.SampleState(locationId, timePassed);
-            drawer.globalTime = timePassed;
+            playerDrawer.globalTime = timePassed;
             
+            clipDrawer.Clear();
+            singleClip.DrawState(clipDrawer, timePassed);
+
             if (singleClip.Length() < timePassed) {
                 onFinish?.Invoke();
             }

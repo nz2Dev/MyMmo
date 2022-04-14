@@ -31,5 +31,9 @@ namespace Player.Scripts {
             // one time command, can't spawn two times
         }
 
+        public void OnUpdateDraw(UnityScriptsClipDrawer stateDrawer, bool activated) {
+            // nothing yet.
+        }
+
     }
 }

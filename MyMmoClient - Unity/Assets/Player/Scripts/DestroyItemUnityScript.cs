@@ -28,5 +28,9 @@ namespace Player.Scripts {
             // one time changes, can't delete two times
         }
 
+        public void OnUpdateDraw(UnityScriptsClipDrawer stateDrawer, bool activated) {
+            // nothing yet.
+        }
+
     }
 }

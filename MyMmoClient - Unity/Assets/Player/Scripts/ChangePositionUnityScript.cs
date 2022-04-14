@@ -43,5 +43,9 @@ namespace Player.Scripts {
             // for one time commands, they can do their staff in one of this methods
         }
 
+        public void OnUpdateDraw(UnityScriptsClipDrawer stateDrawer, bool activated) {
+            stateDrawer.AddMovePoint(scriptData.ItemId, new Vector2(scriptData.ToPosition.X, scriptData.ToPosition.Y), activated);
+        }
+
     }
 }

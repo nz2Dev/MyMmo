@@ -28,5 +28,9 @@ namespace Player.Scripts {
         public void OnUpdateExit(int locationId) {
         }
 
+        public void OnUpdateDraw(UnityScriptsClipDrawer stateDrawer, bool activated) {
+            // nothing yet.
+        }
+
     }
 }

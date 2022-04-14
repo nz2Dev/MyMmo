@@ -22,6 +22,12 @@ namespace Player {
         public float Length() {
             return scriptTracks.Select(track => track.Length()).Max();
         }
+
+        public void DrawState(UnityScriptsClipDrawer stateDrawer, float timePassed) {
+            foreach (var scriptTrack in scriptTracks) {
+                scriptTrack.DrawState(stateDrawer, timePassed);
+            }
+        }
         
         public void SampleState(int locationId, float timePassed) {
             foreach (var scriptTrack in scriptTracks) {
@@ -53,6 +59,14 @@ namespace Player {
             
             public float Length() {
                 return unityScripts.Count * segmentTimeLength;
+            }
+
+            public void DrawState(UnityScriptsClipDrawer stateDrawer, float timePassed) {
+                for (var index = 0; index < unityScripts.Count; index++) {
+                    var unityScript = unityScripts[index];
+                    var scriptEndTime = (index + 1) * segmentTimeLength;
+                    unityScript.OnUpdateDraw(stateDrawer, scriptEndTime < timePassed);
+                }
             }
             
             public void SampleState(int locationId, float timePassed) {

@@ -531,8 +531,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8495995880372724223, guid: f15267e38119e1f47b55d55a716050eb, type: 3}
+      propertyPath: clipDrawer
+      value: 
+      objectReference: {fileID: 2010699969}
+    - target: {fileID: 8495995880372724223, guid: f15267e38119e1f47b55d55a716050eb, type: 3}
+      propertyPath: playerDrawer
+      value: 
+      objectReference: {fileID: 1892652560}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f15267e38119e1f47b55d55a716050eb, type: 3}
+--- !u!114 &1892652560 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1892652560, guid: f15267e38119e1f47b55d55a716050eb, type: 3}
+  m_PrefabInstance: {fileID: 1892652558}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c25e26727634b75ae5bf2ac48d3cace, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2010699969 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3079167152460752936, guid: f15267e38119e1f47b55d55a716050eb, type: 3}
+  m_PrefabInstance: {fileID: 1892652558}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d49b270826464d0e80b2f54c88551864, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!64 &8392010460701166848
 MeshCollider:
   m_ObjectHideFlags: 0

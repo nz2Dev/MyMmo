@@ -16,5 +16,9 @@ namespace Player.Scripts {
             // nothing.
         }
 
+        public void OnUpdateDraw(UnityScriptsClipDrawer stateDrawer, bool activated) {
+            // nothing.
+        }
+
     }
 }

@@ -36,5 +36,9 @@ namespace Player.Scripts {
             // any of this methods should work, but maybe some animation or cleanups will take place here
         }
 
+        public void OnUpdateDraw(UnityScriptsClipDrawer stateDrawer, bool activated) {
+            // nothing yet.
+        }
+
     }
 }

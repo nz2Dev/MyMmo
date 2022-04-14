@@ -7,5 +7,7 @@ namespace Player {
 
         void OnUpdateExit(int locationId);
 
+        void OnUpdateDraw(UnityScriptsClipDrawer stateDrawer, bool activated);
+
     }
 }
