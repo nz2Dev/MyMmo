@@ -13,9 +13,9 @@ namespace Player {
                     avatarItem.DrawShapesAnnotation();
                 }
 
-                var scriptPlayers = FindObjectsOfType<Location>();
-                foreach (var scriptPlayer in scriptPlayers) {
-                    scriptPlayer.DrawShapesAnnotation();
+                var annotations = FindObjectsOfType<AnnotationShapes>();
+                foreach (var annotationShapes in annotations) {
+                    annotationShapes.OnDrawAnnotations();
                 }
             }
         }

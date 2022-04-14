@@ -12,8 +12,6 @@ namespace Player {
     public class Location : MonoBehaviour {
 
         public int Id;
-        public Transform AnnotationDrawingOffset;
-
         private UnityScriptsPlayer scriptsPlayer;
 
         private void Awake() {
@@ -40,10 +38,6 @@ namespace Player {
             var initPosition = entitySnapshotData.PositionInLocation.ToUnityVector3();
             var player = Instantiate(playerPrefab, centerOfLocation + initPosition, Quaternion.identity);
             player.GetComponent<AvatarItem>().AttachToLocation(Id, entitySnapshotData);
-        }
-
-        public void DrawShapesAnnotation() {
-            scriptsPlayer.DrawShapesAnnotation(AnnotationDrawingOffset.localToWorldMatrix);
         }
 
         public void SetClip(ScriptsClipData clipData, Action onFinish = null) {

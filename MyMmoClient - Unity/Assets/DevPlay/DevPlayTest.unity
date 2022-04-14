@@ -483,10 +483,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 813078582, guid: f15267e38119e1f47b55d55a716050eb, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3936501247631991867, guid: f15267e38119e1f47b55d55a716050eb, type: 3}
       propertyPath: m_Name
       value: DevLocation
@@ -533,18 +529,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3936501247631992775, guid: f15267e38119e1f47b55d55a716050eb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8495995880372724223, guid: f15267e38119e1f47b55d55a716050eb, type: 3}
-      propertyPath: debugTime
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8495995880372724223, guid: f15267e38119e1f47b55d55a716050eb, type: 3}
-      propertyPath: playerTimeDebug
-      value: 3.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8495995880372724223, guid: f15267e38119e1f47b55d55a716050eb, type: 3}
-      propertyPath: debugAnnotationDrawing
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

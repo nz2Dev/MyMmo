@@ -1,60 +1,45 @@
 using System;
 using MyMmo.Commons.Scripts;
-using Shapes;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Player {
     public class UnityScriptsPlayer : MonoBehaviour {
 
-        public bool debugAnnotationDrawing;
-        public float playerTimeDebug = 2;
-
-        private UnityScriptsClip unityScriptsClip;
+        public UnityScriptsPlayerDrawer drawer;
+        
+        private UnityScriptsClip singleClip;
         private float timePassed;
         private Action onFinish;
 
-        public void SetClip(ScriptsClipData clip, Action onFinishPlaying = null) {
-            unityScriptsClip = new UnityScriptsClip(clip);
-            onFinish = onFinishPlaying;
-            timePassed = 0;
+        private void Awake() {
+            Assert.IsNotNull(drawer);
         }
 
-        public void DrawShapesAnnotation(Matrix4x4 worldTransformationMatrix) {
-            const float height = 0.4f;
-            
-            Draw.ResetAllDrawStates();
-            Draw.Matrix = worldTransformationMatrix;
-            Draw.ThicknessSpace = ThicknessSpace.Meters;
-            Draw.Rotate(Quaternion.LookRotation(Vector3.down, Vector3.forward));
-            
-            void DrawClipProgress(float time, float startTime, float duration) {
-                var timeOnClip = time - startTime;
-                var clipTimeProgress = Mathf.Clamp(timeOnClip, 0, duration);
-                
-                Draw.RectangleBorder(Vector3.right * -timeOnClip, duration, height, RectPivot.Corner, 0.1f, Color.green);
-                Draw.Rectangle(Vector3.right * -timeOnClip, clipTimeProgress, height, RectPivot.Corner, Color.green);
-            }
-            
-            if (!Application.isPlaying && debugAnnotationDrawing) {
-                DrawClipProgress(playerTimeDebug, 1, 5);
-            } else if (unityScriptsClip != null) {
-                DrawClipProgress(timePassed, 0, unityScriptsClip.Length());
-            }
+        public void SetClip(ScriptsClipData clip, Action onFinishPlaying = null) {
+            singleClip = new UnityScriptsClip(clip);
+            onFinish = onFinishPlaying;
+            timePassed = 0;
+
+            drawer.clipDuration = singleClip.Length();
+            drawer.clipStartTime = 0f; // for now
+            drawer.globalTime = timePassed;
         }
 
         public void PlayNextFrame(int locationId) {
-            if (unityScriptsClip == null) {
+            if (singleClip == null) {
                 return;
             }
 
-            if (unityScriptsClip.Length() < timePassed) {
+            if (singleClip.Length() < timePassed) {
                 return;
             }
             
             timePassed += Time.deltaTime;
-            unityScriptsClip.SampleState(locationId, timePassed);
+            singleClip.SampleState(locationId, timePassed);
+            drawer.globalTime = timePassed;
             
-            if (unityScriptsClip.Length() < timePassed) {
+            if (singleClip.Length() < timePassed) {
                 onFinish?.Invoke();
             }
         }
