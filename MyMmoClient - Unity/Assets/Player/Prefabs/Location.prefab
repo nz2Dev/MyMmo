@@ -172,7 +172,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee39bce352ab4db0b1b519bb712b0486, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drawer: {fileID: 1892652560}
+  playerDrawer: {fileID: 1892652560}
+  clipDrawer: {fileID: 3079167152460752936}
 --- !u!1 &6934890778868414475
 GameObject:
   m_ObjectHideFlags: 0
