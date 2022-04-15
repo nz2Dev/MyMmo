@@ -22,11 +22,13 @@ namespace Player {
         }
 
         public override void OnDrawAnnotations() {
-            if (!Application.isPlaying && drawInScene) {
+            if (!Application.isPlaying) {
                 Clear();
-                AddMovePoint("", Vector2.left, true);
-                AddMovePoint("", Vector2.left + Vector2.up, true);
-                AddMovePoint("", Vector2.up, false);
+                if (drawInScene) {
+                    AddMovePoint("", Vector2.left, true);
+                    AddMovePoint("", Vector2.left + Vector2.up, true);
+                    AddMovePoint("", Vector2.up, false);
+                }
             }
             
             Draw.ResetAllDrawStates();
