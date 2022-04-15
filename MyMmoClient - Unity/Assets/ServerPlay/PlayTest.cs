@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using ExitGames.Client.Photon;
 using MyMmo.Client;
 using MyMmo.Client.Params;
@@ -11,19 +10,17 @@ using UnityEngine;
 namespace ServerPlay {
     public class PlayTest : MonoBehaviour, IGameListener {
 
-        public static PlayTest Instance;
         private const string WorldName = "UnityWorld";
 
-        public GameObject playerPrefab;
+        public UnityWorldPlayer worldPlayer;
 
-        private Game game;
         private bool isConnectState;
         private bool isEnterState;
         private bool isPlayState;
         private bool isManualSetup;
-    
+        private Game game;
+
         private void Awake() {
-            Instance = this;
             Application.runInBackground = true;
             Application.targetFrameRate = 60;
             DontDestroyOnLoad(gameObject);
@@ -132,25 +129,15 @@ namespace ServerPlay {
         }
 
         public void OnLocationEntered(int locationId, SceneSnapshotData sceneSnapshotData) {
-            var targetLocation = FindObjectsOfType<Location>().FirstOrDefault(location => location.Id == locationId);
-            if (targetLocation == null) {
-                throw new Exception("Location not found: " + locationId);
-            }
-        
-            Debug.Log($"location {locationId} enters, with entities snapshots [{sceneSnapshotData.EntitiesSnapshotData.AggregateToString()}]");
-            foreach (var entitySnapshotData in sceneSnapshotData.EntitiesSnapshotData) {
-                targetLocation.PlaceAvatar(playerPrefab, entitySnapshotData);
-            }
+            worldPlayer.EnterLocation(locationId, sceneSnapshotData);
         }
 
         public void OnLocationExit(int locationId) {
-            // for disposing unused resources, will have to implement some mechanism for that 
+            worldPlayer.ExitLocation(locationId); 
         }
 
         public void OnLocationUpdate(int locationId, ScriptsClipData clipData) {
-            Debug.Log($"on location update: {locationId} with items[{clipData.ItemDataArray.Length}] [{clipData.ItemDataArray.Select(data => $"item {data.ItemId} scripts[" + data.ScriptDataArray.AggregateToString() + "]").AggregateToString()}]");
-            var updatedLocation = FindObjectsOfType<Location>().First(location => location.Id == locationId);
-            updatedLocation.SetClip(clipData);
+            worldPlayer.UpdateLocation(locationId, clipData);
         }
 
         public void OnLog(DebugLevel debugLevel, string message) {

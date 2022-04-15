@@ -447,7 +447,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fd3884f1e929bd419695fe1451b0205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 7746906731115792878, guid: 9ddf40b945a763244be014b9c6679ed7, type: 3}
+  worldPlayer: {fileID: 1925665787}
 --- !u!4 &1925665786
 Transform:
   m_ObjectHideFlags: 0
@@ -471,9 +471,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1925665784}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ade0be44c837452f9d079a1d02590380, type: 3}
+  m_Script: {fileID: 11500000, guid: 6ea7f3cafe3b41a59ca7c80dbebb402e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerPrefab: {fileID: 7746906731115792878, guid: 9ddf40b945a763244be014b9c6679ed7, type: 3}
 --- !u!1001 &3936501248738798020
 PrefabInstance:
   m_ObjectHideFlags: 0

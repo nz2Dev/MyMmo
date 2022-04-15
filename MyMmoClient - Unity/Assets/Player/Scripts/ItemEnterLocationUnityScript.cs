@@ -19,7 +19,8 @@ namespace Player.Scripts {
                 throw new Exception("can't find script's target location: " + locationId);
             }
             
-            targetLocation.PlaceAvatar(PlayTest.Instance.playerPrefab, scriptData.EntitySnapshotData);
+            /*todo use reference to world player instance*/
+            targetLocation.PlaceAvatar(UnityWorldPlayer.Instance.playerPrefab, scriptData.EntitySnapshotData);
         }
 
         public void UpdateUnityState(int locationId, float progress) {

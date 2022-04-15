@@ -20,7 +20,8 @@ namespace Player.Scripts {
             if (targetLocation == null) {
                 throw new Exception("can't find script's target location: " + locationId);
             }
-            targetLocation.SpawnAvatar(PlayTest.Instance.playerPrefab, scriptData.EntitySnapshotData);
+            // todo use reference to world player instance instead
+            targetLocation.SpawnAvatar(UnityWorldPlayer.Instance.playerPrefab, scriptData.EntitySnapshotData);
         }
 
         public void UpdateUnityState(int locationId, float progress) {
