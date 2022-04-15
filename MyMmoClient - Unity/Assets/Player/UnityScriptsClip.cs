@@ -29,10 +29,10 @@ namespace Player {
             }
         }
         
-        public void SampleState(int locationId, float timePassed) {
+        public void SampleState(Location location, float timePassed) {
             foreach (var scriptTrack in scriptTracks) {
                 if (!scriptTrack.IsEndOfState) {
-                    scriptTrack.SampleState(locationId, timePassed);
+                    scriptTrack.SampleState(location, timePassed);
                 }
             }
         }
@@ -69,13 +69,13 @@ namespace Player {
                 }
             }
             
-            public void SampleState(int locationId, float timePassed) {
+            public void SampleState(Location location, float timePassed) {
                 if (endOfState) {
                     return;
                 }
                 
                 if (currentSegmentIndex == -1) {
-                    if (!EnterNextSegment(locationId, timePassed)) {
+                    if (!EnterNextSegment(location, timePassed)) {
                         endOfState = true;
                         return;
                     }
@@ -85,23 +85,23 @@ namespace Player {
                 timePassedDebug = timePassed;
                 frameTimeDeltaDebug = Time.deltaTime;
                 if (timeDelta > segmentTimeLength) {
-                    ExitCurrentSegment(locationId);
+                    ExitCurrentSegment();
                     // ...should return next segment, then enter/exit all segments in between,
                     // so that state is correct, and all scripts contributes,
                     // in case if each next script don't have previous state... 
-                    if (!EnterNextSegment(locationId, timePassed)) {
+                    if (!EnterNextSegment(location, timePassed)) {
                         endOfState = true; // workaround to prevent inconsistent behaviour when sampling out of range multiple time 
                         return;
                     }
 
                     var newTimeDelta = timePassed - currentSegmentEnterTime;
                     Assert.IsTrue(newTimeDelta > 0 && newTimeDelta < segmentTimeLength);
-                    CurrentSegmentInterpolation(locationId, newTimeDelta / segmentTimeLength);
+                    CurrentSegmentInterpolation(newTimeDelta / segmentTimeLength);
                     return;
                 }
 
                 if (timeDelta < segmentTimeLength) {
-                    CurrentSegmentInterpolation(locationId, timeDelta / segmentTimeLength);
+                    CurrentSegmentInterpolation(timeDelta / segmentTimeLength);
                     return;
                 }
 
@@ -112,18 +112,18 @@ namespace Player {
                 throw new Exception("Unexpected sample exit");
             }
 
-            private void ExitCurrentSegment(int locationId) {
+            private void ExitCurrentSegment() {
                 var currSegment = unityScripts.ElementAtOrDefault(currentSegmentIndex);
                 if (currSegment != null) {
-                    currSegment.UpdateUnityState(locationId, progress: 1);
-                    currSegment.OnUpdateExit(locationId);
+                    currSegment.UpdateUnityState(progress: 1);
+                    currSegment.OnUpdateExit();
                     if (debug) {
                         Debug.Log($"[{currentSegmentIndex}] |{currentSegmentEnterTime}s .. {frameTimeDeltaDebug}/{timePassedDebug}s >> ");
                     }
                 }
             }
 
-            private bool EnterNextSegment(int locationId, float timePassed) {
+            private bool EnterNextSegment(Location location, float timePassed) {
                 var segmentsPassedApprox = timePassed / segmentTimeLength;
                 var segmentsPassedCount = Mathf.FloorToInt(segmentsPassedApprox);
 
@@ -132,7 +132,7 @@ namespace Player {
                 if (nextScript != null) {
                     currentSegmentIndex = nextSegmentIndex;
                     currentSegmentEnterTime = segmentsPassedCount * segmentTimeLength;
-                    nextScript.OnUpdateEnter(locationId);
+                    nextScript.OnUpdateEnter(location);
                     if (debug) {
                         Debug.Log($"<< .. {frameTimeDeltaDebug}/{timePassedDebug}s .. {currentSegmentEnterTime}s| [{currentSegmentIndex}]");
                     }
@@ -142,8 +142,8 @@ namespace Player {
                 }
             }
 
-            private void CurrentSegmentInterpolation(int locationId, float progress) {
-                unityScripts[currentSegmentIndex].UpdateUnityState(locationId, progress);
+            private void CurrentSegmentInterpolation(float progress) {
+                unityScripts[currentSegmentIndex].UpdateUnityState(progress);
                 if (debug) {
                     Debug.Log($"[{currentSegmentIndex}] |{currentSegmentEnterTime}s .. {frameTimeDeltaDebug}/{timePassedDebug}s .. ");
                 }

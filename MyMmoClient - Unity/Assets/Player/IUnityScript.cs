@@ -1,11 +1,11 @@
 namespace Player {
     public interface IUnityScript {
 
-        void OnUpdateEnter(int locationId);
+        void OnUpdateEnter(Location location);
     
-        void UpdateUnityState(int locationId, float progress);
+        void UpdateUnityState(float progress);
 
-        void OnUpdateExit(int locationId);
+        void OnUpdateExit();
 
         void OnUpdateDraw(UnityScriptsClipDrawer stateDrawer, bool activated);
 

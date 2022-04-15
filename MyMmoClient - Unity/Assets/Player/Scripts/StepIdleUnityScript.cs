@@ -4,15 +4,15 @@ namespace Player.Scripts {
         // idles the whole step, so that other scripts in the list can be executed later
         // this is workaround initially for the ItemEnterLocationUnityScript
         
-        public void OnUpdateEnter(int locationId) {
+        public void OnUpdateEnter(Location location) {
             // nothing.
         }
 
-        public void UpdateUnityState(int locationId, float progress) {
+        public void UpdateUnityState(float progress) {
             // nothing.
         }
 
-        public void OnUpdateExit(int locationId) {
+        public void OnUpdateExit() {
             // nothing.
         }
 

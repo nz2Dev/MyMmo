@@ -60,7 +60,6 @@ GameObject:
   - component: {fileID: 3936501247631992773}
   - component: {fileID: 3936501247631992772}
   - component: {fileID: 8117159627841462085}
-  - component: {fileID: 8495995880372724223}
   m_Layer: 0
   m_Name: Location
   m_TagString: Untagged
@@ -159,21 +158,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21089d2bfe5ff874f8c7eebf79d4105a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Id: 0
---- !u!114 &8495995880372724223
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3936501247631991867}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee39bce352ab4db0b1b519bb712b0486, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerDrawer: {fileID: 1892652560}
-  clipDrawer: {fileID: 3079167152460752936}
+  id: 0
+  clipsDrawer: {fileID: 3079167152460752936}
+  clipPlayerDrawer: {fileID: 1892652560}
 --- !u!1 &6934890778868414475
 GameObject:
   m_ObjectHideFlags: 0

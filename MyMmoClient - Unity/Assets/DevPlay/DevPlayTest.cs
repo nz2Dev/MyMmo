@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using MyMmo.Commons.Scripts;
 using MyMmo.Commons.Snapshots;
@@ -5,18 +6,23 @@ using MyMmo.Processing;
 using MyMmo.Processing.Utils;
 using Player;
 using UnityEngine;
+using UnityEngine.Assertions;
+using Random = UnityEngine.Random;
 using Transform = MyMmo.Processing.Components.Transform;
 using Vector2 = MyMmo.Commons.Primitives.Vector2;
 
 namespace DevPlay {
     public class DevPlayTest : MonoBehaviour {
 
-        public Location devLocation;
-        public GameObject playerPrefab;
         public bool replay = true;
-        
+        public UnityWorldPlayer worldPlayer;
+
         private ScriptsClipData simulatedClip;
         private EntitySnapshotData[] snapshots;
+
+        private void Awake() {
+            Assert.IsNotNull(worldPlayer);
+        }
 
         private void Start() {
             ReSimulate();   
@@ -54,11 +60,11 @@ namespace DevPlay {
         }
 
         private void PlayClip() {
-            foreach (var snapshotData in snapshots) {
-                devLocation.PlaceAvatar(playerPrefab, snapshotData);
-            }
+            worldPlayer.EnterLocation(0, new SceneSnapshotData {
+                EntitiesSnapshotData = snapshots
+            });
             
-            devLocation.SetClip(simulatedClip, () => {
+            worldPlayer.UpdateLocation(0, simulatedClip, () => {
                 if (replay) {
                     PlayClip();
                 }
